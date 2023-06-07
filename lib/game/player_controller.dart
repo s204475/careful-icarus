@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+import 'package:flutter/services.dart';
 
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -25,10 +28,18 @@ class PlayerObject extends BodyComponent {
 
 // main player
 class PlayerControls extends PositionComponent with TapCallbacks, DragCallbacks {
+PlayerControls() : super();
+
   // adds a player physics object as a child of this component
-  PlayerObject player = PlayerObject();
-  @override
-  add(player);
+  var player = PlayerObject();
+  // adds the player sprite
+  var playerSprite = PlayerSprite();
+  
+  void onLoad() {
+    // adds a player physics object as a child of this component
+    addAll([player, playerSprite]);
+  }
+
 
 
   @override
