@@ -6,5 +6,8 @@ import 'player_controller.dart';
 // game main function
 class Icarus extends Forge2DGame {
   @override
-  Future<void> onLoad() async {addAll([PlayerControls()]);}
+  Future<void> onLoad() async {
+    print("loading Game");
+    addAll([PlayerControls()]);
+  }
 }

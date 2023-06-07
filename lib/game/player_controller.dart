@@ -3,26 +3,37 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
+
 import 'package:flutter/services.dart';
 
 import 'package:sensors_plus/sensors_plus.dart';
 
-// the sprite of the player
-class PlayerSprite extends SpriteComponent {
-
-}
-
 // main player physics object
 class PlayerObject extends BodyComponent {
   @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    final sprite = await gameRef.loadSprite('PixelPenguin1.png');
+    renderBody = false;
+    add(
+      SpriteComponent(
+        sprite: sprite,
+        size: Vector2(2,2),
+        anchor: Anchor.center,
+      ),
+    );
+  }
+
+
+  @override
   Body createBody() {
-  final bodyDef = BodyDef(
+    final bodyDef = BodyDef(
       type: BodyType.static,
       userData: this,
       position: Vector2.zero(),
       fixedRotation: true
     );
-    throw world.createBody(bodyDef);
+    return world.createBody(bodyDef);
   }
 }
 
@@ -32,12 +43,12 @@ PlayerControls() : super();
 
   // adds a player physics object as a child of this component
   var player = PlayerObject();
-  // adds the player sprite
-  var playerSprite = PlayerSprite();
   
+  @override
   void onLoad() {
     // adds a player physics object as a child of this component
-    addAll([player, playerSprite]);
+    addAll([player]);
+    
   }
 
 
