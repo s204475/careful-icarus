@@ -14,7 +14,7 @@ class PlayerObject extends BodyComponent {
   Future<void> onLoad() async {
     await super.onLoad();
     final sprite = await gameRef.loadSprite('PixelPenguin1.png');
-    renderBody = false;
+    renderBody = true;
     add(
       SpriteComponent(
         sprite: sprite,
