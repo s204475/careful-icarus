@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'player_controller.dart';
 
 // game main function
-class Icarus extends FlameGame {
+class Icarus extends FlameGame with HasCollisionDetection {
   Icarus({required Vector2 viewportResolution}) {
     // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
