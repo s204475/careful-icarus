@@ -15,7 +15,7 @@ class PlayerControls extends PositionComponent with TapCallbacks, DragCallbacks 
     add(
       SpriteComponent(
         sprite: sprite,
-        size: Vector2(2,2),
+        size: Vector2(200,200),
         anchor: Anchor.center,
       ),
     );
