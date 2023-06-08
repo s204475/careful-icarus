@@ -47,16 +47,37 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+enum Level {game, mainMenu, shop}
+
 class _HomePageState extends State<HomePage> {
+  Level lvl = Level.game;
+
   @override
   Widget build(BuildContext context) {
+    Widget scene;
 
-  var width = MediaQuery.of(context).size.width;
-  var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
-  var padding = MediaQuery.of(context).padding;
-  var safeHeight = height - padding.top - padding.bottom;
-
-    return GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
+    var padding = MediaQuery.of(context).padding;
+    var safeHeight = height - padding.top - padding.bottom;
+  
+  switch (lvl) {
+    case Level.game:
+      scene = GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
+      break;
+    // case 1:
+    //   scene = ShopPage();
+    //   break;
+    // case 2:
+    //   scene = MainMenu();
+    //   break;
+    default:
+      throw UnimplementedError('no widget for $lvl.toString()');
+    }
+  return LayoutBuilder(builder: (context,constraints){
+    return scene;
+  }
+  );
   }
 }
