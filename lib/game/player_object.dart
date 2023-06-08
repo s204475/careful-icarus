@@ -13,17 +13,24 @@ class PlayerObject extends SpriteComponent{
     sprite?.originalSize.y;
   }
 
-  double velocity = 0;
-  double acceleration = 0;
+  double mass = 1;
+  Vector2 velocity = Vector2.zero();
+  Vector2 acceleration = Vector2.zero();
+
+  static const gravity = 9.834; // m/(s^2)
 
   @override
   void update(double dt) {
-    
+    velocity += acceleration*dt; // apply acceleration
+
+    velocity.y -= gravity*dt; // apply gravity
+
+    position += velocity*dt; // apply position
   }
 
   // for use in player controller
   // add a given newton force to the player
-  void addForce(double force) {
-
+  void addForce(int force, Vector2 direction) {
+    
   }
 }
