@@ -13,8 +13,17 @@ class PlayerObject extends SpriteComponent{
     sprite?.originalSize.y;
   }
 
+  double velocity = 0;
+  double acceleration = 0;
+
   @override
   void update(double dt) {
     
+  }
+
+  // for use in player controller
+  // add a given newton force to the player
+  void addForce(double force) {
+
   }
 }
