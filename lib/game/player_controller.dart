@@ -9,14 +9,12 @@ import 'package:flutter/widgets.dart';
 
 import 'package:sensors_plus/sensors_plus.dart';
 
-import 'player_character.dart';
-
 // main player physics object
 class PlayerObject extends BodyComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final sprite = await gameRef.loadSprite('sprites/PixelPenguin1.png');
+    final sprite = await gameRef.loadSprite('PixelPenguin1.png');
     debugPrint("loading playerBody");
 
     renderBody = false;
