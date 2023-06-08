@@ -8,7 +8,7 @@ import 'player_controller.dart';
 class Icarus extends FlameGame {
   
   @override
-  Color backgroundColor() => Colors.lightBlue;
+  Color backgroundColor() => Colors.pink;
 
   late final CameraComponent cameraComponent;
 
