@@ -7,6 +7,9 @@ import 'player_controller.dart';
 // game main function
 class Icarus extends FlameGame {
   
+  Icarus({required this.viewportResolution});
+  final Vector2 viewportResolution; 
+
   @override
   Color backgroundColor() => Colors.lightBlue;
 
