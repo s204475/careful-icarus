@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:careful_icarus/game/player_object.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/widgets.dart';
@@ -6,8 +7,10 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 // main player
 class PlayerControls extends PositionComponent with TapCallbacks, DragCallbacks {
-  PlayerControls({super.position, super.size, super.priority}) : super(anchor: Anchor.center);
+  PlayerControls(this.playerObject, {super.position, super.size, super.priority}) : super(anchor: Anchor.center);
   
+  late PlayerObject playerObject;
+
   @override
   Future<void> onLoad() async {
     debugPrint("loading playerControls");

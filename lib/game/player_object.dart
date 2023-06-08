@@ -8,6 +8,9 @@ class PlayerObject extends SpriteComponent{
   Future<void> onLoad() async {
     debugPrint("loading PlayerObject");
     sprite = await findGame()?.loadSprite('PixelPenguin1.png');
+
+    sprite?.originalSize.x;
+    sprite?.originalSize.y;
   }
 
   @override

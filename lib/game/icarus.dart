@@ -29,8 +29,10 @@ class Icarus extends FlameGame {
 
 
     debugPrint("loading Game");
-    var playerInput = PlayerControls(size: viewportResolution);
+    // the player object or character
     var playerChar = PlayerObject(size: Vector2(200, 200));
+    // the player controller handling all inpus from the player
+    var playerInput = PlayerControls(playerChar, size: viewportResolution);
 
     cameraComponent.add(playerInput); // add the player input field to always be laid under the camera
 
