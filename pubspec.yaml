@@ -12,7 +12,6 @@ dependencies:
   flame: 1.8.0
   google_fonts: ^5.0.0
   sensors_plus: ^3.0.0
-  flame_forge2d: ^0.14.0
 
 dev_dependencies:
   flutter_test:
@@ -22,5 +21,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/
     - assets/sprites/
     #- lib/assets/sounds/
