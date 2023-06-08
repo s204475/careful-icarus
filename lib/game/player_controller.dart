@@ -6,22 +6,13 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 // main player
 class PlayerControls extends PositionComponent with TapCallbacks, DragCallbacks {
-  PlayerControls() : super(anchor: Anchor.center);
+  PlayerControls({super.position, super.size, super.priority}) : super(anchor: Anchor.center);
   
   @override
   Future<void> onLoad() async {
     debugPrint("loading playerControls");
-    final sprite = await findGame()?.loadSprite('PixelPenguin1.png');
-    add(
-      SpriteComponent(
-        sprite: sprite,
-        size: Vector2(200,200),
-        anchor: Anchor.center,
-      ),
-    );
+
   }
-
-
 
   @override
   void onTapUp(TapUpEvent event) {
