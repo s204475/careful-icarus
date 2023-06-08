@@ -21,11 +21,14 @@ class PlayerObject extends SpriteComponent{
 
   @override
   void update(double dt) {
+    /*
+    debugPrint("update deltatime: $dt, position: $position, velocity $velocity, acceleration $acceleration.");
     velocity += acceleration*dt; // apply acceleration
 
     velocity.y -= gravity*dt; // apply gravity
 
     position += velocity*dt; // apply position
+    */
   }
 
   // for use in player controller
