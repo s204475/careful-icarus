@@ -1,12 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-import 'player_controller.dart';
+import 'controllers/controller.dart';
 
 // game main function
-class Icarus extends Forge2DGame {
+class Icarus extends FlameGame {
   
   @override
   Color backgroundColor() => Colors.lightBlue;

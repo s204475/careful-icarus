@@ -1,18 +1,16 @@
 import 'dart:async';
 
+import 'package:careful_icarus/game/icarus.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
-
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
 import 'package:sensors_plus/sensors_plus.dart';
 
-import 'player_character.dart';
-
 // main player physics object
-class PlayerObject extends BodyComponent {
+class PlayerObject extends SpriteGroupComponent<PlayerState>
+    with HasGameRef<Icarus>, KeyboardHandler, CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -40,6 +38,9 @@ class PlayerObject extends BodyComponent {
     );
     return world.createBody(bodyDef);
   }
+}
+
+enum PlayerState {
 }
 
 // main player
