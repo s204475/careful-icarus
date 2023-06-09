@@ -5,31 +5,45 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'platform.dart';
+import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../icarus.dart';
 
+enum Collidables {
+  platform,
+  powerup,
+}
+
 // main player
-class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallbacks, DragCallbacks, CollisionCallbacks{
+class Player extends SpriteComponent
+    with
+        HasGameRef,
+        KeyboardHandler,
+        TapCallbacks,
+        DragCallbacks,
+        CollisionCallbacks {
   Player({
     super.position,
-  }): super (anchor: Anchor.center, size: Vector2(200,200), priority: 1);
+  }) : super(anchor: Anchor.center, size: Vector2(200, 200), priority: 100);
 
   double _hAxisInput = 0;
   double gravity = 9;
   Vector2 Velocity = Vector2.zero();
 
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async {
     await super.onLoad();
 
     sprite = await gameRef.loadSprite('PixelPenguin1.png');
 
     await add(CircleHitbox());
+    debugMode = GameManager.debugging;
   }
 
   @override
-  void update(double dt){
+  void update(double dt) {
     Velocity.x = _hAxisInput * 200;
     Velocity.y += gravity;
 
@@ -44,7 +58,7 @@ class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallba
 
     position += Velocity * dt;
     super.update(dt);
-    print(position);
+    //print(position);
   }
 
   @override
@@ -62,19 +76,32 @@ class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallba
     return true;
   }
 
-  void moveLeft() async{
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    //print("collision with " + other.toString());
+    if (other is Platform) {
+      jump();
+    }
+  }
+
+  void moveLeft() async {
     _hAxisInput = 0;
-      print("Left");
-      sprite = await gameRef.loadSprite('PixelPenguin2.png'); //TODO remove this debug statement
+    print("Left");
+    sprite = await gameRef
+        .loadSprite('PixelPenguin2.png'); //TODO remove this debug statement
     _hAxisInput += -1;
   }
-  void moveRight() async{
+
+  void moveRight() async {
     _hAxisInput = 0;
     print("Right");
-    sprite = await gameRef.loadSprite('PixelPenguin1.png'); //TODO remove this debug statement
+    sprite = await gameRef
+        .loadSprite('PixelPenguin1.png'); //TODO remove this debug statement
     _hAxisInput += 1;
   }
-  void jump(){
+
+  void jump() {
     print("Jump");
     Velocity.y = -600;
   }

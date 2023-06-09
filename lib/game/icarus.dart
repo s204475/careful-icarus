@@ -1,25 +1,29 @@
 import 'package:careful_icarus/game/player_object.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'controllers/player.dart';
+import 'controllers/platform.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
 
-enum Character { penguin}
+enum Character { penguin }
+
 // game main function
-class Icarus extends FlameGame with HasKeyboardHandlerComponents{
+class Icarus extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   Icarus({required Vector2 viewportResolution}) {
     // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
   }
 
-  static late Vector2 viewportResolution; 
+  static late Vector2 viewportResolution;
 
   @override
   Color backgroundColor() => Colors.pink;
-  
+
   late final CameraComponent cameraComponent;
 
   @override
@@ -28,29 +32,24 @@ class Icarus extends FlameGame with HasKeyboardHandlerComponents{
     cameraComponent = CameraComponent(
       world: world,
     );
-   
+
     addAll([world, cameraComponent]);
 
-
     debugPrint("loading Game");
-     var player = Player();
-    
+    var player = Player();
+    var platform = Platform();
+
     add(player);
-    player.position = Vector2(size.x/2, size.y/2);
+    //add(platform); //testing adding one platform
+    //platform.position = Vector2(size.x / 2, size.y - 5);
+    player.position = Vector2(size.x / 2, size.y / 2);
     cameraComponent.follow(player);
     add(TapTarget());
-
   }
 }
 
-
 class TapTarget extends PositionComponent with TapCallbacks {
-  
-
   TapTarget();
-  
-  
-  
 
   final _paint = Paint()..color = const Color(0x448BA8FF);
 
@@ -70,13 +69,13 @@ class TapTarget extends PositionComponent with TapCallbacks {
   //start moving depending on the side of touch
   @override
   void onTapDown(TapDownEvent event) {
-    debugPrint("Heya");
+    debugPrint("TapdownEvent");
     final circle = ExpandingCircle(event.localPosition);
     _circles[event.pointerId] = circle;
     add(circle);
   }
 
-    @override
+  @override
   void onLongTapDown(TapDownEvent event) {
     _circles[event.pointerId]!.accent();
     //Player.sprite.position.x-=50;
@@ -87,10 +86,6 @@ class TapTarget extends PositionComponent with TapCallbacks {
   void onTapUp(TapUpEvent event) {
     _circles.remove(event.pointerId)!.release();
   }
-
- 
-
-
 }
 
 class ExpandingCircle extends Component {
