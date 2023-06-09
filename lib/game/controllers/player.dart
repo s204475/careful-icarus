@@ -16,6 +16,7 @@ class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallba
   }): super (anchor: Anchor.center, size: Vector2(200,200), priority: 1);
 
   double _hAxisInput = 0;
+  double gravity = 9;
   Vector2 Velocity = Vector2.zero();
 
   @override
@@ -23,12 +24,14 @@ class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallba
     await super.onLoad();
 
     sprite = await gameRef.loadSprite('PixelPenguin1.png');
+
+    await add(CircleHitbox());
   }
 
   @override
   void update(double dt){
     Velocity.x = _hAxisInput * 200;
-    Velocity.y = 0;
+    Velocity.y += gravity;
 
     final double dashHorizontalCenter = size.x / 2;
 
@@ -53,20 +56,26 @@ class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallba
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
       moveRight();
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      //jump(); //TODO: remove this debug statement
+      jump(); //TODO: remove this debug statement
     }
 
     return true;
   }
 
-  void moveLeft(){
+  void moveLeft() async{
     _hAxisInput = 0;
       print("Left");
+      sprite = await gameRef.loadSprite('PixelPenguin2.png'); //TODO remove this debug statement
     _hAxisInput += -1;
   }
-  void moveRight(){
+  void moveRight() async{
     _hAxisInput = 0;
     print("Right");
+    sprite = await gameRef.loadSprite('PixelPenguin1.png'); //TODO remove this debug statement
     _hAxisInput += 1;
+  }
+  void jump(){
+    print("Jump");
+    Velocity.y = -600;
   }
 }
