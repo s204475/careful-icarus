@@ -18,7 +18,7 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatelessWidget  {
   const MainApp({super.key});
 
   @override
@@ -41,7 +41,8 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
+
+class HomePage extends StatefulWidget  {
   const HomePage({Key? key, required this.title});
 
   final String title;
