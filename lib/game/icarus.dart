@@ -1,4 +1,3 @@
-import 'package:careful_icarus/game/player_object.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
