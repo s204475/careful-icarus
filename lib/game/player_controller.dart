@@ -1,49 +1,56 @@
 import 'dart:async';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 // main player
-class PlayerControls extends PositionComponent with TapCallbacks, DragCallbacks {
-  PlayerControls() : super(anchor: Anchor.center);
-  
-  @override
-  Future<void> onLoad() async {
-    debugPrint("loading playerControls");
-    final sprite = await findGame()?.loadSprite('PixelPenguin1.png');
-    add(
-      SpriteComponent(
-        sprite: sprite,
-        size: Vector2(200,200),
-        anchor: Anchor.center,
-      ),
-    );
-  }
+class PlayerControls extends SpriteGroupComponent with HasGameRef, KeyboardHandler, TapCallbacks, DragCallbacks, CollisionCallbacks{
+  PlayerControls({
+    super.position,
+     
+  }): super (anchor: Anchor.center, size: Vector2(200,200), priority: 1);
 
+  double _hAxisInput = 0;
+  Vector2 Velocity = Vector2.zero();
 
 
   @override
-  void onTapUp(TapUpEvent event) {
-    // to use an item
+  Future<void> onLoad() async{
+    await super.onLoad();
+
+    //final sprite = await findGame()?.loadSprite("PixelPenguin1.png");
   }
 
   @override
-  void onDragStart(DragStartEvent event) {
-    super.onDragStart(event);
-    // setup UI to switch between items
-
-    // start drag by saving the current position that is interacted
+  void update(double dt){
+    Velocity.x = _hAxisInput;
+    position += Velocity;
+    super.update(dt);
+    print(position);
   }
 
   @override
-  void onDragUpdate(DragUpdateEvent event) {
-    // switch to next item
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed){
+    _hAxisInput = 0;
+    if(keysPressed.contains(LogicalKeyboardKey.arrowLeft)){
+      moveLeft();
+    }
+    else if(keysPressed.contains(LogicalKeyboardKey.arrowRight)){
+      moveRight();
+    }
+    else if(keysPressed.contains(LogicalKeyboardKey.arrowUp)){
+      //Up();
+    }
+    return true;
   }
 
-  @override
-  void onDragEnd(DragEndEvent event) {
-    super.onDragEnd(event);
-    // select current item
+  void moveLeft(){
+    _hAxisInput = -1;
+  }
+  void moveRight(){
+    _hAxisInput = 1;
   }
 }
