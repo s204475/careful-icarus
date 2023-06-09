@@ -7,11 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-import '../game/icarus.dart';
+import '../icarus.dart';
 
 // main player
-class PlayerControls extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallbacks, DragCallbacks, CollisionCallbacks{
-  PlayerControls({
+class Player extends SpriteComponent with HasGameRef, KeyboardHandler, TapCallbacks, DragCallbacks, CollisionCallbacks{
+  Player({
     super.position,
   }): super (anchor: Anchor.center, size: Vector2(200,200), priority: 1);
 

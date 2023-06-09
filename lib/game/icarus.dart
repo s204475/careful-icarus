@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'player_controller.dart';
+import 'controllers/player.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
@@ -26,7 +26,7 @@ class Icarus extends FlameGame with HasKeyboardHandlerComponents{
 
 
     debugPrint("loading Game");
-     var player = PlayerControls();
+     var player = Player();
     
     add(player);
     player.position = Vector2(size.x/2, size.y/2);
