@@ -5,6 +5,8 @@ import 'package:flame/game.dart';
 import 'game/icarus.dart';
 import 'game/util/util.dart';
 import 'game/widgets/widgets.dart';
+import 'game/widgets/main_menu.dart';
+import 'game/widgets/shop_page.dart';
 
 //Main only serves to startup the game, everything else is handled by Icarus
 
@@ -66,12 +68,12 @@ class _HomePageState extends State<HomePage> {
     case Level.game:
       scene = GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
       break;
-    // case 1:
-    //   scene = ShopPage();
-    //   break;
-    // case 2:
-    //   scene = MainMenu();
-    //   break;
+     case Level.shop:
+       scene = ShopPage(Icarus(viewportResolution: Vector2(width, height)));
+       break;
+    case Level.mainMenu:
+       scene = MainMenu(Icarus(viewportResolution: Vector2(width, height)));
+       break;
     default:
       throw UnimplementedError('no widget for $lvl.toString()');
     }
