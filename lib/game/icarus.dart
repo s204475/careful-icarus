@@ -5,12 +5,14 @@ import 'player_controller.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
+
+enum Character { penguin}
 // game main function
-class Icarus extends FlameGame {
+class Icarus extends FlameGame with HasKeyboardHandlerComponents{
   
   @override
   Color backgroundColor() => Colors.pink;
-
+  
   late final CameraComponent cameraComponent;
 
   @override
@@ -26,7 +28,8 @@ class Icarus extends FlameGame {
     debugPrint("loading Game");
      var player = PlayerControls();
     
-    world.addAll([player]);
+    add(player);
+    player.position = Vector2(size.x/2, size.y/2);
     cameraComponent.follow(player);
     add(TapTarget());
 
