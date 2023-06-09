@@ -38,7 +38,6 @@ class MainApp extends StatelessWidget  {
   }
 }
 
-final Game _game = Icarus();
 
 class HomePage extends StatefulWidget  {
   const HomePage({Key? key, required this.title});
