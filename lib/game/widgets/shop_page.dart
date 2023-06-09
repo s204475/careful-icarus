@@ -50,7 +50,7 @@ class _ShopPageState extends State<ShopPage> {
                             backgroundColor: Colors.green,
                             foregroundColor: Colors.white,
                             textStyle: const TextStyle(
-                              fontSize: 30,
+                              fontSize: 69,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
