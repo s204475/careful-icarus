@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../icarus.dart';
+import 'shopping_button.dart';
 
 class ShopPage extends StatefulWidget {
     const ShopPage (this.game, {super.key});
@@ -23,42 +24,41 @@ class _ShopPageState extends State<ShopPage> {
                     padding: const EdgeInsets.all(80),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    children: <Widget>[ //put widget type in here once we have shop buttons
-                      ElevatedButton(
-                        onPressed: () {
-                          print('Hello there!');
-                          },
-                          child: const Text('Say Hello'),
-                        ),
-                        ElevatedButton(
-                        onPressed: () {
-                          print('Hello again!');
-                          },
-                          child: const Text('Say Hello 2'),
-                        ),
+                    children: <ShoppingButton>[
+                      ShoppingButton('Upgrade 1'),
+                      ShoppingButton('Upgrade 2'),
+                      ShoppingButton('Upgrade 3'),
+                      ShoppingButton('Upgrade 4'),
+                      ShoppingButton('Upgrade 5'),
                     ],
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                        child: ElevatedButton(
-                          onPressed: (){
-                            //set state to game
-                          },
-                          child: const Text('START'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            foregroundColor: Colors.white,
-                            textStyle: const TextStyle(
-                              fontSize: 69,
-                              fontWeight: FontWeight.bold,
+                  
+                    Expanded(
+                      
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: (){
+                                //set state to game
+                              },
+                              child: const Text('START'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                textStyle: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          
                         
-                      
+                      ),
                     ),
-                  )
             ],
         );
     }

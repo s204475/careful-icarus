@@ -28,11 +28,12 @@ class MainApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       theme: ThemeData(
         colorScheme: lightColorScheme,
+        textTheme: GoogleFonts.robotoFlexTextTheme(ThemeData.light().textTheme),
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
         colorScheme: darkColorScheme,
-        textTheme: GoogleFonts.audiowideTextTheme(ThemeData.dark().textTheme),
+        textTheme: GoogleFonts.robotoFlexTextTheme(ThemeData.dark().textTheme),
         useMaterial3: true,
       ),
       home: const HomePage(title: 'Icarus'),
@@ -52,7 +53,7 @@ class HomePage extends StatefulWidget {
 enum Level {game, mainMenu, shop}
 
 class _HomePageState extends State<HomePage> {
-  Level lvl = Level.game;
+  Level lvl = Level.shop;
 
   @override
   Widget build(BuildContext context) {
