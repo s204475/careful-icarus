@@ -2,6 +2,7 @@ import 'package:careful_icarus/game/player_object.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'DampenedCamera.dart';
 import 'controllers/player.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
@@ -20,12 +21,12 @@ class Icarus extends FlameGame with HasKeyboardHandlerComponents{
   @override
   Color backgroundColor() => Colors.pink;
   
-  late final CameraComponent cameraComponent;
+  late final DampenedCamera cameraComponent;
 
   @override
   Future<void> onLoad() async {
     final world = World();
-    cameraComponent = CameraComponent(
+    cameraComponent = DampenedCamera(
       world: world,
     );
    
@@ -33,11 +34,11 @@ class Icarus extends FlameGame with HasKeyboardHandlerComponents{
 
 
     debugPrint("loading Game");
-     var player = Player();
+     var player = Player(position: Vector2.zero());
     
-    add(player);
+    world.add(player);
     player.position = Vector2(size.x/2, size.y/2);
-    cameraComponent.follow(player);
+    cameraComponent.followDampened(player, snap: true, speed: 20, maxDistance: 20, minDistance: 20);
     add(TapTarget());
 
   }
