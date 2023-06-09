@@ -1,3 +1,4 @@
+import 'package:careful_icarus/game/player_object.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,13 @@ import 'dart:math';
 enum Character { penguin}
 // game main function
 class Icarus extends FlameGame with HasKeyboardHandlerComponents{
-  
+  Icarus({required Vector2 viewportResolution}) {
+    // ignore: prefer_initializing_formals
+    Icarus.viewportResolution = viewportResolution;
+  }
+
+  static late Vector2 viewportResolution; 
+
   @override
   Color backgroundColor() => Colors.pink;
   

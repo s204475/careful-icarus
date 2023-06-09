@@ -52,11 +52,13 @@ class HomePage extends StatefulWidget  {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: GameWidget(game: _game),
-    );
+
+  var width = MediaQuery.of(context).size.width;
+  var height = MediaQuery.of(context).size.height;
+
+  var padding = MediaQuery.of(context).padding;
+  var safeHeight = height - padding.top - padding.bottom;
+
+    return GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
   }
 }
