@@ -6,9 +6,17 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+//import 'platform.dart';
+import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import '../icarus.dart';
+
+enum Collidables {
+  platform,
+  powerup,
+}
 
 // main player
 class Player extends SpriteComponent
@@ -20,7 +28,7 @@ class Player extends SpriteComponent
         CollisionCallbacks {
   Player({
     super.position,
-  }) : super(anchor: Anchor.center, size: Vector2(200, 200), priority: 1);
+  }) : super(anchor: Anchor.center, size: Vector2(200, 200), priority: 100);
 
   double _hAxisInput = 0;
   double gravity = 9;
@@ -36,6 +44,7 @@ class Player extends SpriteComponent
     sprite = await gameRef.loadSprite('Default.png');
 
     await add(CircleHitbox());
+    debugMode = GameManager.debugging;
   }
 
   @override
@@ -83,6 +92,9 @@ class Player extends SpriteComponent
 
     updatePosition(dt);
     super.update(dt);
+    if (GameManager.height < position.y) {
+      GameManager.height = position.y; //height might be set differently
+    }
   }
 
   void updatePosition(double dt) {

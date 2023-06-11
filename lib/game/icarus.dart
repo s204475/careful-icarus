@@ -1,15 +1,19 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'controllers/player.dart';
+
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
+import 'controllers/player.dart';
+import 'managers/level_manager.dart';
 import 'dart:math';
 
 enum Character { penguin }
 
 // game main function
-class Icarus extends FlameGame with HasKeyboardHandlerComponents {
+class Icarus extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   Icarus({required Vector2 viewportResolution}) {
     // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
@@ -31,13 +35,13 @@ class Icarus extends FlameGame with HasKeyboardHandlerComponents {
 
     addAll([world, cameraComponent]);
 
-    debugPrint("loading Game");
+    debugPrint("loading level");
     var player = Player();
+    var levelManager = LevelManager(this, cameraComponent);
+    levelManager.StartLevel();
+    debugPrint("loading complete");
 
-    add(player);
-    player.position = Vector2(size.x / 2, size.y / 2);
-    cameraComponent.follow(player);
-    add(TapTarget());
+    //add(TapTarget());
   }
 }
 
@@ -62,7 +66,7 @@ class TapTarget extends PositionComponent with TapCallbacks {
   //start moving depending on the side of touch
   @override
   void onTapDown(TapDownEvent event) {
-    debugPrint("Heya");
+    debugPrint("TapdownEvent");
     final circle = ExpandingCircle(event.localPosition);
     _circles[event.pointerId] = circle;
     add(circle);
