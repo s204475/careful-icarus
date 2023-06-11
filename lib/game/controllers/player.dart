@@ -58,7 +58,10 @@ class Player extends SpriteComponent
 
     position += Velocity * dt;
     super.update(dt);
-    //print(position);
+
+    if (GameManager.height < position.y) {
+      GameManager.height = position.y; //height might be set differently
+    }
   }
 
   @override
@@ -77,8 +80,9 @@ class Player extends SpriteComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
     if (other is Platform) {
       jump();

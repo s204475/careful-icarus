@@ -22,9 +22,7 @@ class Platform extends SpriteComponent with HasGameRef {
 
     sprite = await gameRef.loadSprite(getCloudSprite(hasFish));
 
-    await add(CircleHitbox(
-      radius: size.x > size.y ? size.x / 2 : size.y / 2,
-    ));
+    await add(RectangleHitbox());
     debugMode = GameManager.debugging;
   }
 }
