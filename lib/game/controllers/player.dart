@@ -7,7 +7,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-//import 'platform.dart';
+import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -120,5 +120,15 @@ class Player extends SpriteComponent
       },
       cancelOnError: true,
     );
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    //print("collision with " + other.toString());
+    if (other is kplatform.Platform) {
+      jump();
+    }
   }
 }
