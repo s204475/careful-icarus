@@ -34,11 +34,10 @@ class Icarus extends FlameGame
     );
 
     addAll([world, cameraComponent]);
-
     debugPrint("loading level");
-    var player = Player();
     var levelManager = LevelManager(this, cameraComponent);
     levelManager.StartLevel();
+
     debugPrint("loading complete");
 
     //add(TapTarget());
