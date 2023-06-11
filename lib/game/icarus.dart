@@ -3,10 +3,10 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'controllers/player.dart';
-import 'controllers/platform.dart';
+
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
+import 'managers/level_manager.dart';
 import 'dart:math';
 
 enum Character { penguin }
@@ -35,16 +35,12 @@ class Icarus extends FlameGame
 
     addAll([world, cameraComponent]);
 
-    debugPrint("loading Game");
-    var player = Player();
-    var platform = Platform();
+    debugPrint("loading level");
+    var levelManager = LevelManager(this, cameraComponent);
+    levelManager.StartLevel();
+    debugPrint("loading complete");
 
-    add(player);
-    //add(platform); //testing adding one platform
-    //platform.position = Vector2(size.x / 2, size.y - 5);
-    player.position = Vector2(size.x / 2, size.y / 2);
-    cameraComponent.follow(player);
-    add(TapTarget());
+    //add(TapTarget());
   }
 }
 
