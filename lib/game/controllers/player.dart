@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -22,7 +23,7 @@ class Player extends SpriteComponent
   }) : super(anchor: Anchor.center, size: Vector2(200, 200), priority: 1);
 
   double _hAxisInput = 0;
-  double gravity = 0;
+  double gravity = 9;
   Vector2 Velocity = Vector2.zero();
   double gyroDeadZone = 1.5;
   double maxHorizontalVelocity = 10;
@@ -35,7 +36,6 @@ class Player extends SpriteComponent
     sprite = await gameRef.loadSprite('Default.png');
 
     await add(CircleHitbox());
-
   }
 
   @override
@@ -70,47 +70,43 @@ class Player extends SpriteComponent
 
     final double dashHorizontalCenter = size.x / 2;
 
-    if ((position.x + 100 ) < dashHorizontalCenter) {
+    if ((position.x + 100) < dashHorizontalCenter) {
       position.x = gameRef.size.x - (dashHorizontalCenter);
     }
-    if ((position.x - 100 ) > gameRef.size.x - (dashHorizontalCenter)) {
+    if ((position.x - 100) > gameRef.size.x - (dashHorizontalCenter)) {
       position.x = dashHorizontalCenter;
     }
-    sensorListener();
-    
+    //Add magnetometer support for mobile, runs in separate thread to avoid lag
+    if (Platform.isAndroid || Platform.isIOS) {
+      sensorListener();
+    }
+
     updatePosition(dt);
     super.update(dt);
   }
 
   void updatePosition(double dt) {
-    //clampDouble(Velocity.x, -maxHorizontalVelocity, maxHorizontalVelocity);
-    //clampDouble(Velocity.y, -maxVerticalVelocity, maxVerticalVelocity);
     position += Velocity * dt;
-    //_hAxisInput = 0;
-    //print(position);
   }
-  Future<void> sensorListener() async{
+
+  Future<void> sensorListener() async {
     double? magnometerValue;
     magnetometerEvents.listen(
       (MagnetometerEvent event) {
-        //print("event.x: ${event.x}");
-        if((event.x.abs()) > gyroDeadZone){
-          //print("got here!");
-          if(event.x > gyroDeadZone){
-            move(event.x*4);
-          } else if(event.x < -gyroDeadZone){
-            move(event.x*4);
-          } 
-        } else{
+        if ((event.x.abs()) > gyroDeadZone) {
+          if (event.x > gyroDeadZone) {
+            move(event.x * 4);
+          } else if (event.x < -gyroDeadZone) {
+            move(event.x * 4);
+          }
+        } else {
           move(0);
         }
-
       },
       onError: (error) {
         // Logic to handle error in case sensor is not available
       },
       cancelOnError: true,
     );
-    //print(magnometerValue);
   }
 }
