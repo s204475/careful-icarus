@@ -1,4 +1,3 @@
-import 'package:careful_icarus/game/player_object.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
+import 'controllers/player.dart';
 import 'managers/level_manager.dart';
 import 'dart:math';
 
@@ -36,6 +36,7 @@ class Icarus extends FlameGame
     addAll([world, cameraComponent]);
 
     debugPrint("loading level");
+    var player = Player();
     var levelManager = LevelManager(this, cameraComponent);
     levelManager.StartLevel();
     debugPrint("loading complete");
