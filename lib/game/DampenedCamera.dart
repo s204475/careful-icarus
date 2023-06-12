@@ -8,16 +8,15 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static PositionComponent? target;
 
   static double maxDistance = double.infinity;
-  static double minDistance = double.infinity;
-  static double speed = 0; // the actual speed
+  static double minDistance = 0;
+  static double speed = 1; // the actual speed
   static double acceleration = 1; // the accelration to increase the speed based on distance
+  static bool lockHeight = false;
 
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    
-    priority = 999; // to make sure the camera is updated last
-  }
+  static double maxSpeed = double.infinity;
+  static bool horizontalOnly = false;
+  static bool verticalOnly = false;
+  static bool snap = false;
 
   Future<void> followDampened(PositionComponent target, {
     double maxSpeed = double.infinity,
@@ -25,10 +24,19 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     bool verticalOnly = false,
     bool snap = false,
 
+    bool lockHeight = false,
     double maxDistance = double.infinity,
-    double minDistance = double.infinity,
+    double minDistance = 0,
     double acceleration = 1,
   }) async {
+    assert(maxDistance >= minDistance);
+
+    DampenedCamera.maxSpeed = maxSpeed;
+    DampenedCamera.horizontalOnly = horizontalOnly;
+    DampenedCamera.verticalOnly = verticalOnly;
+    DampenedCamera.snap = snap;
+
+    DampenedCamera.lockHeight = lockHeight;
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
     DampenedCamera.acceleration = acceleration;
@@ -44,28 +52,37 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     follow(target!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
   }
 
-  @override
-  void update(double dt) {
+  static void fixedUpdated(double dt) { // an update method that is always called after the players update
     if (trail == null || target == null) {
       return;
     }
 
-    if (trail!.position.distanceTo(target!.position) >= minDistance) { // only move camera if under minDistance
-      var dir = target!.position - trail!.position; // vector from trail to target
+    Vector2 pos = trail!.position;
 
-      if (dir.length > maxDistance) { // keep camera at the max distance  allowed
+    if (pos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
+      var dir = target!.position - pos; // vector from trail to target
+
+      if (dir.length >= maxDistance) { // keep camera at the max distance  allowed
         dir.length -= maxDistance;
 
-        trail!.position += dir;
+        pos += dir;
 
       } else { // move the camera gradually to the target dependened on speed
-        //trail!.position += dir * speed * dt;
-
+        pos += dir * speed * dt;
       }
     }
-    var pos = trail!.position;
-    //print("Camera - trail pos: $pos)");
-    
-    super.update(dt); // to run the update on the normal camera functions
+
+
+    if (horizontalOnly) {
+      pos.y = 0;
+    }
+    if (verticalOnly) {
+      pos.x = 0;
+    }
+
+    trail!.position = pos;
+
   }
+
+  
 }

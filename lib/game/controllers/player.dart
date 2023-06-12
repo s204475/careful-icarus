@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
+import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -111,6 +112,9 @@ class Player extends SpriteComponent
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
     }
+
+    // update the camera:
+    DampenedCamera.fixedUpdated(dt);
   }
 
   void updatePosition(double dt) {
