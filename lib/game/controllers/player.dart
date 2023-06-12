@@ -1,86 +1,135 @@
 import 'dart:async';
-
-import 'package:careful_icarus/game/icarus.dart';
+import 'dart:ffi';
+import 'dart:io';
+import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'platform.dart' as kplatform;
+import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
-// main player physics object
-class PlayerObject extends SpriteGroupComponent<PlayerState>
-    with HasGameRef<Icarus>, KeyboardHandler, CollisionCallbacks {
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    final sprite = await gameRef.loadSprite('sprites/PixelPenguin1.png');
-    debugPrint("loading playerBody");
+import '../icarus.dart';
 
-    renderBody = false;
-    add(
-      SpriteComponent(
-        sprite: sprite,
-        size: Vector2(2,2),
-        anchor: Anchor.center,
-      ),
-    );
-  }
-
-
-  @override
-  Body createBody() {
-    final bodyDef = BodyDef(
-      type: BodyType.static,
-      userData: this,
-      position: Vector2.zero(),
-      fixedRotation: true
-    );
-    return world.createBody(bodyDef);
-  }
-}
-
-enum PlayerState {
+enum Collidables {
+  platform,
+  powerup,
 }
 
 // main player
-class PlayerControls extends PositionComponent with TapCallbacks, DragCallbacks {
-  PlayerControls() : super(anchor: Anchor.center);
+class Player extends SpriteComponent
+    with
+        HasGameRef,
+        KeyboardHandler,
+        TapCallbacks,
+        DragCallbacks,
+        CollisionCallbacks {
+  Player({
+    super.position,
+  }) : super(anchor: Anchor.center, size: Vector2(152, 73), priority: 100);
 
-  // adds a player physics object as a child of this component
-  var player = PlayerObject();
-  
-  @override
-  void onLoad() {
-    debugPrint("loading playerControls");
-    // adds a player physics object as a child of this component
-    addAll([player]);
-    
-  }
-
-
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    // to use an item
-  }
+  double _hAxisInput = 0;
+  double gravity = 9;
+  Vector2 Velocity = Vector2.zero();
+  double gyroDeadZone = 1.5;
+  double maxHorizontalVelocity = 10;
+  double maxVerticalVelocity = 10;
 
   @override
-  void onDragStart(DragStartEvent event) {
-    super.onDragStart(event);
-    // setup UI to switch between items
+  Future<void> onLoad() async {
+    await super.onLoad();
 
-    // start drag by saving the current position that is interacted
-  }
+    sprite = await gameRef.loadSprite('Default.png');
 
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    // switch to next item
+    await add(CircleHitbox());
+    debugMode = GameManager.debugging;
   }
 
   @override
-  void onDragEnd(DragEndEvent event) {
-    super.onDragEnd(event);
-    // select current item
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    _hAxisInput = 0;
+
+    if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+      move(-200); //int to speed up the movement
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+      move(200); //int to speed up the movement
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+      jump(); //TODO: remove this debug statement
+    }
+
+    return true;
+  }
+
+  void move(double movement) {
+    _hAxisInput = 0;
+    _hAxisInput += movement;
+  }
+
+  void jump() {
+    print("Jump");
+    Velocity.y = -600;
+  }
+
+  @override
+  Future<void> update(double dt) async {
+    Velocity.x = _hAxisInput;
+    Velocity.y += gravity;
+
+    final double dashHorizontalCenter = size.x / 2;
+
+    if ((position.x + 100) < dashHorizontalCenter) {
+      position.x = gameRef.size.x - (dashHorizontalCenter);
+    }
+    if ((position.x - 100) > gameRef.size.x - (dashHorizontalCenter)) {
+      position.x = dashHorizontalCenter;
+    }
+    //Add magnetometer support for mobile, runs in separate thread to avoid lag
+    if (Platform.isAndroid || Platform.isIOS) {
+      sensorListener();
+    }
+
+    updatePosition(dt);
+    super.update(dt);
+    if (GameManager.height < position.y) {
+      GameManager.height = position.y; //height might be set differently
+    }
+  }
+
+  void updatePosition(double dt) {
+    position += Velocity * dt;
+  }
+
+  Future<void> sensorListener() async {
+    double? magnometerValue;
+    magnetometerEvents.listen(
+      (MagnetometerEvent event) {
+        if ((event.x.abs()) > gyroDeadZone) {
+          if (event.x > gyroDeadZone) {
+            move(event.x * 4);
+          } else if (event.x < -gyroDeadZone) {
+            move(event.x * 4);
+          }
+        } else {
+          move(0);
+        }
+      },
+      onError: (error) {
+        // Logic to handle error in case sensor is not available
+      },
+      cancelOnError: true,
+    );
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    //print("collision with " + other.toString());
+    if (other is kplatform.Platform && other.isAlive) {
+      jump();
+      other.destroy();
+    }
   }
 }
