@@ -9,7 +9,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
 
   static double maxDistance = double.infinity;
   static double minDistance = double.infinity;
-  static double speed = double.infinity; // the actual speed
+  static double speed = 0; // the actual speed
   static double acceleration = 1; // the accelration to increase the speed based on distance
 
   @override
@@ -32,6 +32,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
     DampenedCamera.acceleration = acceleration;
+    DampenedCamera.target = target;
 
     if (trail != null) {
       remove(trail!);
@@ -40,7 +41,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     trail = PositionComponent(position: target.position);
     trail?.add(SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
-    DampenedCamera.target = target;
     follow(target!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
   }
 
