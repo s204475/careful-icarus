@@ -23,7 +23,7 @@ class Icarus extends FlameGame
   static late final world;
 
   @override
-  Color backgroundColor() => Colors.pink;
+  Color backgroundColor() => Colors.white;
 
   late final DampenedCamera cameraComponent;
 

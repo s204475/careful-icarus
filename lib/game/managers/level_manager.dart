@@ -1,4 +1,5 @@
 import 'package:careful_icarus/game/icarus.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import '../DampenedCamera.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
+import '../sprites/background.dart';
 
 class LevelManager extends Component with HasGameRef<Icarus> {
   var player;
@@ -27,10 +29,13 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         minDistance: 40);
   }
 
-  void StartLevel() {
+  Future<void> StartLevel() async {
+    var background = BackgroundSprite();
+    Icarus.world.add(background);
+
     GameManager.StartLevel();
     addPlatforms(400, 100);
-    player.jump();
+    player.jump(); //An initial jump
   }
 
   void addPlatforms(int distanceBetween, int numberofPlatforms) {
@@ -43,5 +48,24 @@ class LevelManager extends Component with HasGameRef<Icarus> {
           -lastYpos.toDouble());
       lastYpos += distanceBetween;
     }
+  }
+
+  static Color getBackgroundColor() {
+    // Define the RGB values for the starting (light blue) and ending (orange) colors
+    Color startColor = Color(0xFFADD8E6); // Light blue
+    Color endColor = Color(0xFFFFA500); // Orange
+
+    // Calculate the color gradient
+    double gradientRatio = GameManager.height / GameManager.distanceToSun;
+    int r = (startColor.red + (endColor.red - startColor.red) * gradientRatio)
+        .round();
+    int g =
+        (startColor.green + (endColor.green - startColor.green) * gradientRatio)
+            .round();
+    int b =
+        (startColor.blue + (endColor.blue - startColor.blue) * gradientRatio)
+            .round();
+
+    return Color.fromARGB(255, r, g, b);
   }
 }

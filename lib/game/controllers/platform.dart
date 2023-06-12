@@ -5,6 +5,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/widgets.dart';
 import '../managers/game_manager.dart';
 import '../managers/level_manager.dart';
 import 'player.dart';
@@ -26,7 +27,7 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
 
     sprite = await gameRef.loadSprite(getCloudSprite(hasFish));
 
-    await add(RectangleHitbox());
+    await add(CircleHitbox());
     debugMode = GameManager.debugging;
   }
 
