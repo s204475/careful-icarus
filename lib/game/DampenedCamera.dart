@@ -18,13 +18,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool verticalOnly = false;
   static bool snap = false;
 
-  @override
-  Future<void> onLoad() async {
-    super.onLoad();
-    
-    priority = 999; // to make sure the camera is updated last
-  }
-
   Future<void> followDampened(PositionComponent target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
@@ -59,18 +52,17 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     follow(target!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
   }
 
-  @override
-  void update(double dt) {
+  static void fixedUpdated(double dt) { // an update method that is always called after the players update
     if (trail == null || target == null) {
       return;
     }
 
     Vector2 pos = trail!.position;
 
-    if (pos.distanceTo(target!.position) >= minDistance) { // only move camera if under minDistance
+    if (pos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
       var dir = target!.position - pos; // vector from trail to target
 
-      if (dir.length > maxDistance) { // keep camera at the max distance  allowed
+      if (dir.length >= maxDistance) { // keep camera at the max distance  allowed
         dir.length -= maxDistance;
 
         pos += dir;
@@ -88,11 +80,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     }
 
     trail!.position = pos;
-
-    super.update(dt); // to run the update on the normal camera functions
   }
 
-  void fixedUpdated(double dt) { // an update method that is always called after the players update
-
-  }
+  
 }
