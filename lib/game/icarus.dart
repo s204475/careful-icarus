@@ -41,12 +41,15 @@ class Icarus extends FlameGame
     debugPrint("loading Game");
      var player = Player(position: Vector2.zero());
     
-    world.add(player);
+    await world.add(player);
     player.position = Vector2(size.x/2, size.y/2);
+    /*
     cameraComponent.followDampened(player, snap: true,
       acceleration: 20,
       maxDistance: viewportResolution.y / 2, 
-      minDistance: 40);
+      minDistance: 40);*/
+    
+    cameraComponent.follow(player);
 
     print("viewport res: $viewportResolution");
     add(TapTarget());
