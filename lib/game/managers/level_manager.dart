@@ -23,7 +23,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
     cameraComponent.followDampened(player, snap: true, verticalOnly: true,
       acceleration: 20,
-      maxDistance: icarus.size.y / 2, 
+      maxDistance: icarus.size.y, 
       minDistance: 40);
   }
 
