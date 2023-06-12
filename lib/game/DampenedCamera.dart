@@ -8,8 +8,8 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static PositionComponent? target;
 
   static double maxDistance = double.infinity;
-  static double minDistance = double.infinity;
-  static double speed = 0; // the actual speed
+  static double minDistance = 0;
+  static double speed = 1; // the actual speed
   static double acceleration = 1; // the accelration to increase the speed based on distance
 
   @override
@@ -26,9 +26,11 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     bool snap = false,
 
     double maxDistance = double.infinity,
-    double minDistance = double.infinity,
+    double minDistance = 0,
     double acceleration = 1,
   }) async {
+    assert(maxDistance >= minDistance);
+
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
     DampenedCamera.acceleration = acceleration;
@@ -59,7 +61,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
         trail!.position += dir;
 
       } else { // move the camera gradually to the target dependened on speed
-        //trail!.position += dir * speed * dt;
+        trail!.position += dir * speed * dt;
 
       }
     }
