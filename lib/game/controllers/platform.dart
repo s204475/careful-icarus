@@ -34,6 +34,7 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
   void destroy() async {
     isAlive = false;
     var pfD = PlatformDissappearing();
+    pfD.position = position;
     Icarus.world.add(pfD);
     removeFromParent();
   }
