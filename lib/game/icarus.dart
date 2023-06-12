@@ -2,7 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
+import 'DampenedCamera.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
 import 'controllers/player.dart';
@@ -20,16 +20,17 @@ class Icarus extends FlameGame
   }
 
   static late Vector2 viewportResolution;
+  static late final world;
 
   @override
   Color backgroundColor() => Colors.pink;
 
-  late final CameraComponent cameraComponent;
+  late final DampenedCamera cameraComponent;
 
   @override
   Future<void> onLoad() async {
-    final world = World();
-    cameraComponent = CameraComponent(
+    world = World();
+    cameraComponent = DampenedCamera(
       world: world,
     );
 
@@ -38,9 +39,10 @@ class Icarus extends FlameGame
     var levelManager = LevelManager(this, cameraComponent);
     levelManager.StartLevel();
 
+    print("viewport res: $viewportResolution");
+    add(TapTarget());
+    
     debugPrint("loading complete");
-
-    //add(TapTarget());
   }
 }
 

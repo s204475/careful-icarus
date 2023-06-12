@@ -65,6 +65,7 @@ class Player extends SpriteComponent
   void move(double movement) {
     _hAxisInput = 0;
     _hAxisInput += movement;
+   
   }
 
   void jump() {
