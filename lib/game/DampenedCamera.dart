@@ -89,9 +89,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
 
     trail!.position = pos;
 
-
-    print("Camera - trail pos: $pos)");
-    
     super.update(dt); // to run the update on the normal camera functions
   }
 
