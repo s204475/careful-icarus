@@ -12,27 +12,25 @@ import 'dart:math';
 
 class LevelManager extends Component with HasGameRef<Icarus> {
   var player;
-  var icarus; //rename to game?
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
-    this.icarus = icarus;
     Icarus.world.add(player);
 
     player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
 
-    cameraComponent.followDampened(player, snap: true, verticalOnly: true,
-      acceleration: 20,
-      maxDistance: icarus.size.y / 2, 
-      minDistance: 40);
+    cameraComponent.followDampened(player,
+        snap: true,
+        verticalOnly: true,
+        acceleration: 20,
+        maxDistance: icarus.size.y / 2,
+        minDistance: 40);
   }
 
   void StartLevel() {
-    //var platform = Platform();
-    //icarus.add(platform); //Adds a platform at the bottom of the screen
-    //platform.position = Vector2(icarus.size.x / 2, icarus.size.y - 5);
-
+    GameManager.StartLevel();
     addPlatforms(400, 100);
+    player.jump();
   }
 
   void addPlatforms(int distanceBetween, int numberofPlatforms) {
@@ -41,7 +39,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
       var platform = Platform();
       Icarus.world.add(platform);
       platform.position = Vector2(
-          Random().nextInt(icarus.size.x.toInt()).toDouble(),
+          Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
           -lastYpos.toDouble());
       lastYpos += distanceBetween;
     }

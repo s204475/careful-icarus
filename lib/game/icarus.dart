@@ -41,7 +41,7 @@ class Icarus extends FlameGame
 
     print("viewport res: $viewportResolution");
     add(TapTarget());
-    
+
     debugPrint("loading complete");
   }
 }
