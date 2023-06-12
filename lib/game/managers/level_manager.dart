@@ -1,6 +1,7 @@
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import '../DampenedCamera.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
 import '../controllers/platform.dart';
@@ -13,13 +14,17 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   var player;
   var icarus; //rename to game?
 
-  LevelManager(Icarus icarus, CameraComponent cameraComponent) {
+  LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
     this.icarus = icarus;
-    icarus.add(player);
+    Icarus.world.add(player);
 
     player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
-    cameraComponent.follow(player);
+
+    cameraComponent.followDampened(player, snap: true,
+      acceleration: 20,
+      maxDistance: icarus.size.y / 2, 
+      minDistance: 40);
   }
 
   void StartLevel() {
@@ -34,7 +39,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     int lastYpos = 0;
     for (var i = 0; i < numberofPlatforms; i++) {
       var platform = Platform();
-      icarus.add(platform);
+      Icarus.world.add(platform);
       platform.position = Vector2(
           Random().nextInt(icarus.size.x.toInt()).toDouble(),
           lastYpos.toDouble());

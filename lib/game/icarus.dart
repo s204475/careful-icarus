@@ -20,6 +20,7 @@ class Icarus extends FlameGame
   }
 
   static late Vector2 viewportResolution;
+  static late final world;
 
   @override
   Color backgroundColor() => Colors.pink;
@@ -28,7 +29,7 @@ class Icarus extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final world = World();
+    world = World();
     cameraComponent = DampenedCamera(
       world: world,
     );
@@ -37,19 +38,6 @@ class Icarus extends FlameGame
     debugPrint("loading level");
     var levelManager = LevelManager(this, cameraComponent);
     levelManager.StartLevel();
-
-    debugPrint("loading Game");
-     var player = Player(position: Vector2.zero());
-    
-    await world.add(player);
-    player.position = Vector2(size.x/2, size.y/2);
-    /*
-    cameraComponent.followDampened(player, snap: true,
-      acceleration: 20,
-      maxDistance: viewportResolution.y / 2, 
-      minDistance: 40);*/
-    
-    cameraComponent.follow(player);
 
     print("viewport res: $viewportResolution");
     add(TapTarget());
