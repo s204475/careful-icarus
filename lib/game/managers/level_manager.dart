@@ -21,16 +21,16 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
     player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
 
-    cameraComponent.followDampened(player, snap: true,
+    cameraComponent.followDampened(player, snap: true, verticalOnly: true,
       acceleration: 20,
       maxDistance: icarus.size.y / 2, 
       minDistance: 40);
   }
 
   void StartLevel() {
-    var platform = Platform();
-    icarus.add(platform); //Adds a platform at the bottom of the screen
-    platform.position = Vector2(icarus.size.x / 2, icarus.size.y - 5);
+    //var platform = Platform();
+    //icarus.add(platform); //Adds a platform at the bottom of the screen
+    //platform.position = Vector2(icarus.size.x / 2, icarus.size.y - 5);
 
     addPlatforms(400, 100);
   }
@@ -42,7 +42,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
       Icarus.world.add(platform);
       platform.position = Vector2(
           Random().nextInt(icarus.size.x.toInt()).toDouble(),
-          lastYpos.toDouble());
+          -lastYpos.toDouble());
       lastYpos += distanceBetween;
     }
   }
