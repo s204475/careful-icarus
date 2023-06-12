@@ -28,7 +28,7 @@ class Player extends SpriteComponent
         CollisionCallbacks {
   Player({
     super.position,
-  }) : super(anchor: Anchor.center, size: Vector2(200, 200), priority: 100);
+  }) : super(anchor: Anchor.center, size: Vector2(152, 73), priority: 100);
 
   double _hAxisInput = 0;
   double gravity = 9;
@@ -127,8 +127,9 @@ class Player extends SpriteComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
-    if (other is kplatform.Platform) {
+    if (other is kplatform.Platform && other.isAlive) {
       jump();
+      other.destroy();
     }
   }
 }
