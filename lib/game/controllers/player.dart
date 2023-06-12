@@ -41,8 +41,10 @@ class Player extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite('Default.png');
-
+   
+      sprite = await gameRef.loadSprite('Default.png');
+    
+    
     await add(CircleHitbox());
     debugMode = GameManager.debugging;
   }
@@ -69,7 +71,7 @@ class Player extends SpriteComponent
   }
 
   void jump() {
-    print("Jump");
+    //print("Jump");
     Velocity.y = -600;
   }
 
@@ -77,6 +79,8 @@ class Player extends SpriteComponent
   Future<void> update(double dt) async {
     Velocity.x = _hAxisInput;
     Velocity.y += gravity;
+
+    
 
     final double dashHorizontalCenter = size.x / 2;
 
@@ -90,9 +94,20 @@ class Player extends SpriteComponent
     if (Platform.isAndroid || Platform.isIOS) {
       sensorListener();
     }
-
+  
     updatePosition(dt);
     super.update(dt);
+
+     if (Velocity.y < -50) {
+      //up
+      sprite = await gameRef.loadSprite('Up.png');
+    } else if (Velocity.y > 50) {
+      //down
+      sprite = await gameRef.loadSprite('Down.png');
+    } else {
+      sprite = await gameRef.loadSprite('Default.png');
+    }
+
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
     }
@@ -100,6 +115,8 @@ class Player extends SpriteComponent
 
   void updatePosition(double dt) {
     position += Velocity * dt;
+   
+    
   }
 
   Future<void> sensorListener() async {
