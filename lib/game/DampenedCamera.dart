@@ -9,7 +9,15 @@ class DampenedCamera extends CameraComponent with HasGameRef {
 
   static double maxDistance = double.infinity;
   static double minDistance = double.infinity;
-  static double speed = double.infinity;
+  static double speed = double.infinity; // the actual speed
+  static double acceleration = 1; // the accelration to increase the speed based on distance
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    
+    priority = 999; // to make sure the camera is updated last
+  }
 
   Future<void> followDampened(PositionComponent target, {
     double maxSpeed = double.infinity,
@@ -19,11 +27,11 @@ class DampenedCamera extends CameraComponent with HasGameRef {
 
     double maxDistance = double.infinity,
     double minDistance = double.infinity,
-    double speed = double.infinity,
+    double acceleration = 1,
   }) async {
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
-    DampenedCamera.speed = speed;
+    DampenedCamera.acceleration = acceleration;
 
     if (trail != null) {
       remove(trail!);
@@ -33,7 +41,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     trail?.add(SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
     DampenedCamera.target = target;
-    follow(trail!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
+    follow(target!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
   }
 
   @override
@@ -42,25 +50,21 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       return;
     }
 
-     var diff = target!.position - trail!.position; // vector from trail to target
-
     if (trail!.position.distanceTo(target!.position) >= minDistance) { // only move camera if under minDistance
-      //var dir = target!.position - trail!.position; // vector from trail to target
+      var dir = target!.position - trail!.position; // vector from trail to target
 
-      if (diff.length > maxDistance) { // keep camera at the max distance  allowed
-        //diff.length -= maxDistance; // TODO
+      if (dir.length > maxDistance) { // keep camera at the max distance  allowed
+        dir.length -= maxDistance;
 
-        //trail!.position.setFrom(diff.scaled((diff.length -= maxDistance) *dt));
-
+        trail!.position += dir;
 
       } else { // move the camera gradually to the target dependened on speed
-        //trail!.position.setFrom(diff.scaled(speed *dt));
+        //trail!.position += dir * speed * dt;
 
-        trail!.position += diff * speed * dt;
       }
     }
     var pos = trail!.position;
-    print("Camera - trail pos: $pos, dir: $diff)");
+    print("Camera - trail pos: $pos)");
     
     super.update(dt); // to run the update on the normal camera functions
   }

@@ -37,7 +37,12 @@ class Icarus extends FlameGame with HasKeyboardHandlerComponents{
     
     world.add(player);
     player.position = Vector2(size.x/2, size.y/2);
-    cameraComponent.followDampened(player, snap: true, speed: 20, maxDistance: 20, minDistance: 20);
+    cameraComponent.followDampened(player, snap: true,
+      acceleration: 20,
+      maxDistance: viewportResolution.y / 2, 
+      minDistance: 40);
+
+    print("viewport res: $viewportResolution");
     add(TapTarget());
 
   }
