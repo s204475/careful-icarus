@@ -72,6 +72,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       }
     }
 
+
     if (horizontalOnly) {
       pos.y = 0;
     }
@@ -80,6 +81,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     }
 
     trail!.position = pos;
+
   }
 
   
