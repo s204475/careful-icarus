@@ -21,10 +21,11 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
     player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
 
-    cameraComponent.followDampened(player, snap: true, verticalOnly: true,
+    cameraComponent.followDampened(player, snap: true, 
+      verticalOnly: true,
       acceleration: 20,
       maxDistance: icarus.size.y, 
-      minDistance: 40);
+      minDistance: 30);
   }
 
   void StartLevel() {
