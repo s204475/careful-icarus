@@ -1,6 +1,7 @@
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/foundation.dart';
 import '../DampenedCamera.dart';
 import '../controllers/enemy.dart';
 import 'game_manager.dart';
@@ -39,15 +40,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     var background = BackgroundSprite();
     Icarus.world.add(background);
 
-    lastYpos = addPlatforms(0, 400, 20); // add the initial first 20 platforms
+    lastYpos = addPlatforms(0, 400, 7); // add the initial first 7 platforms
 
     GameManager.startLevel();
-
-    var enemy = Enemy();
-    Icarus.world.add(enemy);
-    enemy.position = Vector2(
-        Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
-        -1000);
 
     player.jump(); //An initial jump
   }
@@ -68,7 +63,21 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         platform.speed = 35;
       }
       lastYpos += distanceBetween;
+      bool enemyAdded = false;
+      int enemyChance = Random().nextInt(100);
+      double enemyThreshold = -LevelManager.player.position.y / 1000;
+      clampDouble(enemyThreshold, 0, 30);
+      if (enemyChance <= enemyThreshold && !enemyAdded) {
+        var enemy = Enemy();
+        Icarus.world.add(enemy);
+        enemy.position = Vector2(
+            Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
+            -lastYpos.toDouble() - 200);
+        enemy.isMoving = true;
+        enemyAdded = true;
+      }
     }
+
     return lastYpos;
   }
 

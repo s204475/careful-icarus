@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:careful_icarus/game/DampenedCamera.dart';
+import 'package:careful_icarus/game/controllers/warning.dart';
 import 'package:careful_icarus/game/managers/level_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -166,7 +167,9 @@ class Player extends SpriteComponent
     //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
       GameManager.lose();
-    } else if (other is kplatform.Platform && other.isAlive) {
+    } else if (other is kplatform.Platform &&
+        other.isAlive &&
+        !(other is Warning)) {
       jump();
       GameManager.fishGathered++;
       other.destroy();
