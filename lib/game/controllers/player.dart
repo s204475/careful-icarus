@@ -10,6 +10,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import '../icarus.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -35,7 +36,6 @@ class Player extends SpriteComponent
     super.position,
   }) : super(anchor: Anchor.center, size: Vector2(152, 73), priority: 100);
 
-  
   double _hAxisInput = 0;
   double gravity = 9;
   Vector2 Velocity = Vector2.zero();
@@ -49,7 +49,7 @@ class Player extends SpriteComponent
     await super.onLoad();
 
     sprite = await gameRef.loadSprite('Default.png');
-    
+
     await add(CircleHitbox());
     debugMode = GameManager.debugging;
   }
@@ -76,7 +76,7 @@ class Player extends SpriteComponent
 
   void jump() {
     //print("Jump");
-     FlameAudio.play('sfx_wing.mp3');
+    FlameAudio.play('sfx_wing.mp3');
     Velocity.y -= 600;
     Velocity.y = clampDouble(Velocity.y, -1000, -600);
   }
@@ -115,6 +115,11 @@ class Player extends SpriteComponent
 
     // check if player is dead
     checkPlayerDeath();
+
+    // check player win
+    if (position.y.abs() + 100 > GameManager.distanceToSun) {
+      debugPrint("You Win!");
+    }
 
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
@@ -158,8 +163,6 @@ class Player extends SpriteComponent
       jump();
 
       other.destroy();
-    
-   
     }
   }
 
