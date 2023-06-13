@@ -38,11 +38,11 @@ class _ShopPageState extends State<ShopPage> {
         height: 80,
         child: ElevatedButton(
           onPressed: () {
-            setState(() {
-              print('Start pressed!');
-              HomePageState.lvl = Level.game;
-            });
-            setState((){});
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => GameWidget(game: Icarus(viewportResolution: Vector2(0, 0)))
+              ),
+            );
           },
           child: const Text('START'),
           style: ElevatedButton.styleFrom(

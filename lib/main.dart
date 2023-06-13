@@ -21,6 +21,10 @@ void main() {
 class MainApp extends StatelessWidget  {
   const MainApp({super.key});
 
+void changeLevel(Level lvl) {
+        _HomePageState.lvl = lvl;
+    }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,18 +53,11 @@ class HomePage extends StatefulWidget  {
   final String title;
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
-typedef void LevelCallback(Level lvl);
 
-class HomePageState extends State<HomePage> {
+  class _HomePageState extends State<HomePage> {
   static Level lvl = Level.shop;
-
-static void setLevel(Level x) {
-    lvl = x;
-    print('set lvl to ${lvl.toString()}');
-    
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +68,7 @@ static void setLevel(Level x) {
 
     var padding = MediaQuery.of(context).padding;
     var safeHeight = height - padding.top - padding.bottom;
-  
+
   print('switch statement $lvl.toString()');
   switch (lvl) {
     case Level.game:
@@ -87,7 +84,7 @@ static void setLevel(Level x) {
       throw UnimplementedError('no widget for $lvl.toString()');
     }
   return LayoutBuilder(builder: (context,constraints){
-    return scene;
+      return Scaffold(body: scene);      
   }
   );
   }
