@@ -10,6 +10,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import '../icarus.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -118,6 +119,7 @@ class Player extends SpriteComponent
       GameManager.height = position.y; //height might be set differently
     }
 
+    //Check win or lose conditions
     if (checkPlayerDeath()) {
       GameManager.lose();
     } else if (position.y.abs() >= GameManager.distanceToSun) {

@@ -21,7 +21,8 @@ class Icarus extends FlameGame
   static late Vector2 viewportResolution;
   static late DampenedCamera cameraComponent;
   static late final world;
-  var levelManager;
+  late var levelManager;
+  int lastPlatformYpos = 0;
 
   @override
   Color backgroundColor() => Colors.white;
@@ -37,11 +38,22 @@ class Icarus extends FlameGame
     debugPrint("loading level");
     levelManager = LevelManager(this, cameraComponent);
     await levelManager.startLevel();
+    lastPlatformYpos = levelManager.lastYpos;
 
     print("viewport res: $viewportResolution");
     add(TapTarget(LevelManager.player));
 
     debugPrint("loading complete");
+  }
+
+  @override
+  Future<void> update(double dt) async {
+    // add platforms if needed, 20 at a time
+    if (LevelManager.player.position.y < (-lastPlatformYpos + 400 * 5)) {
+      lastPlatformYpos =
+          await levelManager.addPlatforms(lastPlatformYpos, 400, 20);
+    }
+    super.update(dt);
   }
 }
 
