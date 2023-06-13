@@ -76,25 +76,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     Vector2 playerPos = target!.position;
 
     Vector2 deltaPos = playerPos - followPos;
-    Vector2 velOffset = velocity;
-
-    /*
-    if (pos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
-      var dir = target!.position - pos; // vector from trail to target
-
-      if (dir.length >= maxDistance) {
-        // keep camera at the max distance  allowed
-        dir.length -= maxDistance;
-
-        followPos += dir;
-
-      } else { // move the camera gradually to the target dependened on speed
-        followPos += dir * speed * dt;
-      }
-    }
-    */
-
-    //debugPrint("before: $deltaPos");
 
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
@@ -116,8 +97,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
         deltaPos.x = 0;
       }
     }
-
-    //debugPrint("after: $deltaPos");
 
     trail!.position += deltaPos;
   }
