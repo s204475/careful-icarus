@@ -33,14 +33,13 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         minDistance: 40);
   }
 
-  Future<void> StartLevel() async {
+  Future<void> startLevel() async {
     var background = BackgroundSprite();
     Icarus.world.add(background);
 
-    GameManager.StartLevel();
-
     lastYpos = addPlatforms(0, 400, 20); // add the initial first 20 platforms
 
+    GameManager.startLevel();
     player.jump(); //An initial jump
   }
 
