@@ -23,6 +23,7 @@ class Icarus extends FlameGame
   static late final world;
   late var levelManager;
   int lastPlatformYpos = 0;
+  static bool pause = false;
 
   @override
   Color backgroundColor() => Colors.white;
@@ -53,7 +54,16 @@ class Icarus extends FlameGame
       lastPlatformYpos =
           await levelManager.addPlatforms(lastPlatformYpos, 400, 20);
     }
+    togglePause();
     super.update(dt);
+  }
+
+  togglePause() {
+    if (pause) {
+      pauseEngine();
+    } else {
+      resumeEngine();
+    }
   }
 }
 

@@ -9,7 +9,7 @@ class BackgroundSprite extends SpriteComponent with HasGameRef<Icarus> {
   }) : super(
             anchor: Anchor.bottomLeft,
             size: Vector2(Icarus.viewportResolution.x + 20,
-                40000), //should be GameManager.distanceToSun.toDouble()
+                GameManager.distanceToSun.toDouble()),
             priority: 0);
 
   @override

@@ -1,4 +1,5 @@
 export 'color_schemes.dart';
+export 'local_storage.dart';
 import 'dart:math';
 
 /// A class containing useful functions for the game. All fucntions are static and can be called without an instance of the class.
