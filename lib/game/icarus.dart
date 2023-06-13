@@ -20,12 +20,11 @@ class Icarus extends FlameGame
   }
 
   static late Vector2 viewportResolution;
-  static late final world;
+  static var world;
+  static late DampenedCamera cameraComponent;
 
   @override
   Color backgroundColor() => Colors.white;
-
-  late final DampenedCamera cameraComponent;
 
   @override
   Future<void> onLoad() async {
