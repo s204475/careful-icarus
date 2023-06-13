@@ -75,6 +75,7 @@ class HomePage extends StatefulWidget  {
         body: scene,
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         floatingActionButton: PopupMenuButton<int>(
+          icon: const Icon(Icons.settings),
           onSelected: (item) {onSelected(context, item);},
           itemBuilder: (context) => [
             const PopupMenuItem(
