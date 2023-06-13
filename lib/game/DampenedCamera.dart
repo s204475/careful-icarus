@@ -68,6 +68,9 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     Vector2 followPos = trail!.position + offset;
     Vector2 playerPos = target!.position;
 
+    Vector2 deltaPos = playerPos - followPos;
+
+    /*
     if (pos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
       var dir = target!.position - pos; // vector from trail to target
 
