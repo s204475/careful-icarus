@@ -128,7 +128,7 @@ class Player extends SpriteComponent
     }
 
     // update the camera:
-    DampenedCamera.fixedUpdated(dt);
+    DampenedCamera.fixedUpdated(dt, Velocity);
   }
 
   bool checkPlayerDeath() => Velocity.y >= deathVelocity;
