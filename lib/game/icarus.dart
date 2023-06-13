@@ -62,6 +62,7 @@ class TapTarget extends PositionComponent with TapCallbacks {
   var player;
   bool _fingerOnScreen = false;
   double _xLocation = 0;
+  bool started = false;
 
   TapTarget(Component player) {
     this.player = player;
@@ -81,6 +82,11 @@ class TapTarget extends PositionComponent with TapCallbacks {
   /// Start moving depending on the side of touch
   @override
   void onTapDown(TapDownEvent event) {
+    if (!started) {
+      player.start();
+      started = true;
+      return;
+    }
     player.manualControl = true;
     _fingerOnScreen = true;
     _xLocation = event.localPosition.x;

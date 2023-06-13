@@ -6,18 +6,15 @@ import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../icarus.dart';
+import '../sprites/glider.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-
 import 'package:flame_audio/flame_audio.dart';
-
-import '../icarus.dart';
 
 enum Collidables {
   platform,
@@ -45,19 +42,28 @@ class Player extends SpriteComponent
   final double maxVerticalVelocity = 10;
   final int deathVelocity = 800;
   bool manualControl = false;
+  bool disableControls = true;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite('Default.png');
+    sprite = await gameRef.loadSprite('PixelPenguin5.png');
+    position -= Vector2(0, 15); // moved more up
 
     await add(CircleHitbox());
     debugMode = GameManager.debugging;
   }
 
+  void start() async {
+    disableControls = false;
+    jump();
+  }
+
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (disableControls) return false;
+
     _hAxisInput = 0;
 
     if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
@@ -65,7 +71,7 @@ class Player extends SpriteComponent
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
       move(200); //int to speed up the movement
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      jump(); //TODO: remove this debug statement
+      jump(); //TODO: remove this debug "cheat"
     }
 
     return true;
@@ -77,6 +83,7 @@ class Player extends SpriteComponent
   }
 
   void jump() {
+    if (disableControls) return;
     //print("Jump");
     FlameAudio.play('sfx_wing.mp3');
     Velocity.y -= 600;
@@ -85,6 +92,8 @@ class Player extends SpriteComponent
 
   @override
   Future<void> update(double dt) async {
+    if (disableControls) return;
+
     Velocity.x = _hAxisInput;
     Velocity.y += gravity;
 

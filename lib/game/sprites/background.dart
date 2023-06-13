@@ -20,3 +20,20 @@ class BackgroundSprite extends SpriteComponent with HasGameRef<Icarus> {
     sprite = await gameRef.loadSprite('BackgroundNew.png');
   }
 }
+
+class IcebergSprite extends SpriteComponent with HasGameRef<Icarus> {
+  IcebergSprite({
+    super.position,
+  }) : super(
+            anchor: Anchor.bottomLeft,
+            size: Vector2(
+                Icarus.viewportResolution.x, Icarus.viewportResolution.y),
+            priority: 0);
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    sprite = await gameRef.loadSprite('Start2.png');
+  }
+}
