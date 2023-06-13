@@ -37,9 +37,19 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
   }
 
   @override
-  void update(double dt) {
+  Future<void> update(double dt) async {
     _move(dt);
     super.update(dt);
+    await checkIfBelow();
+  }
+
+  // platforms should be destroyed if they are 2000 pixels below the player
+  Future<void> checkIfBelow() async {
+    var player = LevelManager.player;
+    if ((position.y - 2000) > player.position.y) {
+      destroy();
+    }
+    return;
   }
 
   void destroy() async {

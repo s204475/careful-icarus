@@ -9,11 +9,10 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import '../icarus.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
-
-import '../icarus.dart';
 
 enum Collidables {
   platform,
@@ -110,6 +109,11 @@ class Player extends SpriteComponent
 
     // check if player is dead
     checkPlayerDeath();
+
+    // check player win
+    if (position.y.abs() + 100 > GameManager.distanceToSun) {
+      debugPrint("You Win!");
+    }
 
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
