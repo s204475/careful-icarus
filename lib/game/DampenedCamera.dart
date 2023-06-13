@@ -13,7 +13,8 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static double maxDistance = double.infinity;
   static double minDistance = 0;
   static double speed = 1; // the actual speed
-  static double acceleration = 1; // the accelration to increase the speed based on distance
+  static double acceleration =
+      1; // the accelration to increase the speed based on distance
 
   static double maxSpeed = double.infinity;
   static bool horizontalOnly = false;
@@ -21,9 +22,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool snap = false;
   static bool lockHeight = false;
 
-
-  static Vector2 offset = Vector2(0,200);
-
+  static Vector2 offset = Vector2(0, 200);
 
   Future<void> followDampened(
     PositionComponent target, {
@@ -54,9 +53,14 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     }
 
     trail = PositionComponent(position: target.position);
-    trail?.add(SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
+    trail?.add(
+        SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
-    follow(trail!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
+    follow(trail!,
+        maxSpeed: maxSpeed,
+        horizontalOnly: horizontalOnly,
+        verticalOnly: verticalOnly,
+        snap: snap);
   }
 
   static void fixedUpdated(double dt) {
@@ -86,7 +90,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     }
     */
 
-    debugPrint("before: $deltaPos");
+    //debugPrint("before: $deltaPos");
 
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
@@ -117,7 +121,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       }
     }
 
-    debugPrint("after: $deltaPos");
+    //debugPrint("after: $deltaPos");
 
     trail!.position += deltaPos;
   }

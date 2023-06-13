@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import '../util/util.dart';
 
 import '../icarus.dart';
 
@@ -10,9 +11,10 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static const bool debugging = true;
   static bool gameover = false;
   static num height = 0;
-  static const distanceToSun = 1519100000; //km
+  static const distanceToSun = 100000; //km
   static double timeToSunRecord = double.maxFinite;
   static DateTime levelStartTime = DateTime.now();
+  static int fishGathered = 0;
 
   static void startLevel() {
     gameover = false;
@@ -22,18 +24,29 @@ class GameManager extends Component with HasGameRef<Icarus> {
     //reset stats
   }
 
-  static void win() {
+  static Future<void> win() async {
     debugPrint('Victory!');
     if (timeToSunRecord > DateTime.now().difference(levelStartTime).inSeconds) {
       timeToSunRecord =
           DateTime.now().difference(levelStartTime).inSeconds.toDouble();
       debugPrint('New record: $timeToSunRecord!');
     }
+    int total = await readInt('totalFishGathered') + fishGathered;
+    writeInt('totalFishGathered', total);
     gameover = true;
+    Icarus.pause = true;
   }
 
-  static void lose() {
-    debugPrint('Defeat!');
-    gameover = true;
+  static bool runOnce = false;
+  static Future<void> lose() async {
+    if (!runOnce) {
+      debugPrint('Defeat!');
+      gameover = true;
+      Icarus.pause = true;
+      int total = await readInt('totalFishGathered') + fishGathered;
+      writeInt('totalFishGathered', total);
+      print('Total fish gathered: $total');
+      runOnce = true;
+    }
   }
 }

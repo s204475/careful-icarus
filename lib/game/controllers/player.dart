@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:careful_icarus/game/DampenedCamera.dart';
+import 'package:careful_icarus/game/managers/level_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -43,7 +44,7 @@ class Player extends SpriteComponent
   final double gyroSensitivity = 10;
   final double maxHorizontalVelocity = 10;
   final double maxVerticalVelocity = 10;
-  final int deathVelocity = 800;
+  final int deathVelocity = 1000;
   bool manualControl = false;
 
   @override
@@ -164,7 +165,7 @@ class Player extends SpriteComponent
     //print("collision with " + other.toString());
     if (other is kplatform.Platform && other.isAlive) {
       jump();
-
+      GameManager.fishGathered++;
       other.destroy();
     }
   }
