@@ -2,6 +2,7 @@ import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import '../DampenedCamera.dart';
+import '../controllers/enemy.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
 import '../controllers/platform.dart';
@@ -41,6 +42,13 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     lastYpos = addPlatforms(0, 400, 20); // add the initial first 20 platforms
 
     GameManager.startLevel();
+
+    var enemy = Enemy();
+    Icarus.world.add(enemy);
+    enemy.position = Vector2(
+        Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
+        -1000);
+
     player.jump(); //An initial jump
   }
 

@@ -12,6 +12,7 @@ import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../icarus.dart';
+import 'enemy.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -163,7 +164,9 @@ class Player extends SpriteComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
-    if (other is kplatform.Platform && other.isAlive) {
+    if (other is Enemy && other.isAlive) {
+      GameManager.lose();
+    } else if (other is kplatform.Platform && other.isAlive) {
       jump();
       GameManager.fishGathered++;
       other.destroy();
