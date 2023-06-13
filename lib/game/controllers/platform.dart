@@ -21,6 +21,10 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
   bool isAlive =
       true; // Indicates whether the object is alive or not (can be hit)
   bool hasFish = true; //Indicates whether Icarus can use it to jump higher
+  bool isMoving = false; //Indicates whether the platform is moving or not
+  final Vector2 _velocity = Vector2.zero();
+  double speed = 35;
+  double direction = 1;
 
   @override
   Future<void> onLoad() async {
@@ -32,12 +36,30 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
     debugMode = GameManager.debugging;
   }
 
+  @override
+  void update(double dt) {
+    _move(dt);
+    super.update(dt);
+  }
+
   void destroy() async {
     isAlive = false;
     var pfD = PlatformDissappearing();
     pfD.position = position;
     Icarus.world.add(pfD);
     removeFromParent();
+  }
+
+  void _move(double dt) {
+    if (!isMoving) return;
+
+    if (position.x <= 0) {
+      direction = 1;
+    } else if (position.x >= gameRef.size.x) {
+      direction = -1;
+    }
+    _velocity.x = direction * speed;
+    position += _velocity * dt;
   }
 }
 
