@@ -61,7 +61,6 @@ class HomePage extends StatefulWidget  {
 
   @override
   Widget build(BuildContext context) {
-    Widget scene;
 
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
@@ -69,23 +68,44 @@ class HomePage extends StatefulWidget  {
     var padding = MediaQuery.of(context).padding;
     var safeHeight = height - padding.top - padding.bottom;
 
-  print('switch statement $lvl.toString()');
-  switch (lvl) {
-    case Level.game:
-      scene = GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
-      break;
-     case Level.shop:
-       scene = ShopPage(Icarus(viewportResolution: Vector2(width, height)));
-       break;
-    case Level.mainMenu:
-       scene = MainMenu(Icarus(viewportResolution: Vector2(width, height)));
-       break;
-    default:
-      throw UnimplementedError('no widget for $lvl.toString()');
-    }
+    Widget scene = ShopPage(Icarus(viewportResolution: Vector2(width, height)));
+
   return LayoutBuilder(builder: (context,constraints){
-      return Scaffold(body: scene);      
+      return Scaffold(
+        body: scene,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        floatingActionButton: PopupMenuButton<int>(
+          onSelected: (item) {onSelected(context, item);},
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 0,
+              child: Icon(Icons.volume_off),
+            ),
+            const PopupMenuItem(
+              value: 1,
+              child: Text("Quit to Menu"),
+            ),
+          ],
+        ));      
   }
   );
+  }
+  void onSelected(BuildContext context, int item) {
+    switch (item) {
+      case 0:
+        setState(() {
+          //kode der fjerner lyd fra appen
+        });
+        break;
+      case 1:
+        setState(() {
+          Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MainMenu(Icarus(viewportResolution: Vector2(0, 0)))
+              ),
+            );
+        });
+        break;
+    }
   }
 }
