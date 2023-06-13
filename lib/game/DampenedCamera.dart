@@ -59,68 +59,45 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     follow(trail!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
   }
 
-  static void fixedUpdated(double dt, double velocity) {
+  static void fixedUpdated(double dt, Vector2 velocity) {
     // an update method that is always called after the players update
     if (trail == null || target == null) {
       return;
     }
 
+    minDistance = 100;
 
-
-    Vector2 followPos = trail!.position - offset;
+    Vector2 followPos = trail!.position;
     Vector2 playerPos = target!.position;
 
     Vector2 deltaPos = playerPos - followPos;
-
-    /*
-    if (pos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
-      var dir = target!.position - pos; // vector from trail to target
-
-      if (dir.length >= maxDistance) {
-        // keep camera at the max distance  allowed
-        dir.length -= maxDistance;
-
-        followPos += dir;
-
-      } else { // move the camera gradually to the target dependened on speed
-        followPos += dir * speed * dt;
-      }
-    }
-    */
+    Vector2 velOffset = velocity;
 
     debugPrint("before: $deltaPos");
 
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
     } else {
-      var diff = deltaPos.y;
-      var val = diff < 0 ? -1 : 1;
-      diff = diff > 0 ? diff : -diff;
-      if (diff > minDistance) {
-        if (diff >= maxDistance) {
-          deltaPos.y += (maxDistance - diff) * val;
-        } else {
-          deltaPos.y += diff * speed * dt;
-        }
+      if (deltaPos.y > 0 ? false : -deltaPos.y > minDistance) {
+        deltaPos.y += minDistance;
+
+      } else {
+        deltaPos.y = 0;
       }
     }
     if (verticalOnly) {
       deltaPos.x = 0;
     } else {
-      var diff = deltaPos.x;
-      var val = diff < 0 ? -1 : 1;
-      diff = diff > 0 ? diff : -diff;
-      if ((diff > 0 ? diff : -diff) > minDistance) {
-        if (diff >= maxDistance) {
-          deltaPos.x += (maxDistance - diff) * val;
-        } else {
-          deltaPos.y += diff * speed * dt;
-        }
+      if (deltaPos.x > 0 ? false : -deltaPos.x > minDistance) {
+        deltaPos.x += minDistance;
+
+      } else {
+        deltaPos.x = 0;
       }
     }
 
     debugPrint("after: $deltaPos");
 
-    trail!.position += deltaPos + offset;
+    trail!.position += deltaPos;
   }
 }
