@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'game/icarus.dart';
 import 'game/util/util.dart';
 import 'game/widgets/widgets.dart';
-import 'package:flame_audio/flame_audio.dart';
+
 //Main only serves to startup the game, everything else is handled by Icarus
 
 /*    If an errors appears saying something like "start ms-settings:developers"
@@ -37,14 +37,6 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-
-// til bagrunds music, skal bare køres i starten af build segmentet.
-void startBgmMusic() {
-    FlameAudio.bgm.initialize();
-    //filen skal bare være ___.mp3, og den skal ligge i en mappe i assets der heder audio
-    FlameAudio.bgm.play('');
-  }
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
