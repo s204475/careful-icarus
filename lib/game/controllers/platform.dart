@@ -12,6 +12,7 @@ import 'player.dart';
 
 const chanceForFish = 1;
 
+/// The platform that Icarus can jump on
 class Platform extends SpriteComponent with HasGameRef<Icarus> {
   Platform({
     super.position,
@@ -40,6 +41,7 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
   }
 }
 
+///  The animation of the platform dissapearing fter the fish has been eaten
 class PlatformDissappearing extends SpriteAnimationComponent with HasGameRef {
   PlatformDissappearing({
     super.position,
@@ -69,6 +71,7 @@ class PlatformDissappearing extends SpriteAnimationComponent with HasGameRef {
   }
 }
 
+/// Gets a random sprite for the platform with a fish in it
 String getCloudSprite(bool fish) {
   int rand = Util.nextInt(0, 3);
   switch (rand) {

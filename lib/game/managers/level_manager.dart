@@ -1,7 +1,6 @@
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import '../DampenedCamera.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
@@ -12,11 +11,15 @@ import 'package:flutter/rendering.dart';
 import 'dart:math';
 import '../sprites/background.dart';
 
+/// Handles creation of the actual level, including the player, platforms, and background
+/// Also handles game over and winning logic
 class LevelManager extends Component with HasGameRef<Icarus> {
   var player;
+  var cameraComponent;
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
+    this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
 
     player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
@@ -47,6 +50,16 @@ class LevelManager extends Component with HasGameRef<Icarus> {
           Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
           -lastYpos.toDouble());
       lastYpos += distanceBetween;
+    }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if ((!cameraComponent.cameraRect.contains(player.position))) {
+      print("player fell off screen");
+    } else {
+      print("player is on screen");
     }
   }
 

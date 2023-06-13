@@ -11,7 +11,7 @@ import 'dart:math';
 
 enum Character { penguin }
 
-// game main function
+/// The main game class. Initialises the game and creates the @level_manager.
 class Icarus extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
   Icarus({required Vector2 viewportResolution}) {
@@ -46,6 +46,7 @@ class Icarus extends FlameGame
   }
 }
 
+/// A simple component that responds when the user taps the screen. Currently draws a circle
 class TapTarget extends PositionComponent with TapCallbacks {
   TapTarget();
 

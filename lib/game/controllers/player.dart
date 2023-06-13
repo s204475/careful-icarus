@@ -6,6 +6,7 @@ import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'platform.dart' as kplatform;
@@ -19,7 +20,7 @@ enum Collidables {
   powerup,
 }
 
-// main player
+/// The main player component. Handles all player input and movement
 class Player extends SpriteComponent
     with
         HasGameRef,
