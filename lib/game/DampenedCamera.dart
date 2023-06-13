@@ -3,9 +3,10 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
+/// The camera component that follows the player. It gradually follows the player mimicking a dampened effect
 class DampenedCamera extends CameraComponent with HasGameRef {
   DampenedCamera({required super.world});
-  
+
   static PositionComponent? trail;
   static PositionComponent? target;
 
@@ -24,12 +25,12 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static Vector2 offset = Vector2(0,200);
 
 
-  Future<void> followDampened(PositionComponent target, {
+  Future<void> followDampened(
+    PositionComponent target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,
     bool snap = false,
-
     bool lockHeight = false,
     double maxDistance = double.infinity,
     double minDistance = 0,
@@ -53,17 +54,13 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     }
 
     trail = PositionComponent(position: target.position);
-    trail?.add(SpriteComponent(sprite: await gameRef.loadSprite('Flyfish1.png')));
-    Icarus.world.add(trail);
-
-    var trail2 = PositionComponent(position: target.position + Vector2(0,40));
-    trail2?.add(SpriteComponent(sprite: await gameRef.loadSprite('Flyfish2.png')));
-    target.add(trail2);
+    trail?.add(SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
     follow(trail!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
   }
 
-  static void fixedUpdated(double dt) { // an update method that is always called after the players update
+  static void fixedUpdated(double dt) {
+    // an update method that is always called after the players update
     if (trail == null || target == null) {
       return;
     }
@@ -71,12 +68,11 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     Vector2 followPos = trail!.position + offset;
     Vector2 playerPos = target!.position;
 
-    Vector2 deltaPos = playerPos - followPos;
-    /*
-    if (followPos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
-      var dir = target!.position - followPos; // vector from trail to target
+    if (pos.distanceTo(target!.position) > minDistance) { // only move camera if under minDistance
+      var dir = target!.position - pos; // vector from trail to target
 
-      if (dir.length >= maxDistance) { // keep camera at the max distance  allowed
+      if (dir.length >= maxDistance) {
+        // keep camera at the max distance  allowed
         dir.length -= maxDistance;
 
         followPos += dir;

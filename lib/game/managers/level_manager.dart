@@ -1,6 +1,6 @@
 import 'package:careful_icarus/game/icarus.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import '../DampenedCamera.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
@@ -9,31 +9,36 @@ import 'package:flutter/material.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math';
+import '../sprites/background.dart';
 
+/// Handles creation of the actual level, including the player, platforms, and background
+/// Also handles game over and winning logic
 class LevelManager extends Component with HasGameRef<Icarus> {
   var player;
-  var icarus; //rename to game?
+  var cameraComponent;
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
-    this.icarus = icarus;
+    this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
 
     player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
 
-    cameraComponent.followDampened(player, snap: true, 
-      verticalOnly: true,
-      acceleration: 20,
-      maxDistance: icarus.size.y, 
-      minDistance: 30);
+    cameraComponent.followDampened(player,
+        snap: true,
+        verticalOnly: true,
+        acceleration: 20,
+        maxDistance: icarus.size.y / 2,
+        minDistance: 40);
   }
 
-  void StartLevel() {
-    //var platform = Platform();
-    //icarus.add(platform); //Adds a platform at the bottom of the screen
-    //platform.position = Vector2(icarus.size.x / 2, icarus.size.y - 5);
+  Future<void> StartLevel() async {
+    var background = BackgroundSprite();
+    Icarus.world.add(background);
 
+    GameManager.StartLevel();
     addPlatforms(400, 100);
+    player.jump(); //An initial jump
   }
 
   void addPlatforms(int distanceBetween, int numberofPlatforms) {
@@ -42,9 +47,38 @@ class LevelManager extends Component with HasGameRef<Icarus> {
       var platform = Platform();
       Icarus.world.add(platform);
       platform.position = Vector2(
-          Random().nextInt(icarus.size.x.toInt()).toDouble(),
+          Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
           -lastYpos.toDouble());
       lastYpos += distanceBetween;
     }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if ((!cameraComponent.cameraRect.contains(player.position))) {
+      print("player fell off screen");
+    } else {
+      print("player is on screen");
+    }
+  }
+
+  static Color getBackgroundColor() {
+    // Define the RGB values for the starting (light blue) and ending (orange) colors
+    Color startColor = Color(0xFFADD8E6); // Light blue
+    Color endColor = Color(0xFFFFA500); // Orange
+
+    // Calculate the color gradient
+    double gradientRatio = GameManager.height / GameManager.distanceToSun;
+    int r = (startColor.red + (endColor.red - startColor.red) * gradientRatio)
+        .round();
+    int g =
+        (startColor.green + (endColor.green - startColor.green) * gradientRatio)
+            .round();
+    int b =
+        (startColor.blue + (endColor.blue - startColor.blue) * gradientRatio)
+            .round();
+
+    return Color.fromARGB(255, r, g, b);
   }
 }

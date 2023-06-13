@@ -1,16 +1,19 @@
 import 'dart:ui';
+import 'package:careful_icarus/game/icarus.dart';
 import 'package:careful_icarus/game/util/util.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/widgets.dart';
 import '../managers/game_manager.dart';
 import '../managers/level_manager.dart';
 import 'player.dart';
 
 const chanceForFish = 1;
 
-class Platform extends SpriteAnimationComponent with HasGameRef {
+/// The platform that Icarus can jump on
+class Platform extends SpriteComponent with HasGameRef<Icarus> {
   Platform({
     super.position,
   }) : super(anchor: Anchor.center, size: Vector2(150, 100), priority: 1);
@@ -19,25 +22,37 @@ class Platform extends SpriteAnimationComponent with HasGameRef {
       true; // Indicates whether the object is alive or not (can be hit)
   bool hasFish = true; //Indicates whether Icarus can use it to jump higher
 
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    sprite = await gameRef.loadSprite(getCloudSprite(hasFish));
+
+    await add(CircleHitbox());
+    debugMode = GameManager.debugging;
+  }
+
+  void destroy() async {
+    isAlive = false;
+    var pfD = PlatformDissappearing();
+    pfD.position = position;
+    Icarus.world.add(pfD);
+    removeFromParent();
+  }
+}
+
+///  The animation of the platform dissapearing fter the fish has been eaten
+class PlatformDissappearing extends SpriteAnimationComponent with HasGameRef {
+  PlatformDissappearing({
+    super.position,
+  }) : super(anchor: Anchor.center, size: Vector2(150, 100), priority: 1);
+
   late double spriteSheetWidth = 200, spriteSheetHeight = 150;
 
   late SpriteAnimation cloudAnimation;
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
-    var spriteImage = await Flame.images.load(getCloudSprite(hasFish));
-
-    animation = SpriteSheet(image: spriteImage, srcSize: Vector2(160, 105))
-        .createAnimation(row: 0, stepTime: 0.1);
-
-    await add(RectangleHitbox());
-    debugMode = GameManager.debugging;
-  }
-
-  void destroy() async {
-    isAlive = false;
     var spriteImages = await Flame.images.load(
         'CloudDissappear-Sheet.png'); //Should be loaded in at game start, not on collision
 
@@ -56,6 +71,7 @@ class Platform extends SpriteAnimationComponent with HasGameRef {
   }
 }
 
+/// Gets a random sprite for the platform with a fish in it
 String getCloudSprite(bool fish) {
   int rand = Util.nextInt(0, 3);
   switch (rand) {

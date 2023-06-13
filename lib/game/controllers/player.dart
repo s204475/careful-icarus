@@ -6,6 +6,7 @@ import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'platform.dart' as kplatform;
@@ -19,7 +20,7 @@ enum Collidables {
   powerup,
 }
 
-// main player
+/// The main player component. Handles all player input and movement
 class Player extends SpriteComponent
     with
         HasGameRef,
@@ -37,6 +38,7 @@ class Player extends SpriteComponent
   double gyroDeadZone = 1.5;
   double maxHorizontalVelocity = 10;
   double maxVerticalVelocity = 10;
+  int deathVelocity = 800;
 
   @override
   Future<void> onLoad() async {
@@ -66,12 +68,12 @@ class Player extends SpriteComponent
   void move(double movement) {
     _hAxisInput = 0;
     _hAxisInput += movement;
-   
   }
 
   void jump() {
-    print("Jump");
-    Velocity.y = -600;
+    //print("Jump");
+    Velocity.y -= 600;
+    Velocity.y = clampDouble(Velocity.y, -1000, -600);
   }
 
   @override
@@ -79,13 +81,14 @@ class Player extends SpriteComponent
     Velocity.x = _hAxisInput;
     Velocity.y += gravity;
 
+    // check if player is out of bounds
     final double dashHorizontalCenter = size.x / 2;
-
-    if ((position.x + 100) < dashHorizontalCenter) {
-      position.x = gameRef.size.x - (dashHorizontalCenter);
+    var playerSize = size.x / 2;
+    if ((position.x + playerSize) < dashHorizontalCenter) {
+      position.x = gameRef.size.x - (dashHorizontalCenter) + playerSize;
     }
-    if ((position.x - 100) > gameRef.size.x - (dashHorizontalCenter)) {
-      position.x = dashHorizontalCenter;
+    if ((position.x - playerSize) > gameRef.size.x - (dashHorizontalCenter)) {
+      position.x = dashHorizontalCenter - playerSize;
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
     if (Platform.isAndroid || Platform.isIOS) {
@@ -94,6 +97,20 @@ class Player extends SpriteComponent
 
     updatePosition(dt);
     super.update(dt);
+
+    if (Velocity.y < -50) {
+      //up
+      sprite = await gameRef.loadSprite('Up.png');
+    } else if (Velocity.y > 50) {
+      //down
+      sprite = await gameRef.loadSprite('Down.png');
+    } else {
+      sprite = await gameRef.loadSprite('Default.png');
+    }
+
+    // check if player is dead
+    checkPlayerDeath();
+
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
     }
@@ -112,9 +129,9 @@ class Player extends SpriteComponent
       (MagnetometerEvent event) {
         if ((event.x.abs()) > gyroDeadZone) {
           if (event.x > gyroDeadZone) {
-            move(event.x * 4);
+            move(event.x * 6);
           } else if (event.x < -gyroDeadZone) {
-            move(event.x * 4);
+            move(event.x * 6);
           }
         } else {
           move(0);
@@ -136,5 +153,13 @@ class Player extends SpriteComponent
       jump();
       other.destroy();
     }
+  }
+
+  bool checkPlayerDeath() {
+    if (Velocity.y >= deathVelocity) {
+      debugPrint("Game Over");
+      return true;
+    }
+    return false;
   }
 }

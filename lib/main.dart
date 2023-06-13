@@ -16,7 +16,7 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget  {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
@@ -38,8 +38,7 @@ class MainApp extends StatelessWidget  {
   }
 }
 
-
-class HomePage extends StatefulWidget  {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title});
 
   final String title;
@@ -51,12 +50,11 @@ class HomePage extends StatefulWidget  {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
-  var width = MediaQuery.of(context).size.width;
-  var height = MediaQuery.of(context).size.height;
-
-  var padding = MediaQuery.of(context).padding;
-  var safeHeight = height - padding.top - padding.bottom;
+    var padding = MediaQuery.of(context).padding;
+    var safeHeight = height - padding.top - padding.bottom;
 
     return GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
   }
