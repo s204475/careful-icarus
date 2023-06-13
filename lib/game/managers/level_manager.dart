@@ -14,8 +14,9 @@ import '../sprites/background.dart';
 /// Handles creation of the actual level, including the player, platforms, and background
 /// Also handles game over and winning logic
 class LevelManager extends Component with HasGameRef<Icarus> {
-  var player;
+  static var player;
   var cameraComponent;
+  int lastYpos = 0;
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
@@ -32,17 +33,17 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         minDistance: 40);
   }
 
-  Future<void> StartLevel() async {
+  Future<void> startLevel() async {
     var background = BackgroundSprite();
     Icarus.world.add(background);
 
-    GameManager.StartLevel();
-    addPlatforms(400, 100);
+    lastYpos = addPlatforms(0, 400, 20); // add the initial first 20 platforms
+
+    GameManager.startLevel();
     player.jump(); //An initial jump
   }
 
-  void addPlatforms(int distanceBetween, int numberofPlatforms) {
-    int lastYpos = 0;
+  int addPlatforms(int lastYpos, int distanceBetween, int numberofPlatforms) {
     for (var i = 0; i < numberofPlatforms; i++) {
       var platform = Platform();
       Icarus.world.add(platform);
@@ -59,16 +60,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
       }
       lastYpos += distanceBetween;
     }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if ((!cameraComponent.cameraRect.contains(player.position))) {
-      print("player fell off screen");
-    } else {
-      print("player is on screen");
-    }
+    return lastYpos;
   }
 
   static Color getBackgroundColor() {

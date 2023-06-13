@@ -10,6 +10,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import '../icarus.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -26,7 +27,7 @@ enum Collidables {
 /// The main player component. Handles all player input and movement
 class Player extends SpriteComponent
     with
-        HasGameRef,
+        HasGameRef<Icarus>,
         KeyboardHandler,
         TapCallbacks,
         DragCallbacks,
@@ -35,21 +36,22 @@ class Player extends SpriteComponent
     super.position,
   }) : super(anchor: Anchor.center, size: Vector2(152, 73), priority: 100);
 
-  
   double _hAxisInput = 0;
-  double gravity = 9;
+  final double gravity = 9;
   Vector2 Velocity = Vector2.zero();
-  double gyroDeadZone = 1.5;
-  double maxHorizontalVelocity = 10;
-  double maxVerticalVelocity = 10;
-  int deathVelocity = 800;
+  final double gyroDeadZone = 1.5;
+  final double gyroSensitivity = 10;
+  final double maxHorizontalVelocity = 10;
+  final double maxVerticalVelocity = 10;
+  final int deathVelocity = 800;
+  bool manualControl = false;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
     sprite = await gameRef.loadSprite('Default.png');
-    
+
     await add(CircleHitbox());
     debugMode = GameManager.debugging;
   }
@@ -76,7 +78,7 @@ class Player extends SpriteComponent
 
   void jump() {
     //print("Jump");
-     FlameAudio.play('sfx_wing.mp3');
+    FlameAudio.play('sfx_wing.mp3');
     Velocity.y -= 600;
     Velocity.y = clampDouble(Velocity.y, -1000, -600);
   }
@@ -96,7 +98,7 @@ class Player extends SpriteComponent
       position.x = dashHorizontalCenter - playerSize;
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!manualControl && (Platform.isAndroid || Platform.isIOS)) {
       sensorListener();
     }
 
@@ -113,16 +115,22 @@ class Player extends SpriteComponent
       sprite = await gameRef.loadSprite('Default.png');
     }
 
-    // check if player is dead
-    checkPlayerDeath();
-
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
+    }
+
+    //Check win or lose conditions
+    if (checkPlayerDeath()) {
+      GameManager.lose();
+    } else if (position.y.abs() >= GameManager.distanceToSun) {
+      GameManager.win();
     }
 
     // update the camera:
     DampenedCamera.fixedUpdated(dt, Velocity.y);
   }
+
+  bool checkPlayerDeath() => Velocity.y >= deathVelocity;
 
   void updatePosition(double dt) {
     position += Velocity * dt;
@@ -134,9 +142,9 @@ class Player extends SpriteComponent
       (MagnetometerEvent event) {
         if ((event.x.abs()) > gyroDeadZone) {
           if (event.x > gyroDeadZone) {
-            move(event.x * 6);
+            move(event.x * gyroSensitivity);
           } else if (event.x < -gyroDeadZone) {
-            move(event.x * 6);
+            move(event.x * gyroSensitivity);
           }
         } else {
           move(0);
@@ -158,16 +166,6 @@ class Player extends SpriteComponent
       jump();
 
       other.destroy();
-    
-   
     }
-  }
-
-  bool checkPlayerDeath() {
-    if (Velocity.y >= deathVelocity) {
-      debugPrint("Game Over");
-      return true;
-    }
-    return false;
   }
 }
