@@ -1,3 +1,4 @@
+import 'package:careful_icarus/main.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,11 @@ class _ShopPageState extends State<ShopPage> {
         height: 80,
         child: ElevatedButton(
           onPressed: () {
-            //set state to game
+            setState(() {
+              print('Start pressed!');
+              HomePageState.lvl = Level.game;
+            });
+            setState((){});
           },
           child: const Text('START'),
           style: ElevatedButton.styleFrom(

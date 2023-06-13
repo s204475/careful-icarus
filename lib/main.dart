@@ -41,6 +41,7 @@ class MainApp extends StatelessWidget  {
   }
 }
 
+enum Level {game, mainMenu, shop}
 
 class HomePage extends StatefulWidget  {
   const HomePage({Key? key, required this.title});
@@ -48,13 +49,18 @@ class HomePage extends StatefulWidget  {
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => HomePageState();
 }
+typedef void LevelCallback(Level lvl);
 
-enum Level {game, mainMenu, shop}
+class HomePageState extends State<HomePage> {
+  static Level lvl = Level.shop;
 
-class _HomePageState extends State<HomePage> {
-  Level lvl = Level.shop;
+static void setLevel(Level x) {
+    lvl = x;
+    print('set lvl to ${lvl.toString()}');
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     var padding = MediaQuery.of(context).padding;
     var safeHeight = height - padding.top - padding.bottom;
   
+  print('switch statement $lvl.toString()');
   switch (lvl) {
     case Level.game:
       scene = GameWidget(game: Icarus(viewportResolution: Vector2(width, height)));
