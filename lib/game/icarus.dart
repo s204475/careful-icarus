@@ -50,9 +50,9 @@ class Icarus extends FlameGame
   @override
   Future<void> update(double dt) async {
     // add platforms if needed, 20 at a time
-    if (LevelManager.player.position.y < (-lastPlatformYpos + 400 * 5)) {
+    if (LevelManager.player.position.y < (-lastPlatformYpos + 400 * 2)) {
       lastPlatformYpos =
-          await levelManager.addPlatforms(lastPlatformYpos, 400, 20);
+          await levelManager.addPlatforms(lastPlatformYpos, 400, 7);
     }
     togglePause();
     super.update(dt);
