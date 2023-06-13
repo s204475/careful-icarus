@@ -53,11 +53,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
       if (moveChance <= 2) {
         platform.isMoving = true;
         platform.speed = 15;
-        print("platform is 15");
       } else if (moveChance <= 5) {
         platform.isMoving = true;
         platform.speed = 35;
-        print("platform is 35");
       }
       lastYpos += distanceBetween;
     }
