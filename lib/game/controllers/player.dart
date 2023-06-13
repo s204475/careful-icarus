@@ -7,12 +7,17 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import '../icarus.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+
+import 'package:flame_audio/flame_audio.dart';
+
+import '../icarus.dart';
 
 enum Collidables {
   platform,
@@ -71,6 +76,7 @@ class Player extends SpriteComponent
 
   void jump() {
     //print("Jump");
+    FlameAudio.play('sfx_wing.mp3');
     Velocity.y -= 600;
     Velocity.y = clampDouble(Velocity.y, -1000, -600);
   }
@@ -155,6 +161,7 @@ class Player extends SpriteComponent
     //print("collision with " + other.toString());
     if (other is kplatform.Platform && other.isAlive) {
       jump();
+
       other.destroy();
     }
   }
