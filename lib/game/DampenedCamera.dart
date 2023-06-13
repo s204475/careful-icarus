@@ -85,6 +85,9 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       }
     }
     */
+
+    debugPrint("before: $deltaPos");
+
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
     } else {
@@ -114,10 +117,8 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       }
     }
 
-    debugPrint("$deltaPos");
+    debugPrint("after: $deltaPos");
 
     trail!.position += deltaPos;
   }
-
-
 }
