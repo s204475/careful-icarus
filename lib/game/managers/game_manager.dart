@@ -10,7 +10,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static const bool debugging = true;
   static bool gameover = false;
   static num height = 0;
-  static const distanceToSun = 1519100000; //km
+  static const distanceToSun = 100000; //km
   static double timeToSunRecord = double.maxFinite;
   static DateTime levelStartTime = DateTime.now();
 
