@@ -116,7 +116,7 @@ class Player extends SpriteComponent
     }
 
     // update the camera:
-    DampenedCamera.fixedUpdated(dt);
+    DampenedCamera.fixedUpdated(dt, Velocity.y);
   }
 
   void updatePosition(double dt) {

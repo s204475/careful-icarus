@@ -56,17 +56,21 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     trail = PositionComponent(position: target.position);
     trail?.add(SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
-    follow(trail!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
+    //follow(trail!, maxSpeed: maxSpeed, horizontalOnly: horizontalOnly, verticalOnly: verticalOnly, snap: snap);
+
+    PositionComponent trail2 = PositionComponent(position: target.position);
+    trail2?.add(SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
+    follow(trail2);
   }
 
-  static void fixedUpdated(double dt) {
+  static void fixedUpdated(double dt, double velocity) {
     // an update method that is always called after the players update
     if (trail == null || target == null) {
       return;
     }
 
     Vector2 followPos = trail!.position + offset;
-    Vector2 playerPos = target!.position;
+    Vector2 playerPos = target!.position + offset;
 
     Vector2 deltaPos = playerPos - followPos;
 
