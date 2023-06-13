@@ -34,13 +34,16 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   }
 
   Future<void> startLevel() async {
-    var background = BackgroundSprite();
-    Icarus.world.add(background);
+    var bg = BackgroundSprite();
+    var prop = IcebergSprite();
+    bg.position += Vector2(0, Icarus.viewportResolution.y);
+    prop.position += Vector2(0, Icarus.viewportResolution.y);
+    Icarus.world.add(bg);
+    Icarus.world.add(prop);
 
     lastYpos = addPlatforms(0, 400, 20); // add the initial first 20 platforms
 
     GameManager.startLevel();
-    player.jump(); //An initial jump
   }
 
   int addPlatforms(int lastYpos, int distanceBetween, int numberofPlatforms) {
