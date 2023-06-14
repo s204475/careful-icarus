@@ -13,8 +13,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static double maxDistance = double.infinity;
   static double minDistance = 0;
   static double speed = 1; // the actual speed
-  static double acceleration =
-      1; // the accelration to increase the speed based on distance
 
   static double maxSpeed = double.infinity;
   static bool horizontalOnly = false;
@@ -22,7 +20,12 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool snap = false;
   static bool lockHeight = false;
 
-  static Vector2 offset = Vector2(0, 100);
+  @override
+  Future<void> onLoad() async {
+  super.onLoad();
+  
+  priority = 99;
+}
 
   Future<void> followDampened(
     PositionComponent target, {
@@ -33,7 +36,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     bool lockHeight = false,
     double maxDistance = double.infinity,
     double minDistance = 0,
-    double acceleration = 1,
   }) async {
     assert(maxDistance >= minDistance);
 
@@ -45,7 +47,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     DampenedCamera.lockHeight = lockHeight;
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
-    DampenedCamera.acceleration = acceleration;
     DampenedCamera.target = target;
 
     if (trail != null) {
@@ -63,14 +64,9 @@ class DampenedCamera extends CameraComponent with HasGameRef {
         snap: snap);
   }
 
-  static void fixedUpdated(double dt, Vector2 velocity) {
-    // an update method that is always called after the players update
-    if (trail == null || target == null) {
-      return;
-    }
-
-    minDistance = 100;
-
+  @override
+  void update(double dt) {
+    
     Vector2 followPos = trail!.position;
     Vector2 playerPos = target!.position;
 

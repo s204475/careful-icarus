@@ -136,9 +136,6 @@ class Player extends SpriteComponent
     } else if (position.y.abs() >= GameManager.distanceToSun) {
       GameManager.win();
     }
-
-    // update the camera:
-    DampenedCamera.fixedUpdated(dt, Velocity);
   }
 
   bool checkPlayerDeath() => Velocity.y >= deathVelocity;
