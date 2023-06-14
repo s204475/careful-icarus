@@ -39,8 +39,8 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   Future<void> startLevel() async {
     var bg = BackgroundSprite();
     var prop = IcebergSprite();
-    bg.position += Vector2(0, Icarus.viewportResolution.y);
-    prop.position += Vector2(0, Icarus.viewportResolution.y);
+    bg.position += Vector2(-(bg.size.x/4), Icarus.viewportResolution.y*1.5);
+    prop.position += Vector2(-Icarus.viewportResolution.x/2, Icarus.viewportResolution.y*1.5);
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 
