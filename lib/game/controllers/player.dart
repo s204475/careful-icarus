@@ -100,13 +100,14 @@ class Player extends SpriteComponent
     Velocity.y += gravity;
 
     // check if player is out of bounds
-    final double dashHorizontalCenter = size.x / 2;
+    final double dashHorizontalCenter = size.x;
     var playerSize = size.x / 2;
-    if ((position.x + playerSize) < dashHorizontalCenter) {
-      position.x = gameRef.size.x - (dashHorizontalCenter) + playerSize;
+    if ((position.x) < -(gameRef.size.x/3)) {
+      
+      position.x = gameRef.size.x*1.5 - playerSize;
     }
-    if ((position.x - playerSize) > gameRef.size.x - (dashHorizontalCenter)) {
-      position.x = dashHorizontalCenter - playerSize;
+    if ((position.x + playerSize) > gameRef.size.x*1.5 ) {
+      position.x = -(gameRef.size.x/3);
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
     if (!manualControl && (Platform.isAndroid || Platform.isIOS)) {
