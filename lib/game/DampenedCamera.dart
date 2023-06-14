@@ -20,6 +20,8 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool snap = false;
   static bool lockHeight = false;
 
+  static Vector2 offset = Vector2.zero();
+
   @override
   Future<void> onLoad() async {
   super.onLoad();
@@ -55,7 +57,9 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       remove(trail!);
     }
 
-    trail = PositionComponent(position: target.position);
+    DampenedCamera.offset.y = -viewfinder.visibleWorldRect.size.height / 4;
+
+    trail = PositionComponent(position: target.position + offset);
     trail?.add(
         SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
@@ -69,11 +73,11 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   @override
   void update(double dt) {
     
-    Vector2 followPos = trail!.position;
+    Vector2 followPos = trail!.position - offset;
     Vector2 playerPos = target!.position;
 
     Vector2 deltaPos = playerPos - followPos;
-
+    
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
     } else {

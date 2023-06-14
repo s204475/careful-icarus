@@ -33,8 +33,7 @@ class Enemy extends Platform {
     super.update(dt);
     await checkIfBelow();
     double distance = LevelManager.player.position.y -
-        3 * Icarus.viewportResolution.y / 4 +
-        75;
+        3 * Icarus.viewportResolution.y / 3 - 160;
     if (warn.position.y <= this.position.y) {
       warn.destroy();
     } else {

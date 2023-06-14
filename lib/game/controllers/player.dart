@@ -42,7 +42,7 @@ class Player extends SpriteComponent
   final double gyroSensitivity = 10;
   final double maxHorizontalVelocity = 10;
   final double maxVerticalVelocity = 10;
-  final int deathVelocity = 1000;
+  final int deathVelocity = 800;
   bool manualControl = false;
   bool disableControls = true;
 
