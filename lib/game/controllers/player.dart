@@ -12,6 +12,7 @@ import 'package:flame_audio/audio_pool.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../icarus.dart';
+import '../managers/sound_manager.dart';
 import 'enemy.dart';
 import '../sprites/glider.dart';
 import 'platform.dart' as kplatform;
@@ -90,7 +91,7 @@ class Player extends SpriteComponent
   void jump() {
     var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
-    FlameAudio.play('sfx_wing.mp3');
+    SoundManager.playSound('sfx_wing.mp3', 0.6);
     Velocity.y -= jumpStrength;
     Velocity.y = clampDouble(Velocity.y, -(jumpStrength * 2), -jumpStrength);
   }

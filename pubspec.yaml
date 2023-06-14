@@ -27,3 +27,4 @@ flutter:
     - assets/images/
     - assets/sprites/
     - assets/audio/sfx_wing.mp3
+    - assets/audio/FlyingPenguins_Theme.mp3

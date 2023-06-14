@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:careful_icarus/game/DampenedCamera.dart';
+import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../util/util.dart';
@@ -34,6 +35,8 @@ class GameManager extends Component with HasGameRef<Icarus> {
       true; //If true, all upgrades are unlocked instantly
 
   static void startLevel() {
+    debugPrint("Start level");
+    SoundManager.playMusic();
     gameover = false;
     levelStartTime = DateTime.now();
     print(
@@ -58,6 +61,8 @@ class GameManager extends Component with HasGameRef<Icarus> {
 
   static Future<void> win() async {
     debugPrint('Victory!');
+    SoundManager.stopMusic();
+
     if (timeToSunRecord > DateTime.now().difference(levelStartTime).inSeconds) {
       timeToSunRecord =
           DateTime.now().difference(levelStartTime).inSeconds.toDouble();
@@ -71,6 +76,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
   }
 
   static Future<void> lose() async {
+    SoundManager.stopMusic();
     if (!runOnce) {
       DampenedCamera.lockHeight = true;
       debugPrint('Defeat!');
