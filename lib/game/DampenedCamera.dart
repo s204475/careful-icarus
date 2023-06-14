@@ -25,6 +25,8 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   super.onLoad();
   
   priority = 99;
+
+  viewfinder.zoom = 0.5;
 }
 
   Future<void> followDampened(
