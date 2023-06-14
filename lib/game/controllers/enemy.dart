@@ -10,20 +10,20 @@ import '../util/util.dart';
 import 'platform.dart';
 
 class Enemy extends Platform {
-  var pl = Warning();
+  var warn = Warning();
   var _velocity = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite("red.png");
+    sprite = await gameRef.loadSprite("Sealion_cloud1.png");
 
     await add(CircleHitbox());
     debugMode = GameManager.debugging;
 
-    Icarus.world.add(pl);
-    pl.position =
+    Icarus.world.add(warn);
+    warn.position =
         Vector2(this.position.x, LevelManager.player.position.y - 200);
   }
 
@@ -35,10 +35,10 @@ class Enemy extends Platform {
     double distance = LevelManager.player.position.y -
         3 * Icarus.viewportResolution.y / 4 +
         75;
-    if (pl.position.y <= this.position.y) {
-      pl.destroy();
+    if (warn.position.y <= this.position.y) {
+      warn.destroy();
     } else {
-      pl.position = Vector2(this.position.x, distance);
+      warn.position = Vector2(this.position.x, distance);
     }
   }
 
