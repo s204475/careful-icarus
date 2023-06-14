@@ -9,6 +9,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/audio_pool.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../icarus.dart';
 import 'enemy.dart';
@@ -45,6 +46,8 @@ class Player extends SpriteComponent
   final int deathVelocity = 1000;
   bool manualControl = false;
   bool disableControls = true;
+
+  bool usedSealProtection = false;
 
   @override
   Future<void> onLoad() async {
@@ -85,16 +88,18 @@ class Player extends SpriteComponent
   }
 
   void jump() {
+    var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
-    //print("Jump");
     FlameAudio.play('sfx_wing.mp3');
-    Velocity.y -= 600;
-    Velocity.y = clampDouble(Velocity.y, -1000, -600);
+    Velocity.y -= jumpStrength;
+    Velocity.y = clampDouble(Velocity.y, -(jumpStrength * 2), -jumpStrength);
   }
 
   @override
   Future<void> update(double dt) async {
     if (disableControls) return;
+
+    var jumpStrength = GameManager.jumpStrength;
 
     Velocity.x = _hAxisInput;
     Velocity.y += gravity;
@@ -113,9 +118,11 @@ class Player extends SpriteComponent
       sensorListener();
     }
 
+    //Update position based on player input or use of magnetometer
     updatePosition(dt);
     super.update(dt);
 
+    //Update sprite based on direction of movement
     if (Velocity.y < -50) {
       //up
       sprite = await gameRef.loadSprite('Up.png');
@@ -126,6 +133,7 @@ class Player extends SpriteComponent
       sprite = await gameRef.loadSprite('Default.png');
     }
 
+    //Update the run's maximum height reached
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
     }
@@ -174,12 +182,20 @@ class Player extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
-      GameManager.lose();
+      if (GameManager.sealprotection && !usedSealProtection) {
+        //Can use SealProtection once
+        debugPrint("SealProtection used");
+        usedSealProtection = true;
+        other.destroy();
+        jump();
+      } else {
+        GameManager.lose();
+      }
     } else if (other is kplatform.Platform &&
         other.isAlive &&
         !(other is Warning)) {
       jump();
-      GameManager.fishGathered++;
+      GameManager.fishGatheredRun++;
       other.destroy();
     }
   }
