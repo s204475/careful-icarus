@@ -5,7 +5,7 @@ class Warning extends Platform {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    sprite = await gameRef.loadSprite("PixelPenguin3.png");
+    sprite = await gameRef.loadSprite("Warning.png");
   }
 
   @override
