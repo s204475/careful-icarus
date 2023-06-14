@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../util/util.dart';
@@ -40,6 +41,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static bool runOnce = false;
   static Future<void> lose() async {
     if (!runOnce) {
+      DampenedCamera.lockHeight = true;
       debugPrint('Defeat!');
       gameover = true;
       Icarus.pause = true;

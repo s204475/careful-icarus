@@ -22,8 +22,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool snap = false;
   static bool lockHeight = false;
 
-
-  static Vector2 offset = Vector2(0,100);
+  static Vector2 offset = Vector2(0, 100);
 
   Future<void> followDampened(
     PositionComponent target, {
@@ -82,7 +81,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     } else {
       if (deltaPos.y > 0 ? false : -deltaPos.y > minDistance) {
         deltaPos.y += minDistance;
-
       } else {
         deltaPos.y = 0;
       }
@@ -92,7 +90,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     } else {
       if (deltaPos.x > 0 ? false : -deltaPos.x > minDistance) {
         deltaPos.x += minDistance;
-
       } else {
         deltaPos.x = 0;
       }

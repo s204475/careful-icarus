@@ -11,12 +11,13 @@ import '../managers/level_manager.dart';
 import 'player.dart';
 
 const chanceForFish = 1;
+final Vector2 platformSize = Vector2(135, 90);
 
 /// The platform that Icarus can jump on
 class Platform extends SpriteComponent with HasGameRef<Icarus> {
   Platform({
     super.position,
-  }) : super(anchor: Anchor.center, size: Vector2(150, 100), priority: 1);
+  }) : super(anchor: Anchor.center, size: platformSize, priority: 1);
 
   bool isAlive =
       true; // Indicates whether the object is alive or not (can be hit)
@@ -77,7 +78,7 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
 class PlatformDissappearing extends SpriteAnimationComponent with HasGameRef {
   PlatformDissappearing({
     super.position,
-  }) : super(anchor: Anchor.center, size: Vector2(150, 100), priority: 1);
+  }) : super(anchor: Anchor.center, size: platformSize, priority: 1);
 
   late double spriteSheetWidth = 200, spriteSheetHeight = 150;
 
