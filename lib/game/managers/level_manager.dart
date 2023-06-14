@@ -25,8 +25,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     player = Player();
     this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
+    //icarus.camera.gameSize;
 
-    player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
+    player.position = Vector2(cameraComponent.viewfinder.visibleWorldRect.size.width / 4, cameraComponent.viewfinder.visibleWorldRect.size.height / 4);
 
     cameraComponent.followDampened(player,
         snap: true,
