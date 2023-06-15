@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 import '../DampenedCamera.dart';
 import '../controllers/enemy.dart';
+import '../sprites/heads_up_display.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
 import '../controllers/platform.dart';
@@ -19,6 +20,7 @@ import '../util/util.dart';
 class LevelManager extends Component with HasGameRef<Icarus> {
   static late Player player;
   late CameraComponent cameraComponent;
+  late HeightCounter scoreCounter;
   int lastYpos = 0;
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
@@ -35,6 +37,10 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         verticalOnly: true,
         maxDistance: icarus.size.y / 2,
         minDistance: 100);
+
+      // UI
+      scoreCounter = HeightCounter(margin: EdgeInsets.all(20), anchor: Anchor.topCenter, position: Vector2(0, cameraComponent.viewfinder.visibleWorldRect.size.height / 4));
+      Icarus.cameraComponent.viewport.add(scoreCounter);
   }
 
   Future<void> startLevel() async {
