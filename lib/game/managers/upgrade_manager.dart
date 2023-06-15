@@ -2,9 +2,9 @@ import '../util/local_storage.dart';
 
 class UpgradeManager {
   static Map upgrades = {
-    "Seal protection": {
+    "Sealion Protection": {
       "cost": 10,
-      "description": "Protects seals from predators",
+      "description": "Protects penguins from predators",
       "level": 0,
       "multiplier": 1.0
     },
@@ -17,6 +17,12 @@ class UpgradeManager {
     "Jump Strength": {
       "cost": 10,
       "description": "Jump higher",
+      "level": 0,
+      "multiplier": 1.0
+    },
+    "Launch Strength": {
+      "cost": 10,
+      "description": "Get launched off the iceberg",
       "level": 0,
       "multiplier": 1.0
     },
@@ -33,6 +39,7 @@ class UpgradeManager {
       "multiplier": 1.0
     }
   };
+
   static Future<Map> readUpgrades() async {
     var upgradeBuffer = await readMap("stats");
     if (upgradeBuffer.isNotEmpty) {
@@ -66,5 +73,10 @@ class UpgradeManager {
       writeUpgrades();
     }
     print(UpgradeManager.upgrades);
+  }
+
+  static void resetUpgrades() {
+    upgrades.clear();
+    writeUpgrades();
   }
 }

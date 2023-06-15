@@ -21,14 +21,21 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static int fishGatheredTotal = 0;
 
   //Stats (powers)
-  static bool sealprotection =
-      false; //A one-use powerup that protects the player from one collision with an enemy
+  static int sealprotection = (UpgradeManager.upgrades["Sealion Protection"][
+      "level"]); //A that protects the player from one collision with an enemy per level
   static double idleFisher = (UpgradeManager.upgrades["Idle Fisher"]["level"]) /
       10; //A powerup that automatically catches fish based on time played. Increments by 0.1 per upgrade.
-  static double jumpStrength = 600; //How high the player can jump.
+  static double jumpStrength =
+      (600 * (UpgradeManager.upgrades["Jump Strength"]["multiplier"]))
+          .toDouble(); //How high the player can jump.
+  static double launchStrength =
+      (750 * (UpgradeManager.upgrades["Launch Strength"]["multiplier"]))
+          .toDouble(); //How high the player is initially launched
   static double fishMultiplier = UpgradeManager.upgrades["Fish Multiplier"]
       ["multiplier"]; //Multiplier for fish gathered
-  static double waxMax = 100; //How much wax the player has left
+  static double waxMax =
+      (100 * (UpgradeManager.upgrades["Wax Integrity"]["multiplier"]))
+          .toDouble(); //How much wax the player has left
   static double waxCurrent = 100; //Current timer for player
 
   static bool runOnce = false;
@@ -54,7 +61,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
 
   static void testUpgrades() {
     if (getAllUpgrades) {
-      sealprotection = true;
+      sealprotection = 10;
       idleFisher = 0.5;
       jumpStrength = 1000;
       fishMultiplier = 10;

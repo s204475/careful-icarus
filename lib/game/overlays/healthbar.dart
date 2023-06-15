@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:careful_icarus/game/managers/game_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -13,9 +15,9 @@ class HealthBar extends PositionComponent with HasGameRef<Icarus> {
     final barWidth =
         gameRef.size.x; // Assuming the wax bar width matches the screen width
     const barHeight = 20.0;
-    final barFillWidth = barWidth *
-        (GameManager.waxCurrent /
-            GameManager.waxMax); // Assuming health is a percentage (0-100)
+    final barFillWidth =
+        max(0, barWidth * (GameManager.waxCurrent / GameManager.waxMax))
+            .toDouble(); // Assuming health is a percentage (0-100)
 
     // Draw the empty wax bar background
     final backgroundPaint = Paint()..color = Colors.grey;
