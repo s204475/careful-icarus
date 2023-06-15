@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:careful_icarus/game/managers/sound_manager.dart';
+import 'package:careful_icarus/game/managers/upgrade_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import '../util/util.dart';
@@ -22,11 +23,13 @@ class GameManager extends Component with HasGameRef<Icarus> {
   //Stats (powers)
   static bool sealprotection =
       false; //A one-use powerup that protects the player from one collision with an enemy
-  static double idleFisher =
-      0; //A powerup that automatically catches fish based on time played. Increments by 0.1 per upgrade.
+  static double idleFisher = (UpgradeManager.upgrades["Idle Fisher"]["level"]) /
+      10; //A powerup that automatically catches fish based on time played. Increments by 0.1 per upgrade.
   static double jumpStrength = 600; //How high the player can jump.
-  static double fishMultiplier = 1; //Multiplier for fish gathered
-  static double waxIntegrity = 100; //How much wax the player has left
+  static double fishMultiplier = UpgradeManager.upgrades["Fish Multiplier"]
+      ["multiplier"]; //Multiplier for fish gathered
+  static double waxMax = 100; //How much wax the player has left
+  static double waxCurrent = 100; //Current timer for player
 
   static bool runOnce = false;
 
@@ -34,6 +37,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
       true; //If true, all upgrades are unlocked instantly
 
   static void startLevel() {
+    waxCurrent = waxMax;
     debugPrint("Start level");
     SoundManager.playMusic();
     gameover = false;
@@ -54,7 +58,8 @@ class GameManager extends Component with HasGameRef<Icarus> {
       idleFisher = 0.5;
       jumpStrength = 1000;
       fishMultiplier = 10;
-      waxIntegrity = 500;
+      waxMax = 500;
+      waxCurrent = 500;
     }
   }
 
@@ -90,7 +95,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
   }
 
   static Future<void> updateFish() async {
-    fishGatheredTotal = await readInt('fishGatheredTotal');
+    int fishGatheredTotal = await readInt('fishGatheredTotal');
     int fishIdled =
         (idleFisher * DateTime.now().difference(levelStartTime).inSeconds)
             .toInt();

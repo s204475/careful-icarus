@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 import '../DampenedCamera.dart';
 import '../controllers/enemy.dart';
+import '../overlays/healthbar.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
 import '../controllers/platform.dart';
@@ -40,6 +41,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   }
 
   Future<void> startLevel() async {
+    //Initialise background and iceberg sprites
     var bg = BackgroundSprite();
     var prop = IcebergSprite();
     bg.position += Vector2(-(bg.size.x / 4), Icarus.viewportResolution.y * 1.5);
@@ -48,30 +50,36 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 
+    //Add wax (health) bag
+    HealthBar healthbar = HealthBar();
+    Icarus.world.add(healthbar);
+
     lastYpos = addPlatforms(0); // add the initial first 7 platforms
 
     GameManager.startLevel();
   }
 
   int addPlatforms(int lastYpos) {
-    
-    int numberofPlatforms=10;
+    int numberofPlatforms = 10;
     for (var i = 0; i < numberofPlatforms; i++) {
-     var platform = Platform();
-     Icarus.world.add(platform);
-     int km = (Random().nextInt(275)+75);
+      var platform = Platform();
+      Icarus.world.add(platform);
+      int km = (Random().nextInt(275) + 75);
       platform.position = Vector2(
-          Random().nextInt(Icarus.viewportResolution.x.toInt()+200).toDouble()-100,
+          Random()
+                  .nextInt(Icarus.viewportResolution.x.toInt() + 200)
+                  .toDouble() -
+              100,
           -lastYpos.toDouble());
       int moveChance = Random().nextInt(10);
-       if (moveChance <= 2) {
+      if (moveChance <= 2) {
         platform.isMoving = true;
         platform.speed = 15;
       } else if (moveChance <= 5) {
         platform.isMoving = true;
         platform.speed = 35;
       }
-      lastYpos +=km;
+      lastYpos += km;
       bool enemyAdded = false;
       int enemyChance = Random().nextInt(100);
       double enemyThreshold = -LevelManager.player.position.y / 1000;

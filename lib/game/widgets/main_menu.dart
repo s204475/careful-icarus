@@ -34,13 +34,17 @@ class _MainMenuState extends State<MainMenu> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-        builder: (context) => GameWidget(
-            game:
-                Icarus(viewportResolution: Vector2(0, 0)))),
-  );
-});
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => GameWidget(
+                                  game: Icarus(
+                                      viewportResolution: Vector2(
+                                          MediaQuery.of(context).size.width,
+                                          MediaQuery.of(context)
+                                              .size
+                                              .height)))),
+                        );
+                      });
                     },
                     child: const Text('START'),
                     style: ElevatedButton.styleFrom(
@@ -53,13 +57,16 @@ class _MainMenuState extends State<MainMenu> {
                     ),
                   )),
             ),
-            ElevatedButton(child: const Text('shop'), 
-            onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ShopPage(Icarus(viewportResolution: Vector2(0, 0)))),
-                      );
-                    },)
+            ElevatedButton(
+              child: const Text('shop'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ShopPage(Icarus(viewportResolution: Vector2(0, 0)))),
+                );
+              },
+            )
           ],
         ),
       ),
