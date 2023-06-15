@@ -48,16 +48,52 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 
-    lastYpos = addPlatforms(0, 400, 7); // add the initial first 7 platforms
+    lastYpos = addPlatforms(0); // add the initial first 7 platforms
 
     GameManager.startLevel();
   }
 
-  int addPlatforms(int lastYpos, int distanceBetween, int numberofPlatforms) {
+  int addPlatforms(int lastYpos) {
+    
+    int numberofPlatforms=10;
     for (var i = 0; i < numberofPlatforms; i++) {
+     var platform = Platform();
+     Icarus.world.add(platform);
+     int km = (Random().nextInt(275)+75);
+      platform.position = Vector2(
+          Random().nextInt(Icarus.viewportResolution.x.toInt()+200).toDouble()-100,
+          -lastYpos.toDouble());
+      int moveChance = Random().nextInt(10);
+       if (moveChance <= 2) {
+        platform.isMoving = true;
+        platform.speed = 15;
+      } else if (moveChance <= 5) {
+        platform.isMoving = true;
+        platform.speed = 35;
+      }
+      lastYpos +=km;
+      bool enemyAdded = false;
+      int enemyChance = Random().nextInt(100);
+      double enemyThreshold = -LevelManager.player.position.y / 1000;
+      clampDouble(enemyThreshold, 0, 25);
+      if (enemyChance <= enemyThreshold && !enemyAdded) {
+        var enemy = Enemy();
+        Icarus.world.add(enemy);
+        enemy.position = Vector2(
+            Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
+            -lastYpos.toDouble() - 400);
+        enemy.isMoving = true;
+        enemyAdded = true;
+      }
+    }
+
+    // GAMLE VERSION AF CLOUD SPAWNING, BEHOLDER DEN HER HVIS VI NU VIL HAVE NOGET FRA DEN.
+
+    /*for (var i = 0; i < numberofPlatforms; i++) {
       var platform = Platform();
       Icarus.world.add(platform);
-      print("viewport res: ${Icarus.viewportResolution.x.toInt()}");
+      //print("viewport res: ${Icarus.viewportResolution.x.toInt()}");
+      
       platform.position = Vector2(
           Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
           -lastYpos.toDouble());
@@ -79,11 +115,11 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         Icarus.world.add(enemy);
         enemy.position = Vector2(
             Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
-            -lastYpos.toDouble() - 200);
+            -lastYpos.toDouble() - 400);
         enemy.isMoving = true;
         enemyAdded = true;
       }
-    }
+    }*/
 
     return lastYpos;
   }
