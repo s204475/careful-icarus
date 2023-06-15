@@ -1,3 +1,6 @@
+import 'package:careful_icarus/game/managers/game_manager.dart';
+import 'package:careful_icarus/game/managers/upgrade_manager.dart';
+import 'package:careful_icarus/game/util/util.dart';
 import 'package:careful_icarus/main.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +18,31 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  num fish = UpgradeManager.fish;
+  Map upgrades = UpgradeManager.upgrades;
+
+  refresh() {
+    setState(() {
+      fish = UpgradeManager.fish;
+      upgrades = UpgradeManager.upgrades;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           Text('Shop Page'),
-          Text('[ A string containing how many fish you have :D ]'),
+          Text('[ You have $fish fish.]'),
           ListView.builder(
-            itemCount: 8,
+            itemCount: upgrades.length,
             padding: const EdgeInsets.all(8),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return ShoppingButton('Upgrade $index');
+              return ShoppingButton(upgrades.keys.toList()[index],
+                  notifyParent: refresh);
             },
           ),
         ],

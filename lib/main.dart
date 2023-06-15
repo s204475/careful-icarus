@@ -1,3 +1,4 @@
+import 'package:careful_icarus/game/managers/upgrade_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flame/game.dart';
@@ -13,8 +14,10 @@ import 'package:flame_audio/flame_audio.dart';
 *     type win+R and type "ms-settings:developers" and enable developer mode
 */
 
-void main() {
+void main() async {
   runApp(const MainApp());
+  UpgradeManager.readFish(); //Reads the amount of fish from the save file
+  UpgradeManager.readUpgrades(); //Reads the upgrades from the save file
 }
 
 class MainApp extends StatelessWidget {
@@ -66,7 +69,7 @@ class _HomePageState extends State<HomePage> {
     var padding = MediaQuery.of(context).padding;
     var safeHeight = height - padding.top - padding.bottom;
 
-    Widget scene = ShopPage(Icarus(viewportResolution: Vector2(width, height)));
+    Widget scene = MainMenu(Icarus(viewportResolution: Vector2(width, height)));
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
