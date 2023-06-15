@@ -13,8 +13,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static double maxDistance = double.infinity;
   static double minDistance = 0;
   static double speed = 1; // the actual speed
-  static double acceleration =
-      1; // the accelration to increase the speed based on distance
 
   static double maxSpeed = double.infinity;
   static bool horizontalOnly = false;
@@ -22,7 +20,16 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool snap = false;
   static bool lockHeight = false;
 
-  static Vector2 offset = Vector2(0, 100);
+  static Vector2 offset = Vector2.zero();
+
+  @override
+  Future<void> onLoad() async {
+  super.onLoad();
+  
+  priority = 99;
+
+  viewfinder.zoom = 0.5;
+}
 
   Future<void> followDampened(
     PositionComponent target, {
@@ -33,7 +40,6 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     bool lockHeight = false,
     double maxDistance = double.infinity,
     double minDistance = 0,
-    double acceleration = 1,
   }) async {
     assert(maxDistance >= minDistance);
 
@@ -45,14 +51,15 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     DampenedCamera.lockHeight = lockHeight;
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
-    DampenedCamera.acceleration = acceleration;
     DampenedCamera.target = target;
 
     if (trail != null) {
       remove(trail!);
     }
 
-    trail = PositionComponent(position: target.position);
+    DampenedCamera.offset.y = -viewfinder.visibleWorldRect.size.height / 4;
+
+    trail = PositionComponent(position: target.position + offset);
     trail?.add(
         SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
@@ -63,19 +70,14 @@ class DampenedCamera extends CameraComponent with HasGameRef {
         snap: snap);
   }
 
-  static void fixedUpdated(double dt, Vector2 velocity) {
-    // an update method that is always called after the players update
-    if (trail == null || target == null) {
-      return;
-    }
-
-    minDistance = 100;
-
-    Vector2 followPos = trail!.position;
+  @override
+  void update(double dt) {
+    
+    Vector2 followPos = trail!.position - offset;
     Vector2 playerPos = target!.position;
 
     Vector2 deltaPos = playerPos - followPos;
-
+    
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
     } else {

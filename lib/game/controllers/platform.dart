@@ -64,9 +64,9 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
   void _move(double dt) {
     if (!isMoving) return;
 
-    if (position.x <= 0) {
+    if (position.x <= -(gameRef.size.x/4)+100) {
       direction = 1;
-    } else if (position.x >= gameRef.size.x) {
+    } else if (position.x >= gameRef.size.x*1.5-100) {
       direction = -1;
     }
     _velocity.x = direction * speed;

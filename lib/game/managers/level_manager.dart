@@ -26,22 +26,22 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     // ignore: prefer_initializing_formals
     this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
+    //icarus.camera.gameSize;
 
-    player.position = Vector2(icarus.size.x / 2, icarus.size.y / 2);
+    player.position = Vector2(cameraComponent.viewfinder.visibleWorldRect.size.width / 4, cameraComponent.viewfinder.visibleWorldRect.size.height / 4);
 
     cameraComponent.followDampened(player,
         snap: true,
         verticalOnly: true,
-        acceleration: 20,
         maxDistance: icarus.size.y / 2,
-        minDistance: 40);
+        minDistance: 100);
   }
 
   Future<void> startLevel() async {
     var bg = BackgroundSprite();
     var prop = IcebergSprite();
-    bg.position += Vector2(0, Icarus.viewportResolution.y);
-    prop.position += Vector2(0, Icarus.viewportResolution.y);
+    bg.position += Vector2(-(bg.size.x/4), Icarus.viewportResolution.y*1.5);
+    prop.position += Vector2(-Icarus.viewportResolution.x/2, Icarus.viewportResolution.y*1.5);
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 

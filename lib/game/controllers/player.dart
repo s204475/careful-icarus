@@ -44,7 +44,7 @@ class Player extends SpriteComponent
   final double gyroSensitivity = 10;
   final double maxHorizontalVelocity = 10;
   final double maxVerticalVelocity = 10;
-  final int deathVelocity = 1000;
+  final int deathVelocity = 800;
   bool manualControl = false;
   bool disableControls = true;
 
@@ -106,13 +106,13 @@ class Player extends SpriteComponent
     velocity.y += gravity;
 
     // check if player is out of bounds
-    final double dashHorizontalCenter = size.x / 2;
+    final double dashHorizontalCenter = size.x;
     var playerSize = size.x / 2;
-    if ((position.x + playerSize) < dashHorizontalCenter) {
-      position.x = gameRef.size.x - (dashHorizontalCenter) + playerSize;
+    if ((position.x) < -(gameRef.size.x / 3)) {
+      position.x = gameRef.size.x * 1.5 - playerSize;
     }
-    if ((position.x - playerSize) > gameRef.size.x - (dashHorizontalCenter)) {
-      position.x = dashHorizontalCenter - playerSize;
+    if ((position.x + playerSize) > gameRef.size.x * 1.5) {
+      position.x = -(gameRef.size.x / 3);
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
     if (!manualControl && (Platform.isAndroid || Platform.isIOS)) {
@@ -145,9 +145,6 @@ class Player extends SpriteComponent
     } else if (position.y.abs() >= GameManager.distanceToSun) {
       GameManager.win();
     }
-
-    // update the camera:
-    DampenedCamera.fixedUpdated(dt, velocity);
   }
 
   bool checkPlayerDeath() => velocity.y >= deathVelocity;
