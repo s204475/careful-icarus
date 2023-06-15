@@ -9,8 +9,10 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/audio_pool.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../icarus.dart';
+import '../managers/sound_manager.dart';
 import 'enemy.dart';
 import '../sprites/glider.dart';
 import 'platform.dart' as kplatform;
@@ -37,7 +39,7 @@ class Player extends SpriteComponent
 
   double _hAxisInput = 0;
   final double gravity = 9;
-  Vector2 Velocity = Vector2.zero();
+  Vector2 velocity = Vector2.zero();
   final double gyroDeadZone = 1.5;
   final double gyroSensitivity = 10;
   final double maxHorizontalVelocity = 10;
@@ -45,6 +47,8 @@ class Player extends SpriteComponent
   final int deathVelocity = 800;
   bool manualControl = false;
   bool disableControls = true;
+
+  bool usedSealProtection = false;
 
   @override
   Future<void> onLoad() async {
@@ -85,48 +89,52 @@ class Player extends SpriteComponent
   }
 
   void jump() {
+    var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
-    //print("Jump");
-    FlameAudio.play('sfx_wing.mp3');
-    Velocity.y -= 600;
-    Velocity.y = clampDouble(Velocity.y, -1000, -600);
+    SoundManager.playSound('sfx_wing.mp3', 0.6);
+    velocity.y -= jumpStrength;
+    velocity.y = clampDouble(velocity.y, -(jumpStrength * 2), -jumpStrength);
   }
 
   @override
   Future<void> update(double dt) async {
     if (disableControls) return;
 
-    Velocity.x = _hAxisInput;
-    Velocity.y += gravity;
+    var jumpStrength = GameManager.jumpStrength;
+
+    velocity.x = _hAxisInput;
+    velocity.y += gravity;
 
     // check if player is out of bounds
     final double dashHorizontalCenter = size.x;
     var playerSize = size.x / 2;
-    if ((position.x) < -(gameRef.size.x/3)) {
-      
-      position.x = gameRef.size.x*1.5 - playerSize;
+    if ((position.x) < -(gameRef.size.x / 3)) {
+      position.x = gameRef.size.x * 1.5 - playerSize;
     }
-    if ((position.x + playerSize) > gameRef.size.x*1.5 ) {
-      position.x = -(gameRef.size.x/3);
+    if ((position.x + playerSize) > gameRef.size.x * 1.5) {
+      position.x = -(gameRef.size.x / 3);
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
     if (!manualControl && (Platform.isAndroid || Platform.isIOS)) {
       sensorListener();
     }
 
+    //Update position based on player input or use of magnetometer
     updatePosition(dt);
     super.update(dt);
 
-    if (Velocity.y < -50) {
+    //Update sprite based on direction of movement
+    if (velocity.y < -50) {
       //up
       sprite = await gameRef.loadSprite('Up.png');
-    } else if (Velocity.y > 50) {
+    } else if (velocity.y > 50) {
       //down
       sprite = await gameRef.loadSprite('Down.png');
     } else {
       sprite = await gameRef.loadSprite('Default.png');
     }
 
+    //Update the run's maximum height reached
     if (GameManager.height < position.y) {
       GameManager.height = position.y; //height might be set differently
     }
@@ -139,10 +147,10 @@ class Player extends SpriteComponent
     }
   }
 
-  bool checkPlayerDeath() => Velocity.y >= deathVelocity;
+  bool checkPlayerDeath() => velocity.y >= deathVelocity;
 
   void updatePosition(double dt) {
-    position += Velocity * dt;
+    position += velocity * dt;
   }
 
   Future<void> sensorListener() async {
@@ -172,12 +180,20 @@ class Player extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
-      GameManager.lose();
+      if (GameManager.sealprotection && !usedSealProtection) {
+        //Can use SealProtection once
+        debugPrint("SealProtection used");
+        usedSealProtection = true;
+        other.destroy();
+        jump();
+      } else {
+        GameManager.lose();
+      }
     } else if (other is kplatform.Platform &&
         other.isAlive &&
-        !(other is Warning)) {
+        (other is! Warning)) {
       jump();
-      GameManager.fishGathered++;
+      GameManager.fishGatheredRun++;
       other.destroy();
     }
   }

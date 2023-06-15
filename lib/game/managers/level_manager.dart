@@ -17,12 +17,13 @@ import '../util/util.dart';
 /// Handles creation of the actual level, including the player, platforms, and background
 /// Also handles game over and winning logic
 class LevelManager extends Component with HasGameRef<Icarus> {
-  static var player;
-  var cameraComponent;
+  static late Player player;
+  late CameraComponent cameraComponent;
   int lastYpos = 0;
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
+    // ignore: prefer_initializing_formals
     this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
     //icarus.camera.gameSize;
@@ -85,8 +86,8 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
   static Color getBackgroundColor() {
     // Define the RGB values for the starting (light blue) and ending (orange) colors
-    Color startColor = Color(0xFFADD8E6); // Light blue
-    Color endColor = Color(0xFFFFA500); // Orange
+    Color startColor = const Color(0xFFADD8E6); // Light blue
+    Color endColor = const Color(0xFFFFA500); // Orange
 
     // Calculate the color gradient
     double gradientRatio = GameManager.height / GameManager.distanceToSun;
