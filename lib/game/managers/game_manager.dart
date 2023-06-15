@@ -46,7 +46,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
     fishGatheredRun = 0;
     height = 0;
 
-    testUpgrades();
+    //testUpgrades();
   }
 
   static void testUpgrades() {
