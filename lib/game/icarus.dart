@@ -22,8 +22,8 @@ class Icarus extends FlameGame
 
   static late Vector2 viewportResolution;
   static late DampenedCamera cameraComponent;
-  static late final world;
-  late var levelManager;
+  static late final World world;
+  late LevelManager levelManager;
   int lastPlatformYpos = 0;
   static bool pause = false;
 
@@ -47,7 +47,7 @@ class Icarus extends FlameGame
     await levelManager.startLevel();
     lastPlatformYpos = levelManager.lastYpos;
 
-    print("viewport res: $viewportResolution");
+    debugPrint("viewport res: $viewportResolution");
     add(TapTarget(LevelManager.player));
 
     debugPrint("loading complete");
@@ -57,8 +57,7 @@ class Icarus extends FlameGame
   Future<void> update(double dt) async {
     // add platforms if needed, 20 at a time
     if (LevelManager.player.position.y < (-lastPlatformYpos + 400 * 2)) {
-      lastPlatformYpos =
-          await levelManager.addPlatforms(lastPlatformYpos, 400, 7);
+      lastPlatformYpos = levelManager.addPlatforms(lastPlatformYpos, 400, 7);
     }
     togglePause();
     super.update(dt);
@@ -75,14 +74,13 @@ class Icarus extends FlameGame
 
 /// A simple component that responds when the user taps the screen. Can be used to move the player left or right.
 class TapTarget extends PositionComponent with TapCallbacks {
-  var player;
+  late Player player;
   bool _fingerOnScreen = false;
   double _xLocation = 0;
   bool started = false;
 
-  TapTarget(Component player) {
-    this.player = player;
-  }
+  /// A constructor that initialises $TapTarget with a reference to the player
+  TapTarget(this.player);
 
   @override
   void onGameResize(Vector2 size) {

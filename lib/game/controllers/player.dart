@@ -39,7 +39,7 @@ class Player extends SpriteComponent
 
   double _hAxisInput = 0;
   final double gravity = 9;
-  Vector2 Velocity = Vector2.zero();
+  Vector2 velocity = Vector2.zero();
   final double gyroDeadZone = 1.5;
   final double gyroSensitivity = 10;
   final double maxHorizontalVelocity = 10;
@@ -92,8 +92,8 @@ class Player extends SpriteComponent
     var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
     SoundManager.playSound('sfx_wing.mp3', 0.6);
-    Velocity.y -= jumpStrength;
-    Velocity.y = clampDouble(Velocity.y, -(jumpStrength * 2), -jumpStrength);
+    velocity.y -= jumpStrength;
+    velocity.y = clampDouble(velocity.y, -(jumpStrength * 2), -jumpStrength);
   }
 
   @override
@@ -102,8 +102,8 @@ class Player extends SpriteComponent
 
     var jumpStrength = GameManager.jumpStrength;
 
-    Velocity.x = _hAxisInput;
-    Velocity.y += gravity;
+    velocity.x = _hAxisInput;
+    velocity.y += gravity;
 
     // check if player is out of bounds
     final double dashHorizontalCenter = size.x / 2;
@@ -124,10 +124,10 @@ class Player extends SpriteComponent
     super.update(dt);
 
     //Update sprite based on direction of movement
-    if (Velocity.y < -50) {
+    if (velocity.y < -50) {
       //up
       sprite = await gameRef.loadSprite('Up.png');
-    } else if (Velocity.y > 50) {
+    } else if (velocity.y > 50) {
       //down
       sprite = await gameRef.loadSprite('Down.png');
     } else {
@@ -147,13 +147,13 @@ class Player extends SpriteComponent
     }
 
     // update the camera:
-    DampenedCamera.fixedUpdated(dt, Velocity);
+    DampenedCamera.fixedUpdated(dt, velocity);
   }
 
-  bool checkPlayerDeath() => Velocity.y >= deathVelocity;
+  bool checkPlayerDeath() => velocity.y >= deathVelocity;
 
   void updatePosition(double dt) {
-    position += Velocity * dt;
+    position += velocity * dt;
   }
 
   Future<void> sensorListener() async {
@@ -194,7 +194,7 @@ class Player extends SpriteComponent
       }
     } else if (other is kplatform.Platform &&
         other.isAlive &&
-        !(other is Warning)) {
+        (other is! Warning)) {
       jump();
       GameManager.fishGatheredRun++;
       other.destroy();

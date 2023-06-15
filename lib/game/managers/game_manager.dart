@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:flame/components.dart';
@@ -39,7 +38,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
     SoundManager.playMusic();
     gameover = false;
     levelStartTime = DateTime.now();
-    print(
+    debugPrint(
         'Level start: ${levelStartTime.hour}:${levelStartTime.minute}:${levelStartTime.second}.${levelStartTime.millisecond}');
 
     //Reset stats

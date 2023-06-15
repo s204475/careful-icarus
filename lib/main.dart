@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flame/game.dart';
-
 import 'game/icarus.dart';
 import 'game/util/util.dart';
 import 'game/widgets/widgets.dart';
@@ -38,15 +37,8 @@ class MainApp extends StatelessWidget {
   }
 }
 
-// til bagrunds music, skal bare køres i starten af build segmentet.
-void startBgmMusic() {
-    FlameAudio.bgm.initialize();
-    //filen skal bare være ___.mp3, og den skal ligge i en mappe i assets der heder audio
-    FlameAudio.bgm.play('');
-  }
-
-
 class HomePage extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
   const HomePage({Key? key, required this.title});
 
   final String title;
