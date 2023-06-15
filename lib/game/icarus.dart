@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'DampenedCamera.dart';
 import 'package:flame/events.dart';
 import 'controllers/player.dart';
+import 'managers/game_manager.dart';
 import 'managers/level_manager.dart';
 import 'dart:math';
 
@@ -67,7 +68,9 @@ class Icarus extends FlameGame
   togglePause() {
     if (pause) {
       pauseEngine();
-      notifyParent!();
+      if (GameManager.gameover) {
+        notifyParent!();
+      }
     } else {
       resumeEngine();
     }
