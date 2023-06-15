@@ -15,11 +15,12 @@ enum Character { penguin }
 /// The main game class. Initialises the game and creates the @level_manager.
 class Icarus extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
-  Icarus({required Vector2 viewportResolution}) {
+  final Function() notifyParent;
+
+  Icarus({required Vector2 viewportResolution, required this.notifyParent}) {
     // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
   }
-
   static late Vector2 viewportResolution;
   static late DampenedCamera cameraComponent;
   static late final World world;
@@ -66,6 +67,7 @@ class Icarus extends FlameGame
   togglePause() {
     if (pause) {
       pauseEngine();
+      notifyParent!();
     } else {
       resumeEngine();
     }

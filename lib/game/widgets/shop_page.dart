@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../icarus.dart';
+import 'game_over.dart';
 import 'shopping_button.dart';
 
 class ShopPage extends StatefulWidget {
@@ -25,6 +26,13 @@ class _ShopPageState extends State<ShopPage> {
     setState(() {
       fish = UpgradeManager.fish;
       upgrades = UpgradeManager.upgrades;
+    });
+  }
+
+  gameover() {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => GameOver(score: GameManager.fishGatheredRun)));
     });
   }
 
@@ -59,7 +67,8 @@ class _ShopPageState extends State<ShopPage> {
                         game: Icarus(
                             viewportResolution: Vector2(
                                 MediaQuery.of(context).size.width,
-                                MediaQuery.of(context).size.height)))),
+                                MediaQuery.of(context).size.height),
+                            notifyParent: gameover))),
               );
             });
           },

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flame/game.dart';
 import 'game/icarus.dart';
+import 'game/managers/game_manager.dart';
 import 'game/util/util.dart';
+import 'game/widgets/game_over.dart';
 import 'game/widgets/widgets.dart';
 import 'game/widgets/main_menu.dart';
 import 'game/widgets/shop_page.dart';
@@ -61,6 +63,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static Level lvl = Level.shop;
 
+  gameover() {
+    setState(() {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => GameOver(score: GameManager.fishGatheredRun)));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -69,7 +78,8 @@ class _HomePageState extends State<HomePage> {
     var padding = MediaQuery.of(context).padding;
     var safeHeight = height - padding.top - padding.bottom;
 
-    Widget scene = MainMenu(Icarus(viewportResolution: Vector2(width, height)));
+    Widget scene = MainMenu(Icarus(
+        viewportResolution: Vector2(width, height), notifyParent: gameover));
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
@@ -108,7 +118,8 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => MainMenu(Icarus(
                     viewportResolution: Vector2(
                         MediaQuery.of(context).size.width,
-                        MediaQuery.of(context).size.height)))),
+                        MediaQuery.of(context).size.height),
+                    notifyParent: gameover))),
           );
         });
         break;
