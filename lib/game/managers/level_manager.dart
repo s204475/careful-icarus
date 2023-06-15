@@ -30,7 +30,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     Icarus.world.add(player);
     //icarus.camera.gameSize;
 
-    player.position = Vector2(cameraComponent.viewfinder.visibleWorldRect.size.width / 4, cameraComponent.viewfinder.visibleWorldRect.size.height / 4);
+    player.position = Vector2(
+        cameraComponent.viewfinder.visibleWorldRect.size.width / 4,
+        cameraComponent.viewfinder.visibleWorldRect.size.height / 4);
 
     cameraComponent.followDampened(player,
         snap: true,
@@ -46,8 +48,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   Future<void> startLevel() async {
     var bg = BackgroundSprite();
     var prop = IcebergSprite();
-    bg.position += Vector2(-(bg.size.x/4), Icarus.viewportResolution.y*1.5);
-    prop.position += Vector2(-Icarus.viewportResolution.x/2, Icarus.viewportResolution.y*1.5);
+    bg.position += Vector2(-(bg.size.x / 4), Icarus.viewportResolution.y * 1.5);
+    prop.position += Vector2(
+        -Icarus.viewportResolution.x / 2, Icarus.viewportResolution.y * 1.5);
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 
@@ -60,6 +63,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     for (var i = 0; i < numberofPlatforms; i++) {
       var platform = Platform();
       Icarus.world.add(platform);
+      print("viewport res: ${Icarus.viewportResolution.x.toInt()}");
       platform.position = Vector2(
           Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
           -lastYpos.toDouble());
