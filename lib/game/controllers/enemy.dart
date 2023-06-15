@@ -23,7 +23,8 @@ class Enemy extends Platform {
     debugMode = GameManager.debugging;
 
     Icarus.world.add(warn);
-    warn.position = Vector2(position.x, LevelManager.player.position.y - 200);
+    warn.position =
+        Vector2(this.position.x, Icarus.cameraComponent.visibleWorldRect.top);
   }
 
   @override
@@ -31,9 +32,8 @@ class Enemy extends Platform {
     _move(dt);
     super.update(dt);
     await checkIfBelow();
-    double distance = LevelManager.player.position.y -
-        3 * Icarus.viewportResolution.y / 4 +
-        75;
+    double distance =
+        Icarus.cameraComponent.visibleWorldRect.top + warn.height / 2;
     if (warn.position.y <= position.y) {
       warn.destroy();
     } else {
