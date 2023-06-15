@@ -150,18 +150,22 @@ class Player extends SpriteComponent
     }
 
     //Check win or lose conditions
-    if (checkPlayerDeath()) {
+    checkPlayerDeath();
+  }
+
+  void checkPlayerDeath() {
+    //Check if player is falling or have reached the sun
+    if (velocity.y >= deathVelocity) {
       GameManager.lose();
     } else if (position.y.abs() >= GameManager.distanceToSun) {
       GameManager.win();
     }
 
+    //Check if run out of wax
     if (GameManager.waxCurrent <= 0) {
       defeated();
     }
   }
-
-  bool checkPlayerDeath() => velocity.y >= deathVelocity;
 
   void updatePosition(double dt) {
     position += velocity * dt;
