@@ -49,7 +49,7 @@ class Player extends SpriteComponent
   bool disableControls = true;
   bool startFall = false; //when hitting obstcale or running out of wax
 
-  bool usedSealProtection = false;
+  int sealionProtectionsUsed = 0;
 
   @override
   Future<void> onLoad() async {
@@ -64,7 +64,7 @@ class Player extends SpriteComponent
 
   void start() async {
     disableControls = false;
-    jump();
+    launch();
   }
 
   @override
@@ -84,11 +84,13 @@ class Player extends SpriteComponent
     return true;
   }
 
+  /// Handles horizontal movement
   void move(double movement) {
     _hAxisInput = 0;
     _hAxisInput += movement;
   }
 
+  /// Whenever the player easts a fish, they accelerate upwards
   void jump() {
     if (startFall) return;
     var jumpStrength = GameManager.jumpStrength;
@@ -96,6 +98,12 @@ class Player extends SpriteComponent
     SoundManager.playSound('sfx_wing.mp3', 0.6);
     velocity.y -= jumpStrength;
     velocity.y = clampDouble(velocity.y, -(jumpStrength * 2), -jumpStrength);
+  }
+
+  /// The first jump of the game
+  void launch() {
+    SoundManager.playSound('sfx_wing.mp3', 0.6);
+    velocity.y -= GameManager.launchStrength;
   }
 
   @override
@@ -186,10 +194,10 @@ class Player extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
-      if (GameManager.sealprotection && !usedSealProtection) {
-        //Can use SealProtection once
-        debugPrint("SealProtection used");
-        usedSealProtection = true;
+      if (sealionProtectionsUsed < GameManager.sealprotection) {
+        //Can use SealionProtection
+        debugPrint("SealionProtection used");
+        sealionProtectionsUsed++;
         other.destroy();
         jump();
       } else {
@@ -207,6 +215,5 @@ class Player extends SpriteComponent
   void defeated() {
     velocity.y = 10; //not immediate stop
     startFall = true;
-    //GameManager.lose();
   }
 }

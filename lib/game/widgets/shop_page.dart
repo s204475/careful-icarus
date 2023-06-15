@@ -4,7 +4,6 @@ import 'package:careful_icarus/game/util/util.dart';
 import 'package:careful_icarus/main.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
 import '../icarus.dart';
 import 'shopping_button.dart';
 
