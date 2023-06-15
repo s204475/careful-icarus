@@ -1,13 +1,16 @@
 
+import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HeightCounter extends HudMarginComponent {
-  HeightCounter({super.anchor, required super.margin, super.position});
+import '../icarus.dart';
 
-  TextComponent text = TextComponent();
+class HeightCounter extends HudMarginComponent {
+  HeightCounter({super.anchor, super.margin, super.position});
+
+  late final TextComponent _counterComponent;
 
   @override
   Future<void> onLoad() async {
@@ -18,14 +21,13 @@ class HeightCounter extends HudMarginComponent {
     );
     final defaultRenderer = TextPaint(style: textStyle);
 
-    add(
-      TextComponent(
-        text: "test",
-        position: Vector2(0, 0),
-        anchor: Anchor.center,
-        textRenderer: defaultRenderer,
-      ),
+    _counterComponent = TextComponent(
+      text: "test",
+      position: Vector2(0, 0),
+      anchor: Anchor.center,
+      textRenderer: defaultRenderer,
     );
+    add(_counterComponent);
 
     _backgroundPaint = Paint()
       ..color = Colors.black
@@ -41,7 +43,13 @@ class HeightCounter extends HudMarginComponent {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRRect(_backgroundRect, _backgroundPaint);
+    //canvas.drawRRect(_backgroundRect, _backgroundPaint);
+  }
+
+  @override
+  void update(double dt) {
+    //_timePassedComponent.text = gameRef.timePassed;
+    _counterComponent.text = DampenedCamera.target?.height.toString() ?? "nulled";
   }
 }
 

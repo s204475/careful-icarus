@@ -41,7 +41,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         minDistance: 100);
 
       // UI
-      scoreCounter = HeightCounter(margin: EdgeInsets.all(20), anchor: Anchor.topCenter, position: Vector2(0, cameraComponent.viewfinder.visibleWorldRect.size.height / 4));
+      scoreCounter = HeightCounter(/*margin: EdgeInsets.all(20),*/ anchor: Anchor.topCenter, position: Vector2(cameraComponent.viewfinder.visibleWorldRect.size.width / 4, 40));
       Icarus.cameraComponent.viewport.add(scoreCounter);
   }
 
