@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 import '../DampenedCamera.dart';
 import '../controllers/enemy.dart';
+import '../overlays/healthbar.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
 import '../controllers/platform.dart';
@@ -40,6 +41,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   }
 
   Future<void> startLevel() async {
+    //Initialise background and iceberg sprites
     var bg = BackgroundSprite();
     var prop = IcebergSprite();
     bg.position += Vector2(-(bg.size.x / 4), Icarus.viewportResolution.y * 1.5);
@@ -48,6 +50,11 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 
+    //Add wax (health) bag
+    HealthBar healthbar = HealthBar();
+    Icarus.world.add(healthbar);
+
+    //Initialise the first 7 platforms
     lastYpos = addPlatforms(0, 400, 7); // add the initial first 7 platforms
 
     GameManager.startLevel();

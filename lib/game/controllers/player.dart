@@ -47,6 +47,7 @@ class Player extends SpriteComponent
   final int deathVelocity = 800;
   bool manualControl = false;
   bool disableControls = true;
+  bool startFall = false; //when hitting obstcale or running out of wax
 
   bool usedSealProtection = false;
 
@@ -89,6 +90,7 @@ class Player extends SpriteComponent
   }
 
   void jump() {
+    if (startFall) return;
     var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
     SoundManager.playSound('sfx_wing.mp3', 0.6);
@@ -145,6 +147,10 @@ class Player extends SpriteComponent
     } else if (position.y.abs() >= GameManager.distanceToSun) {
       GameManager.win();
     }
+
+    if (GameManager.waxCurrent <= 0) {
+      defeated();
+    }
   }
 
   bool checkPlayerDeath() => velocity.y >= deathVelocity;
@@ -187,7 +193,7 @@ class Player extends SpriteComponent
         other.destroy();
         jump();
       } else {
-        GameManager.lose();
+        defeated();
       }
     } else if (other is kplatform.Platform &&
         other.isAlive &&
@@ -196,5 +202,11 @@ class Player extends SpriteComponent
       GameManager.fishGatheredRun++;
       other.destroy();
     }
+  }
+
+  void defeated() {
+    velocity.y = 10; //not immediate stop
+    startFall = true;
+    //GameManager.lose();
   }
 }

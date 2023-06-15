@@ -26,7 +26,8 @@ class GameManager extends Component with HasGameRef<Icarus> {
       0; //A powerup that automatically catches fish based on time played. Increments by 0.1 per upgrade.
   static double jumpStrength = 600; //How high the player can jump.
   static double fishMultiplier = 1; //Multiplier for fish gathered
-  static double waxIntegrity = 100; //How much wax the player has left
+  static double waxMax = 100; //How much wax the player has left
+  static double waxCurrent = 100; //Current timer for player
 
   static bool runOnce = false;
 
@@ -54,7 +55,8 @@ class GameManager extends Component with HasGameRef<Icarus> {
       idleFisher = 0.5;
       jumpStrength = 1000;
       fishMultiplier = 10;
-      waxIntegrity = 500;
+      waxMax = 500;
+      waxCurrent = 500;
     }
   }
 
