@@ -24,7 +24,7 @@ class Enemy extends Platform {
 
     Icarus.world.add(warn);
     warn.position =
-        Vector2(this.position.x, Icarus.cameraComponent.visibleWorldRect.top);
+        Vector2(position.x, Icarus.cameraComponent.visibleWorldRect.top);
   }
 
   @override
