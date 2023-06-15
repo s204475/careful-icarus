@@ -42,7 +42,10 @@ class _ShopPageState extends State<ShopPage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => GameWidget(
-                        game: Icarus(viewportResolution: Vector2(0, 0)))),
+                        game: Icarus(
+                            viewportResolution: Vector2(
+                                MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height)))),
               );
             });
           },

@@ -89,7 +89,8 @@ class GameManager extends Component with HasGameRef<Icarus> {
     }
   }
 
-  static void updateFish() {
+  static Future<void> updateFish() async {
+    fishGatheredTotal = await readInt('fishGatheredTotal');
     int fishIdled =
         (idleFisher * DateTime.now().difference(levelStartTime).inSeconds)
             .toInt();
@@ -97,5 +98,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
     debugPrint(
         'Fish idled: $fishIdled \nFish gathered: $fishGatheredRun \nTotal fish gathered (multiplier = $fishMultiplier): $total');
     fishGatheredTotal += total;
+    debugPrint('Total fish gathered: $fishGatheredTotal');
+    writeInt('fishGatheredTotal', fishGatheredTotal);
   }
 }

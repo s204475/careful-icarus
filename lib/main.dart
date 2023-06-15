@@ -102,8 +102,10 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) =>
-                    MainMenu(Icarus(viewportResolution: Vector2(0, 0)))),
+                builder: (context) => MainMenu(Icarus(
+                    viewportResolution: Vector2(
+                        MediaQuery.of(context).size.width,
+                        MediaQuery.of(context).size.height)))),
           );
         });
         break;
