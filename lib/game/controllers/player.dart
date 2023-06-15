@@ -201,6 +201,7 @@ class Player extends SpriteComponent
         other.destroy();
         jump();
       } else {
+        velocity.y = 10; //not immediate stop
         defeated();
       }
     } else if (other is kplatform.Platform &&
@@ -213,7 +214,6 @@ class Player extends SpriteComponent
   }
 
   void defeated() {
-    velocity.y = 10; //not immediate stop
     startFall = true;
   }
 }
