@@ -85,46 +85,8 @@ class _HomePageState extends State<HomePage> {
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
-          body: scene,
-          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-          floatingActionButton: PopupMenuButton<int>(
-            icon: const Icon(Icons.settings),
-            onSelected: (item) {
-              onSelected(context, item);
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 0,
-                child: Icon(Icons.volume_off),
-              ),
-              const PopupMenuItem(
-                value: 1,
-                child: Text("Quit to Menu"),
-              ),
-            ],
-          ));
+        body: scene,
+      );
     });
-  }
-
-  void onSelected(BuildContext context, int item) {
-    switch (item) {
-      case 0:
-        setState(() {
-          //kode der fjerner lyd fra appen
-        });
-        break;
-      case 1:
-        setState(() {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => MainMenu(Icarus(
-                    viewportResolution: Vector2(
-                        MediaQuery.of(context).size.width,
-                        MediaQuery.of(context).size.height),
-                    notifyParent: gameover))),
-          );
-        });
-        break;
-    }
   }
 }
