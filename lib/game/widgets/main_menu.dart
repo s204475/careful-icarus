@@ -1,3 +1,4 @@
+import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:careful_icarus/game/widgets/shop_page.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -26,56 +27,76 @@ class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: FloatingActionButton(
+        onPressed: null, //SoundManager.mute(),
+        child: Icon(Icons.volume_off),
+      ),
       body: Center(
-        child: Column(
+        child: Text(
+          'ICARUS',
+          style: TextStyle(
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+        ),
+      ),
+      bottomSheet: Container(
+          child: Padding(
+        padding: const EdgeInsets.all(60.0),
+        child: Image.asset('assets/images/PixelPenguin2.png'),
+      )),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text('ICARUS',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.w900,
-                  color: Color.fromARGB(255, 248, 169, 13),
-                )),
-            Expanded(
-              child: SizedBox(
-                  height: 120,
-                  width: 120,
+            Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2 - 16,
+                  height: 100,
                   child: ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => GameWidget(
-                                  game: Icarus(
-                                      viewportResolution: Vector2(
-                                          MediaQuery.of(context).size.width,
-                                          MediaQuery.of(context).size.height),
-                                      notifyParent: gameover))),
-                        );
-                      });
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => GameWidget(
+                                game: Icarus(
+                                    viewportResolution: Vector2(
+                                        MediaQuery.of(context).size.width,
+                                        MediaQuery.of(context).size.height),
+                                    notifyParent: gameover))),
+                      );
                     },
-                    child: const Text('START'),
+                    child: Text('PLAY'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      textStyle: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                      shadowColor: Colors.red,
+                      elevation: 5,
                     ),
-                  )),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2 - 16,
+                  height: 100,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShopPage(widget.game)));
+                    },
+                    label: Text('Shop'),
+                    icon: Icon(Icons.shopping_cart),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white,
+                      shadowColor: Colors.red,
+                      elevation: 5,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            ElevatedButton(
-              child: const Text('shop'),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => ShopPage(Icarus(
-                          viewportResolution: Vector2(0, 0),
-                          notifyParent: gameover))),
-                );
-              },
-            )
           ],
         ),
       ),
