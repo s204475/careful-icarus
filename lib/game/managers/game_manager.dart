@@ -93,7 +93,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
       debugPrint('Defeat!');
 
       updateFish();
-
+      
       gameover = true;
       Icarus.pause = true;
 
