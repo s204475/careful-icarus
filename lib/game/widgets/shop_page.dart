@@ -41,7 +41,7 @@ class _ShopPageState extends State<ShopPage> {
     switch (item) {
       case 0:
         setState(() {
-          //kode der fjerner lyd fra appen
+          SoundManager.mute();
         });
         break;
       case 1:
