@@ -10,6 +10,8 @@ import '../util/color_schemes.dart';
 import '../icarus.dart';
 
 class HealthBar extends PositionComponent with HasGameRef<Icarus> {
+  HealthBar({super.position});
+
   @override
   void render(Canvas canvas) {
     final barWidth =

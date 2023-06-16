@@ -53,12 +53,12 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     bg.position += Vector2(-(bg.size.x / 4), Icarus.viewportResolution.y * 1.5);
     prop.position += Vector2(
         -Icarus.viewportResolution.x / 2, Icarus.viewportResolution.y * 1.5);
-    Icarus.world.add(bg);
-    Icarus.world.add(prop);
+    Icarus.world.addAll([bg,prop]);
 
     //Add wax (health) bag
     HealthBar healthbar = HealthBar();
     Icarus.world.add(healthbar);
+    //scoreCounter.add(healthbar);
 
     lastYpos = addPlatforms(0); // add the initial first 7 platforms
 
