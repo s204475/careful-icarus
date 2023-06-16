@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../icarus.dart';
+import '../managers/level_manager.dart';
 
-class HeightCounter extends HudMarginComponent {
+class HeightCounter extends HudMarginComponent with HasGameRef<Icarus> {
   HeightCounter({super.anchor, super.margin, super.position});
 
-  late final TextComponent _counterComponent;
+  late final TextComponent _scoreComponent;
+  late final TextComponent _timerComponent;
 
   @override
   Future<void> onLoad() async {
@@ -21,39 +23,61 @@ class HeightCounter extends HudMarginComponent {
     );
     final defaultRenderer = TextPaint(style: textStyle);
 
-    _counterComponent = TextComponent(
-      text: "test",
-      position: Vector2(0, 0),
+    _scoreComponent = TextComponent(
+      position: Vector2(0, 40),
       anchor: Anchor.center,
       textRenderer: defaultRenderer,
     );
-    add(_counterComponent);
+    add(_scoreComponent);
+    
+    _timerComponent = TextComponent(
+      position: Vector2(0, 70),
+      anchor: Anchor.center,
+      textRenderer: defaultRenderer,
+    );
+    add(_timerComponent);
 
-    _backgroundPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+    _startingOffset = -LevelManager.player.position.y;
+    //_startingOffset = _startingOffset > 0 ? _startingOffset : -_startingOffset;
   }
 
-  final _backgroundRect = RRect.fromRectAndRadius(
-    Rect.fromCircle(center: Offset.zero, radius: 50),
-    const Radius.circular(10),
-  );
-  late final Paint _backgroundPaint;
+  double _timePassed = 0;
 
-  @override
-  void render(Canvas canvas) {
-    //canvas.drawRRect(_backgroundRect, _backgroundPaint);
+  String _addZero(int number) {
+    if (number < 10) {
+      if (number < 0) {
+        var tempNum = -number;
+        return '-0$tempNum';
+      }
+      return '0$number';
+    }
+    return number.toString();
+  }
+
+  String timePassed(time) {
+    final minutes = _addZero((time / 60).floor());
+    final seconds = _addZero((time % 60).floor());
+    final miliseconds = _addZero(((time % 1) * 100).floor());
+    return [minutes, seconds, miliseconds].join(':');
   }
 
   @override
   void update(double dt) {
-    //_timePassedComponent.text = gameRef.timePassed;
-    _counterComponent.text = DampenedCamera.target?.height.toString() ?? "nulled";
-  }
-}
+    _timerComponent.text = timePassed(300 - _timePassed);
+    //_scoreComponent.text = DampenedCamera.target?.height.toString() ?? "nulled";
+    _scoreComponent.text = getScore();
 
-class CountDown extends TimerComponent {
-  CountDown({required super.period});
-  
+    _timePassed += dt;
+  }
+
+  late double _startingOffset;
+
+  String getScore() {
+    var curPos = LevelManager.player.position.y + _startingOffset + 15;
+    curPos = curPos > 0 ? curPos : -curPos;
+
+    debugPrint("curPos: $curPos, _startingOffset: $_startingOffset");
+
+    return (curPos).toInt().toString();
+  }
 }
