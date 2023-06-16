@@ -1,4 +1,5 @@
 import 'package:careful_icarus/game/managers/game_manager.dart';
+import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:careful_icarus/game/managers/upgrade_manager.dart';
 import 'package:careful_icarus/game/util/util.dart';
 import 'package:careful_icarus/main.dart';
@@ -6,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import '../icarus.dart';
 import 'game_over.dart';
+import 'main_menu.dart';
 import 'shopping_button.dart';
 
 class ShopPage extends StatefulWidget {
@@ -35,11 +37,36 @@ class _ShopPageState extends State<ShopPage> {
     });
   }
 
+  onSelected(int item) {
+    switch (item) {
+      case 0:
+        setState(() {
+          //kode der fjerner lyd fra appen
+        });
+        break;
+      case 1:
+        setState(() {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => MainMenu(Icarus(
+                    viewportResolution: Vector2(
+                        MediaQuery.of(context).size.width,
+                        MediaQuery.of(context).size.height),
+                    notifyParent: gameover))),
+          );
+        });
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
+          SizedBox(
+            height: 50,
+          ),
           Text('Shop Page'),
           Text('[ You have $fish fish.]'),
           ListView.builder(
@@ -51,6 +78,23 @@ class _ShopPageState extends State<ShopPage> {
               return ShoppingButton(upgrades.keys.toList()[index],
                   notifyParent: refresh);
             },
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: PopupMenuButton<int>(
+        icon: const Icon(Icons.settings),
+        onSelected: (item) {
+          onSelected(item);
+        },
+        itemBuilder: (context) => [
+          const PopupMenuItem(
+            value: 0,
+            child: Icon(Icons.volume_off),
+          ),
+          const PopupMenuItem(
+            value: 1,
+            child: Text("Quit to Menu"),
           ),
         ],
       ),
