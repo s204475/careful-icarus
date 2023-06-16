@@ -114,4 +114,11 @@ class GameManager extends Component with HasGameRef<Icarus> {
     UpgradeManager.fish = fishGatheredTotal;
     writeInt('fishGatheredTotal', fishGatheredTotal);
   }
+
+  static int get totalfish{
+    int fishIdled =
+        (idleFisher * DateTime.now().difference(levelStartTime).inSeconds)
+            .toInt();
+    return ((fishGatheredRun + fishIdled) * fishMultiplier).toInt();
+  }
 }

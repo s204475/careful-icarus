@@ -1,5 +1,6 @@
 
 import 'package:careful_icarus/game/DampenedCamera.dart';
+import 'package:careful_icarus/game/managers/game_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,10 @@ class HeightCounter extends HudMarginComponent with HasGameRef<Icarus> {
       anchor: Anchor.center,
       textRenderer: defaultRenderer,
     );
-    add(_timerComponent);
+    //add(_timerComponent);
 
-    _startingOffset = -LevelManager.player.position.y;
+    //_startingOffset = -LevelManager.player.position.y;
+    _startingOffset = -(DampenedCamera.trail?.position.y ?? 0);
     //_startingOffset = _startingOffset > 0 ? _startingOffset : -_startingOffset;
   }
 
@@ -63,20 +65,21 @@ class HeightCounter extends HudMarginComponent with HasGameRef<Icarus> {
 
   @override
   void update(double dt) {
-    _timerComponent.text = timePassed(300 - _timePassed);
+    //_timerComponent.text = timePassed(300 - _timePassed);
     //_scoreComponent.text = DampenedCamera.target?.height.toString() ?? "nulled";
-    _scoreComponent.text = getScore();
+    //_scoreComponent.text = getHeight();
+    _scoreComponent.text = GameManager.totalfish.toString();
 
-    _timePassed += dt;
+    //_timePassed += dt;
   }
 
   late double _startingOffset;
 
-  String getScore() {
-    var curPos = LevelManager.player.position.y + _startingOffset + 15;
+  String getHeight() {
+    //var curPos = LevelManager.player.position.y + _startingOffset + 15;
+    var curPos = (DampenedCamera.trail?.position.y ?? 0) + _startingOffset;
     curPos = curPos > 0 ? curPos : -curPos;
 
-    debugPrint("curPos: $curPos, _startingOffset: $_startingOffset");
 
     return (curPos).toInt().toString();
   }
