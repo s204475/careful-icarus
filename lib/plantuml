@@ -1,0 +1,355 @@
+@startuml
+set namespaceSeparator ::
+
+class "careful_icarus::game::controllers::enemy.dart::Enemy" {
+  +Warning warn
+  -Vector2 _velocity
+  +dynamic onLoad()
+  +dynamic update()
+  -void _move()
+}
+
+"careful_icarus::game::controllers::enemy.dart::Enemy" o-- "careful_icarus::game::controllers::warning.dart::Warning"
+"careful_icarus::game::controllers::platform.dart::Platform" <|-- "careful_icarus::game::controllers::enemy.dart::Enemy"
+
+class "careful_icarus::game::controllers::platform.dart::Platform" {
+  +bool isAlive
+  +bool hasFish
+  +bool isMoving
+  -Vector2 _velocity
+  +double speed
+  +double direction
+  +dynamic onLoad()
+  +dynamic update()
+  +dynamic checkIfBelow()
+  +void destroy()
+  -void _move()
+}
+
+"flame::src::components::sprite_component.dart::SpriteComponent" <|-- "careful_icarus::game::controllers::platform.dart::Platform"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::controllers::platform.dart::Platform"
+
+class "careful_icarus::game::controllers::platform.dart::PlatformDissappearing" {
+  +double spriteSheetWidth
+  +double spriteSheetHeight
+  +SpriteAnimation cloudAnimation
+  +dynamic onLoad()
+}
+
+"careful_icarus::game::controllers::platform.dart::PlatformDissappearing" o-- "flame::src::sprite_animation.dart::SpriteAnimation"
+"flame::src::components::sprite_animation_component.dart::SpriteAnimationComponent" <|-- "careful_icarus::game::controllers::platform.dart::PlatformDissappearing"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::controllers::platform.dart::PlatformDissappearing"
+
+class "careful_icarus::game::controllers::player.dart::Player" {
+  -double _hAxisInput
+  +double gravity
+  +Vector2 velocity
+  +double gyroDeadZone
+  +double gyroSensitivity
+  +double maxHorizontalVelocity
+  +double maxVerticalVelocity
+  +int deathVelocity
+  +bool manualControl
+  +bool disableControls
+  +bool startFall
+  +int sealionProtectionsUsed
+  +dynamic onLoad()
+  +void start()
+  +bool onKeyEvent()
+  +void move()
+  +void jump()
+  +void launch()
+  +dynamic update()
+  +bool checkPlayerDeath()
+  +void updatePosition()
+  +dynamic sensorListener()
+  +void onCollisionStart()
+  +void defeated()
+}
+
+"flame::src::components::sprite_component.dart::SpriteComponent" <|-- "careful_icarus::game::controllers::player.dart::Player"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::controllers::player.dart::Player"
+"flame::src::events::component_mixins::tap_callbacks.dart::TapCallbacks" <|-- "careful_icarus::game::controllers::player.dart::Player"
+
+class "careful_icarus::game::controllers::player.dart::Collidables" {
+  +int index
+  {static} +List<Collidables> values
+  {static} +Collidables platform
+  {static} +Collidables powerup
+}
+
+"careful_icarus::game::controllers::player.dart::Collidables" o-- "careful_icarus::game::controllers::player.dart::Collidables"
+
+class "careful_icarus::game::controllers::warning.dart::Warning" {
+  +dynamic onLoad()
+  +void destroy()
+}
+
+"careful_icarus::game::controllers::platform.dart::Platform" <|-- "careful_icarus::game::controllers::warning.dart::Warning"
+
+class "careful_icarus::game::DampenedCamera.dart::DampenedCamera" {
+  {static} +PositionComponent? trail
+  {static} +PositionComponent? target
+  {static} +double maxDistance
+  {static} +double minDistance
+  {static} +double speed
+  {static} +double maxSpeed
+  {static} +bool horizontalOnly
+  {static} +bool verticalOnly
+  {static} +bool snap
+  {static} +bool lockHeight
+  {static} +Vector2 offset
+  +dynamic onLoad()
+  +dynamic followDampened()
+  +void update()
+}
+
+"careful_icarus::game::DampenedCamera.dart::DampenedCamera" o-- "flame::src::components::position_component.dart::PositionComponent"
+"flame::src::camera::camera_component.dart::CameraComponent" <|-- "careful_icarus::game::DampenedCamera.dart::DampenedCamera"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::DampenedCamera.dart::DampenedCamera"
+
+class "careful_icarus::game::icarus.dart::Icarus" {
+  +dynamic Function() notifyParent
+  {static} +Vector2 viewportResolution
+  {static} +DampenedCamera cameraComponent
+  {static} +World world
+  +LevelManager levelManager
+  +int lastPlatformYpos
+  {static} +bool pause
+  +Color backgroundColor()
+  +dynamic onLoad()
+  +dynamic update()
+  +dynamic togglePause()
+  +dynamic garbageCollect()
+}
+
+"careful_icarus::game::icarus.dart::Icarus" o-- "null::dynamic Function()"
+"careful_icarus::game::icarus.dart::Icarus" o-- "careful_icarus::game::DampenedCamera.dart::DampenedCamera"
+"careful_icarus::game::icarus.dart::Icarus" o-- "flame::src::camera::world.dart::World"
+"careful_icarus::game::icarus.dart::Icarus" o-- "careful_icarus::game::managers::level_manager.dart::LevelManager"
+"flame::src::game::flame_game.dart::FlameGame" <|-- "careful_icarus::game::icarus.dart::Icarus"
+
+
+class "careful_icarus::game::icarus.dart::TapTarget" {
+  +Player player
+  -bool _fingerOnScreen
+  -double _xLocation
+  +bool started
+  +void onGameResize()
+  +void onTapDown()
+  +void update()
+  +void onTapUp()
+}
+
+"careful_icarus::game::icarus.dart::TapTarget" o-- "careful_icarus::game::controllers::player.dart::Player"
+"flame::src::components::position_component.dart::PositionComponent" <|-- "careful_icarus::game::icarus.dart::TapTarget"
+"flame::src::events::component_mixins::tap_callbacks.dart::TapCallbacks" <|-- "careful_icarus::game::icarus.dart::TapTarget"
+
+class "careful_icarus::game::icarus.dart::Character" {
+  +int index
+  {static} +List<Character> values
+  {static} +Character penguin
+}
+
+"careful_icarus::game::icarus.dart::Character" o-- "careful_icarus::game::icarus.dart::Character"
+
+class "careful_icarus::game::managers::game_manager.dart::GameManager" {
+  {static} +bool debugging
+  {static} +bool gameover
+  {static} +num height
+  {static} +num heightRecord
+  {static} +int distanceToSun
+  {static} +double timeToSunRecord
+  {static} +DateTime levelStartTime
+  {static} +int fishGatheredRun
+  {static} +int fishGatheredTotal
+  {static} +int sealprotection
+  {static} +double idleFisher
+  {static} +double jumpStrength
+  {static} +double launchStrength
+  {static} +double fishMultiplier
+  {static} +double waxMax
+  {static} +double waxCurrent
+  {static} +bool runOnce
+  {static} +bool getAllUpgrades
+  {static} +void startLevel()
+  {static} +void testUpgrades()
+  {static} +dynamic win()
+  {static} +dynamic lose()
+  {static} +dynamic updateFish()
+}
+
+"flame::src::components::core::component.dart::Component" <|-- "careful_icarus::game::managers::game_manager.dart::GameManager"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::managers::game_manager.dart::GameManager"
+
+class "careful_icarus::game::managers::level_manager.dart::LevelManager" {
+  {static} +Player player
+  +CameraComponent cameraComponent
+  +int lastYpos
+  +dynamic startLevel()
+  +int addPlatforms()
+  {static} +Color getBackgroundColor()
+}
+
+"careful_icarus::game::managers::level_manager.dart::LevelManager" o-- "careful_icarus::game::controllers::player.dart::Player"
+"careful_icarus::game::managers::level_manager.dart::LevelManager" o-- "flame::src::camera::camera_component.dart::CameraComponent"
+"flame::src::components::core::component.dart::Component" <|-- "careful_icarus::game::managers::level_manager.dart::LevelManager"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::managers::level_manager.dart::LevelManager"
+
+class "careful_icarus::game::managers::sound_manager.dart::SoundManager" {
+  {static} -bool _themePlaying
+  {static} +void playSound()
+  {static} +void playMusic()
+  {static} +void stopMusic()
+}
+
+class "careful_icarus::game::managers::upgrade_manager.dart::UpgradeManager" {
+  {static} +Map<dynamic, dynamic> upgrades
+  {static} +num fish
+  {static} +dynamic readUpgrades()
+  {static} +dynamic writeUpgrades()
+  {static} +dynamic readFish()
+  {static} +void buyUpgrades()
+  {static} +void resetUpgrades()
+}
+
+class "careful_icarus::game::overlays::healthbar.dart::HealthBar" {
+  +void render()
+  +void update()
+}
+
+"flame::src::components::position_component.dart::PositionComponent" <|-- "careful_icarus::game::overlays::healthbar.dart::HealthBar"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::overlays::healthbar.dart::HealthBar"
+
+class "careful_icarus::game::sprites::background.dart::BackgroundSprite" {
+  +dynamic onLoad()
+}
+
+"flame::src::components::sprite_component.dart::SpriteComponent" <|-- "careful_icarus::game::sprites::background.dart::BackgroundSprite"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::sprites::background.dart::BackgroundSprite"
+
+class "careful_icarus::game::sprites::background.dart::IcebergSprite" {
+  +dynamic onLoad()
+}
+
+"flame::src::components::sprite_component.dart::SpriteComponent" <|-- "careful_icarus::game::sprites::background.dart::IcebergSprite"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::sprites::background.dart::IcebergSprite"
+
+class "careful_icarus::game::sprites::glider.dart::GliderAnimation" {
+  +double spriteSheetWidth
+  +double spriteSheetHeight
+  +SpriteAnimation gliderAnimation
+  +dynamic onLoad()
+}
+
+"careful_icarus::game::sprites::glider.dart::GliderAnimation" o-- "flame::src::sprite_animation.dart::SpriteAnimation"
+"flame::src::components::sprite_animation_component.dart::SpriteAnimationComponent" <|-- "careful_icarus::game::sprites::glider.dart::GliderAnimation"
+"flame::src::components::mixins::has_game_ref.dart::HasGameRef" <|-- "careful_icarus::game::sprites::glider.dart::GliderAnimation"
+
+class "careful_icarus::game::util::color_schemes.dart::IcarusColors" {
+  {static} +Color waxColor
+}
+
+"careful_icarus::game::util::color_schemes.dart::IcarusColors" o-- "dart::ui::Color"
+
+class "careful_icarus::game::util::util.dart::Util" {
+  {static} -Random _random
+  {static} +int nextInt()
+  {static} +double nextDouble()
+}
+
+"careful_icarus::game::util::util.dart::Util" o-- "dart::math::Random"
+
+class "careful_icarus::game::widgets::game_over.dart::GameOver" {
+  +int score
+  +State<GameOver> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "careful_icarus::game::widgets::game_over.dart::GameOver"
+
+class "careful_icarus::game::widgets::game_over.dart::_GameOverState" {
+  +Widget build()
+  +dynamic gameover()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "careful_icarus::game::widgets::game_over.dart::_GameOverState"
+
+class "careful_icarus::game::widgets::main_menu.dart::MainMenu" {
+  +Game game
+  +State<MainMenu> createState()
+}
+
+"careful_icarus::game::widgets::main_menu.dart::MainMenu" o-- "flame::src::game::game.dart::Game"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "careful_icarus::game::widgets::main_menu.dart::MainMenu"
+
+class "careful_icarus::game::widgets::main_menu.dart::_MainMenuState" {
+  +dynamic gameover()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "careful_icarus::game::widgets::main_menu.dart::_MainMenuState"
+
+class "careful_icarus::game::widgets::shopping_button.dart::ShoppingButton" {
+  +dynamic Function() notifyParent
+  +String upgradeName
+  +Map<dynamic, dynamic> upgrades
+  +Widget build()
+}
+
+"careful_icarus::game::widgets::shopping_button.dart::ShoppingButton" o-- "null::dynamic Function()"
+"flutter::src::widgets::container.dart::Container" <|-- "careful_icarus::game::widgets::shopping_button.dart::ShoppingButton"
+
+class "careful_icarus::game::widgets::shop_page.dart::ShopPage" {
+  +Game game
+  +State<ShopPage> createState()
+}
+
+"careful_icarus::game::widgets::shop_page.dart::ShopPage" o-- "flame::src::game::game.dart::Game"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "careful_icarus::game::widgets::shop_page.dart::ShopPage"
+
+class "careful_icarus::game::widgets::shop_page.dart::_ShopPageState" {
+  +num fish
+  +Map<dynamic, dynamic> upgrades
+  +dynamic refresh()
+  +dynamic gameover()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "careful_icarus::game::widgets::shop_page.dart::_ShopPageState"
+
+class "careful_icarus::main.dart::MainApp" {
+  +void changeLevel()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "careful_icarus::main.dart::MainApp"
+
+class "careful_icarus::main.dart::HomePage" {
+  +String title
+  +State<HomePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "careful_icarus::main.dart::HomePage"
+
+class "careful_icarus::main.dart::_HomePageState" {
+  {static} +Level lvl
+  +dynamic gameover()
+  +Widget build()
+  +void onSelected()
+}
+
+"careful_icarus::main.dart::_HomePageState" o-- "careful_icarus::main.dart::Level"
+"flutter::src::widgets::framework.dart::State" <|-- "careful_icarus::main.dart::_HomePageState"
+
+class "careful_icarus::main.dart::Level" {
+  +int index
+  {static} +List<Level> values
+  {static} +Level game
+  {static} +Level mainMenu
+  {static} +Level shop
+}
+
+"careful_icarus::main.dart::Level" o-- "careful_icarus::main.dart::Level"
+
+
+@enduml

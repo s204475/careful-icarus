@@ -10,6 +10,7 @@ import 'game/widgets/widgets.dart';
 import 'game/widgets/main_menu.dart';
 import 'game/widgets/shop_page.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:dcdg/dcdg.dart';
 //Main only serves to startup the game, everything else is handled by Icarus
 
 /*    If an errors appears saying something like "start ms-settings:developers"
