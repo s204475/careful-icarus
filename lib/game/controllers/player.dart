@@ -47,8 +47,9 @@ class Player extends SpriteComponent
   final int deathVelocity = 800;
   bool manualControl = false;
   bool disableControls = true;
+  bool startFall = false; //when hitting obstcale or running out of wax
 
-  bool usedSealProtection = false;
+  int sealionProtectionsUsed = 0;
 
   @override
   Future<void> onLoad() async {
@@ -63,7 +64,7 @@ class Player extends SpriteComponent
 
   void start() async {
     disableControls = false;
-    jump();
+    launch();
   }
 
   @override
@@ -83,17 +84,26 @@ class Player extends SpriteComponent
     return true;
   }
 
+  /// Handles horizontal movement
   void move(double movement) {
     _hAxisInput = 0;
     _hAxisInput += movement;
   }
 
+  /// Whenever the player easts a fish, they accelerate upwards
   void jump() {
+    if (startFall) return;
     var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
     SoundManager.playSound('sfx_wing.mp3', 0.6);
     velocity.y -= jumpStrength;
-    velocity.y = clampDouble(velocity.y, -(jumpStrength * 2), -jumpStrength);
+    velocity.y = clampDouble(velocity.y, -(jumpStrength * 1.5), -jumpStrength);
+  }
+
+  /// The first jump of the game
+  void launch() {
+    SoundManager.playSound('sfx_wing.mp3', 0.6);
+    velocity.y -= GameManager.launchStrength;
   }
 
   @override
@@ -145,6 +155,10 @@ class Player extends SpriteComponent
     } else if (position.y.abs() >= GameManager.distanceToSun) {
       GameManager.win();
     }
+
+    if (GameManager.waxCurrent <= 0) {
+      defeated();
+    }
   }
 
   bool checkPlayerDeath() => velocity.y >= deathVelocity;
@@ -180,14 +194,15 @@ class Player extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
     //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
-      if (GameManager.sealprotection && !usedSealProtection) {
-        //Can use SealProtection once
-        debugPrint("SealProtection used");
-        usedSealProtection = true;
+      if (sealionProtectionsUsed < GameManager.sealprotection) {
+        //Can use SealionProtection
+        debugPrint("SealionProtection used");
+        sealionProtectionsUsed++;
         other.destroy();
         jump();
       } else {
-        GameManager.lose();
+        velocity.y = 10; //not immediate stop
+        defeated();
       }
     } else if (other is kplatform.Platform &&
         other.isAlive &&
@@ -196,5 +211,9 @@ class Player extends SpriteComponent
       GameManager.fishGatheredRun++;
       other.destroy();
     }
+  }
+
+  void defeated() {
+    startFall = true;
   }
 }

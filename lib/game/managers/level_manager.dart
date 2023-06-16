@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import '../DampenedCamera.dart';
 import '../controllers/enemy.dart';
 import '../sprites/heads_up_display.dart';
+import '../overlays/healthbar.dart';
 import 'game_manager.dart';
 import '../controllers/player.dart';
 import '../controllers/platform.dart';
@@ -46,6 +47,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
   }
 
   Future<void> startLevel() async {
+    //Initialise background and iceberg sprites
     var bg = BackgroundSprite();
     var prop = IcebergSprite();
     bg.position += Vector2(-(bg.size.x / 4), Icarus.viewportResolution.y * 1.5);
@@ -54,16 +56,58 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     Icarus.world.add(bg);
     Icarus.world.add(prop);
 
-    lastYpos = addPlatforms(0, 400, 7); // add the initial first 7 platforms
+    //Add wax (health) bag
+    HealthBar healthbar = HealthBar();
+    Icarus.world.add(healthbar);
+
+    lastYpos = addPlatforms(0); // add the initial first 7 platforms
 
     GameManager.startLevel();
   }
 
-  int addPlatforms(int lastYpos, int distanceBetween, int numberofPlatforms) {
+  int addPlatforms(int lastYpos) {
+    int numberofPlatforms = 10;
     for (var i = 0; i < numberofPlatforms; i++) {
       var platform = Platform();
       Icarus.world.add(platform);
-      print("viewport res: ${Icarus.viewportResolution.x.toInt()}");
+      int km = (Random().nextInt(275) + 75);
+      platform.position = Vector2(
+          Random()
+                  .nextInt(Icarus.viewportResolution.x.toInt() + 200)
+                  .toDouble() -
+              100,
+          -lastYpos.toDouble());
+      int moveChance = Random().nextInt(10);
+      if (moveChance <= 2) {
+        platform.isMoving = true;
+        platform.speed = 15;
+      } else if (moveChance <= 5) {
+        platform.isMoving = true;
+        platform.speed = 35;
+      }
+      lastYpos += km;
+      bool enemyAdded = false;
+      int enemyChance = Random().nextInt(100);
+      double enemyThreshold = -LevelManager.player.position.y / 1000;
+      clampDouble(enemyThreshold, 0, 25);
+      if (enemyChance <= enemyThreshold && !enemyAdded) {
+        var enemy = Enemy();
+        Icarus.world.add(enemy);
+        enemy.position = Vector2(
+            Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
+            -lastYpos.toDouble() - 400);
+        enemy.isMoving = true;
+        enemyAdded = true;
+      }
+    }
+
+    // GAMLE VERSION AF CLOUD SPAWNING, BEHOLDER DEN HER HVIS VI NU VIL HAVE NOGET FRA DEN.
+
+    /*for (var i = 0; i < numberofPlatforms; i++) {
+      var platform = Platform();
+      Icarus.world.add(platform);
+      //print("viewport res: ${Icarus.viewportResolution.x.toInt()}");
+      
       platform.position = Vector2(
           Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
           -lastYpos.toDouble());
@@ -85,11 +129,11 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         Icarus.world.add(enemy);
         enemy.position = Vector2(
             Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
-            -lastYpos.toDouble() - 200);
+            -lastYpos.toDouble() - 400);
         enemy.isMoving = true;
         enemyAdded = true;
       }
-    }
+    }*/
 
     return lastYpos;
   }

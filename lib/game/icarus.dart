@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'DampenedCamera.dart';
 import 'package:flame/events.dart';
 import 'controllers/player.dart';
+import 'managers/game_manager.dart';
 import 'managers/level_manager.dart';
 import 'dart:math';
 
@@ -15,11 +16,12 @@ enum Character { penguin }
 /// The main game class. Initialises the game and creates the @level_manager.
 class Icarus extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
-  Icarus({required Vector2 viewportResolution}) {
+  final Function() notifyParent;
+
+  Icarus({required Vector2 viewportResolution, required this.notifyParent}) {
     // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
   }
-
   static late Vector2 viewportResolution;
   static late DampenedCamera cameraComponent;
   static late final World world;
@@ -56,8 +58,8 @@ class Icarus extends FlameGame
   @override
   Future<void> update(double dt) async {
     // add platforms if needed, 20 at a time
-    if (LevelManager.player.position.y < (-lastPlatformYpos + 400 * 2)) {
-      lastPlatformYpos = levelManager.addPlatforms(lastPlatformYpos, 400, 7);
+    if (LevelManager.player.position.y < (-lastPlatformYpos + 500 * 2)) {
+      lastPlatformYpos = levelManager.addPlatforms(lastPlatformYpos);
     }
     togglePause();
     super.update(dt);
@@ -66,9 +68,18 @@ class Icarus extends FlameGame
   togglePause() {
     if (pause) {
       pauseEngine();
+      if (GameManager.gameover) {
+        notifyParent!();
+        garbageCollect();
+        removeFromParent();
+      }
     } else {
       resumeEngine();
     }
+  }
+
+  garbageCollect() {
+    remove(world);
   }
 }
 

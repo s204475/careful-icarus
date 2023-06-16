@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 
+class IcarusColors {
+  static const waxColor = Color(0xFFDF7126);
+}
+
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
   primary: Color(0xFF195CB5),
