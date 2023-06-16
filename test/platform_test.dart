@@ -10,7 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('A destroyed platform spawns a SpriteAnimationComponent', () {
     // Create a new Enemy instance
-    Icarus icarus = Icarus(viewportResolution: Vector2(100, 100));
+    Icarus icarus =
+        Icarus(viewportResolution: Vector2(100, 100), notifyParent: () {});
     Icarus.world = World();
     Platform platform = Platform(position: Vector2.zero());
     Player player = Player(position: Vector2(0, -2001));
@@ -33,7 +34,8 @@ void main() {
 
   test('Platforms much below the player should be destroyed', () {
     // Create a new Enemy instance
-    Icarus icarus = Icarus(viewportResolution: Vector2(100, 100));
+    Icarus icarus =
+        Icarus(viewportResolution: Vector2(100, 100), notifyParent: () {});
     Platform platform = Platform(position: Vector2.zero());
     Player player = Player(position: Vector2(0, -2001));
     LevelManager.player = player;
