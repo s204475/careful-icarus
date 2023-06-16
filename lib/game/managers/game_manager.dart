@@ -111,6 +111,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
         'Fish idled: $fishIdled \nFish gathered: $fishGatheredRun \nTotal fish gathered (multiplier = $fishMultiplier): $total');
     fishGatheredTotal += total;
     debugPrint('Total fish gathered: $fishGatheredTotal');
+    UpgradeManager.fish = fishGatheredTotal;
     writeInt('fishGatheredTotal', fishGatheredTotal);
   }
 }
