@@ -9,7 +9,7 @@ import '../util/util.dart';
 import 'platform.dart';
 
 class Enemy extends Platform {
-  var warn = Warning();
+  Warning warn = Warning();
   // ignore: prefer_final_fields
   var _velocity = Vector2.zero();
 
@@ -44,9 +44,9 @@ class Enemy extends Platform {
   void _move(double dt) {
     if (!isMoving) return;
 
-    if (position.x <= -(gameRef.size.x/4)+100) {
+    if (position.x <= -(gameRef.size.x / 4) + 100) {
       direction = 1;
-    } else if (position.x >= gameRef.size.x*1.5-100) {
+    } else if (position.x >= gameRef.size.x * 1.5 - 100) {
       direction = -1;
     }
     _velocity.x = direction * speed;
