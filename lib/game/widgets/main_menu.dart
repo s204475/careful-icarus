@@ -29,7 +29,7 @@ class _MainMenuState extends State<MainMenu> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
-        onPressed: null, //SoundManager.mute(),
+        onPressed: () => SoundManager.mute(),
         child: Icon(Icons.volume_off),
       ),
       body: Center(
@@ -45,7 +45,7 @@ class _MainMenuState extends State<MainMenu> {
       bottomSheet: Container(
           child: Padding(
         padding: const EdgeInsets.all(60.0),
-        child: Image.asset('assets/images/PixelPenguin2.png'),
+        child: Image.asset('assets/images/VictoryDance.gif'),
       )),
       bottomNavigationBar: BottomAppBar(
         child: Row(
