@@ -19,6 +19,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static DateTime levelStartTime = DateTime.now();
   static int fishGatheredRun = 0;
   static int fishGatheredTotal = 0;
+  static bool manualControl = false;
 
   //Stats (powers)
   static int sealprotection = (UpgradeManager.upgrades["Sealion Protection"][
@@ -93,7 +94,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
       debugPrint('Defeat!');
 
       updateFish();
-      
+
       gameover = true;
       Icarus.pause = true;
 

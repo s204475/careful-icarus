@@ -38,7 +38,7 @@ class Player extends SpriteComponent
   }) : super(anchor: Anchor.center, size: Vector2(152, 73), priority: 100);
 
   double _hAxisInput = 0;
-  final double gravity = 0;
+  final double gravity = 9;
   Vector2 velocity = Vector2.zero();
   final double gyroDeadZone = 1.5;
   final double gyroSensitivity = 10;
@@ -125,7 +125,9 @@ class Player extends SpriteComponent
       position.x = -(gameRef.size.x / 3);
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
-    if (!manualControl && (Platform.isAndroid || Platform.isIOS)) {
+    if (!manualControl &&
+        (Platform.isAndroid || Platform.isIOS) &&
+        !GameManager.manualControl) {
       sensorListener();
     }
 

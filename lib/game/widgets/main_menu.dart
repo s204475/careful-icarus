@@ -32,6 +32,19 @@ class _MainMenuState extends State<MainMenu> {
         onPressed: () => SoundManager.mute(),
         child: Icon(Icons.volume_off),
       ),
+      appBar: AppBar(
+        leading: SizedBox(
+          child: Switch(
+            value: GameManager.manualControl,
+            onChanged: (value) {
+              setState(() {
+                GameManager.manualControl = value;
+              });
+            },
+          ),
+        ),
+        title: Text('Manual Control'),
+      ),
       body: Center(
         child: Text(
           'ICARUS',

@@ -112,6 +112,9 @@ class TapTarget extends PositionComponent with TapCallbacks {
       started = true;
       return;
     }
+    if (!GameManager.manualControl) {
+      return;
+    }
     player.manualControl = true;
     _fingerOnScreen = true;
     _xLocation = event.localPosition.x;
