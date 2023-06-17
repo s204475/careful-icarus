@@ -125,7 +125,9 @@ class Player extends SpriteComponent
       position.x = -(gameRef.size.x / 3);
     }
     //Add magnetometer support for mobile, runs in separate thread to avoid lag
-    if (!manualControl && (Platform.isAndroid || Platform.isIOS)) {
+    if (!manualControl &&
+        (Platform.isAndroid || Platform.isIOS) &&
+        !GameManager.manualControl) {
       sensorListener();
     }
 
@@ -171,18 +173,26 @@ class Player extends SpriteComponent
     position += velocity * dt;
   }
 
+  /* Add magnetometer support for mobile, runs in separate thread to avoid lag, 
+  due to it being based on magnetometer we need to introduce a offset to the value
+  */
+  num magnometerOffset = 0;
   Future<void> sensorListener() async {
-    double? magnometerValue;
     magnetometerEvents.listen(
       (MagnetometerEvent event) {
-        if ((event.x.abs()) > gyroDeadZone) {
-          if (event.x > gyroDeadZone) {
-            move(event.x * gyroSensitivity);
-          } else if (event.x < -gyroDeadZone) {
-            move(event.x * gyroSensitivity);
-          }
+        if (magnometerOffset == 0) {
+          magnometerOffset = event.x;
         } else {
-          move(0);
+          var magnetometerValue = event.x - magnometerOffset;
+          if ((magnetometerValue.abs()) > gyroDeadZone) {
+            if (magnetometerValue > gyroDeadZone) {
+              move(magnetometerValue * gyroSensitivity);
+            } else if (magnetometerValue < -gyroDeadZone) {
+              move(magnetometerValue * gyroSensitivity);
+            }
+          } else {
+            move(0);
+          }
         }
       },
       onError: (error) {
