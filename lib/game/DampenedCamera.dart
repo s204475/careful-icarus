@@ -7,20 +7,17 @@ import 'package:flutter/material.dart';
 class DampenedCamera extends CameraComponent with HasGameRef {
   DampenedCamera({required super.world});
 
-  static PositionComponent? trail;
-  static PositionComponent? target;
+  static PositionComponent? trail; // the object used to follow the target, the camera is always fixed on this object
+  static PositionComponent? target; // a refernce to the target for the trail to follow
 
-  static double maxDistance = double.infinity;
-  static double minDistance = 0;
-  static double speed = 1; // the actual speed
+  static double maxDistance = double.infinity; // used to set the max distance the camera can travel, unused TODO
+  static double minDistance = 0; // the minimum distance the target can move before the trail has to follow
 
-  static double maxSpeed = double.infinity;
-  static bool horizontalOnly = false;
-  static bool verticalOnly = false;
-  static bool snap = false;
-  static bool lockHeight = false;
+  static bool horizontalOnly = false; // sets if the camera should only move on the x axis
+  static bool verticalOnly = false; // sets if the camera should only move on the y axis
+  static bool lockHeight = false; // sets if the camera should be able to move down on the y axis
 
-  static Vector2 offset = Vector2.zero();
+  static Vector2 _offset = Vector2.zero(); // offset used to move the camera a fixed relative distance from the target
 
   @override
   Future<void> onLoad() async {
@@ -28,7 +25,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   
   priority = 99;
 
-  viewfinder.zoom = 0.5;
+  viewfinder.zoom = 0.5; // the size of a pixel 1:1, 1:4
 }
 
   Future<void> followDampened(
@@ -42,24 +39,21 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     double minDistance = 0,
   }) async {
     assert(maxDistance >= minDistance);
-
-    DampenedCamera.maxSpeed = maxSpeed;
     DampenedCamera.horizontalOnly = horizontalOnly;
     DampenedCamera.verticalOnly = verticalOnly;
-    DampenedCamera.snap = snap;
 
     DampenedCamera.lockHeight = lockHeight;
     DampenedCamera.maxDistance = maxDistance;
     DampenedCamera.minDistance = minDistance;
     DampenedCamera.target = target;
 
-    if (trail != null) {
+    if (trail != null) { // make sure the camera only follows a single target, while removing now unused objects
       remove(trail!);
     }
 
-    DampenedCamera.offset.y = -viewfinder.visibleWorldRect.size.height / 4;
+    DampenedCamera._offset.y = -viewfinder.visibleWorldRect.size.height / 4; // 
 
-    trail = PositionComponent(position: target.position + offset);
+    trail = PositionComponent(position: target.position + _offset);
     trail?.add(
         SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
@@ -73,7 +67,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   @override
   void update(double dt) {
     
-    Vector2 followPos = trail!.position - offset;
+    Vector2 followPos = trail!.position - _offset;
     Vector2 playerPos = target!.position;
 
     Vector2 deltaPos = playerPos - followPos;
@@ -83,6 +77,9 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     } else {
       if (deltaPos.y > 0 ? false : -deltaPos.y > minDistance) {
         deltaPos.y += minDistance;
+        if (-deltaPos.y < maxDistance) {
+          deltaPos.y += -deltaPos.y*dt*2;
+        }
       } else {
         deltaPos.y = 0;
       }
