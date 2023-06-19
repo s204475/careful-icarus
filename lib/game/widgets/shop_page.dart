@@ -64,10 +64,10 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
-          Text('Shop Page'),
+          const Text('Shop Page'),
           Text('[ You have $fish fish.]'),
           ListView.builder(
             itemCount: upgrades.length,

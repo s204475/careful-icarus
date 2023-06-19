@@ -25,7 +25,7 @@ class _GameOverState extends State<GameOver> {
           child: Column(children: [
         Padding(
           padding: const EdgeInsets.all(40.0),
-          child: Container(child: Text('Game Over! You scored ${widget.score} points! and gotten ${GameManager.getFishIdled()} fish from idle ')),
+          child: Text('Game Over! You scored ${widget.score} points! and gotten ${GameManager.getFishIdled()} fish from idle '),
         ),
         Center(
           heightFactor: 5,
