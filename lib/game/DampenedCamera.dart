@@ -3,6 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
+import 'managers/level_manager.dart';
+
 /// The camera component that follows the player. It gradually follows the player mimicking a dampened effect
 class DampenedCamera extends CameraComponent with HasGameRef {
   DampenedCamera({required super.world});
@@ -78,7 +80,10 @@ class DampenedCamera extends CameraComponent with HasGameRef {
       if (deltaPos.y > 0 ? false : -deltaPos.y > minDistance) {
         deltaPos.y += minDistance;
         if (-deltaPos.y < maxDistance) {
-          deltaPos.y += -deltaPos.y*dt*2;
+          //deltaPos.y += -deltaPos.y*dt*2;
+          //deltaPos.y = deltaPos.y*(1/LevelManager.player.velocity.y);
+        } else {
+          //deltaPos.y += maxDistance;
         }
       } else {
         deltaPos.y = 0;
