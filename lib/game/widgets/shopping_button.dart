@@ -24,11 +24,11 @@ class ShoppingButton extends Container {
             UpgradeManager.buyUpgrades(upgradeName);
             notifyParent();
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
         ElevatedButton(
           onPressed: () {},
-          child: Icon(Icons.remove),
+          child: const Icon(Icons.remove),
         ),
       ],
     );

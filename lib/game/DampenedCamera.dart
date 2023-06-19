@@ -33,7 +33,7 @@ class DampenedCamera extends CameraComponent with HasGameRef {
   static bool lockHeight = false;
 
   /// offset used to move the camera a fixed relative distance from the target
-  static late Vector2 _offset;
+  static Vector2 _offset = Vector2.zero();
 
   @override
   Future<void> onLoad() async {

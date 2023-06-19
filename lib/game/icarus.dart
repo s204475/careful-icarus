@@ -69,7 +69,7 @@ class Icarus extends FlameGame
     if (pause) {
       pauseEngine();
       if (GameManager.gameover) {
-        notifyParent!();
+        notifyParent();
         garbageCollect();
         removeFromParent();
       }

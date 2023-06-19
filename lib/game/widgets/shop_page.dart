@@ -64,10 +64,10 @@ class _ShopPageState extends State<ShopPage> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
-          Text('Shop Page'),
+          const Text('Shop Page'),
           Text('[ You have $fish fish.]'),
           ListView.builder(
             itemCount: upgrades.length,
@@ -115,7 +115,6 @@ class _ShopPageState extends State<ShopPage> {
               );
             });
           },
-          child: const Text('START'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
             foregroundColor: Colors.white,
@@ -124,6 +123,7 @@ class _ShopPageState extends State<ShopPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          child: const Text('START'),
         ),
       ),
     );
