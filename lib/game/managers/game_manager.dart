@@ -5,7 +5,9 @@ import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:careful_icarus/game/managers/upgrade_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 import '../util/util.dart';
+
 
 import '../icarus.dart';
 
@@ -91,7 +93,9 @@ class GameManager extends Component with HasGameRef<Icarus> {
       DampenedCamera.lockHeight = true;
 
       updateFish();
-
+      if (Platform.isAndroid || Platform.isIOS) {
+        Vibration.vibrate(duration: 100);
+      } 
       gameover = true;
       Icarus.pause = true;
 
