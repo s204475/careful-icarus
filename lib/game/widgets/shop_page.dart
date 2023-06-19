@@ -115,7 +115,6 @@ class _ShopPageState extends State<ShopPage> {
               );
             });
           },
-          child: const Text('START'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
             foregroundColor: Colors.white,
@@ -124,6 +123,7 @@ class _ShopPageState extends State<ShopPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          child: const Text('START'),
         ),
       ),
     );
