@@ -24,13 +24,11 @@ class ShoppingButton extends Container {
             UpgradeManager.buyUpgrades(upgradeName);
             notifyParent();
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
         ElevatedButton(
-          onPressed: () {
-            print('minus one of $upgradeName'); //TODO implement this
-          },
-          child: Icon(Icons.remove),
+          onPressed: () {},
+          child: const Icon(Icons.remove),
         ),
       ],
     );

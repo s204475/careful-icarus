@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
+import 'dart:io';
 import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -19,7 +21,6 @@ class Icarus extends FlameGame
   final Function() notifyParent;
 
   Icarus({required Vector2 viewportResolution, required this.notifyParent}) {
-    // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
   }
   static late Vector2 viewportResolution;
@@ -40,25 +41,24 @@ class Icarus extends FlameGame
     );
 
     //Load audio into cache to smoothe playback
-    await FlameAudio.audioCache
-        .loadAll(['sfx_wing.mp3', 'FlyingPenguins_Theme.mp3']);
+    if (Platform.isAndroid || Platform.isIOS) {
+      await FlameAudio.audioCache
+          .loadAll(['sfx_wing.mp3', 'FlyingPenguins_Theme.mp3']);
+    }
 
     addAll([world, cameraComponent]);
-    debugPrint("loading level");
     levelManager = LevelManager(this, cameraComponent);
     await levelManager.startLevel();
     lastPlatformYpos = levelManager.lastYpos;
 
-    debugPrint("viewport res: $viewportResolution");
     add(TapTarget(LevelManager.player));
-
-    debugPrint("loading complete");
   }
 
   @override
   Future<void> update(double dt) async {
-    // add platforms if needed, 20 at a time
-    if (LevelManager.player.position.y < (-lastPlatformYpos + 500 * 2)) {
+    // add platforms if needed, 10 at a time
+    if (LevelManager.player.position.y < (-lastPlatformYpos + 1000)) {
+      //When 1000 pixels close to the last platform, add more platforms
       lastPlatformYpos = levelManager.addPlatforms(lastPlatformYpos);
     }
     togglePause();
@@ -69,7 +69,7 @@ class Icarus extends FlameGame
     if (pause) {
       pauseEngine();
       if (GameManager.gameover) {
-        notifyParent!();
+        notifyParent();
         garbageCollect();
         removeFromParent();
       }
@@ -126,10 +126,8 @@ class TapTarget extends PositionComponent with TapCallbacks {
     if (_fingerOnScreen) {
       if (_xLocation < Icarus.viewportResolution.x / 2) {
         player.move(-200.toDouble());
-        //debugPrint("left");
       } else {
         player.move(200.toDouble());
-        //debugPrint("right");
       }
     }
   }

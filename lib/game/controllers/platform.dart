@@ -14,7 +14,8 @@ const chanceForFish = 1;
 final Vector2 platformSize = Vector2(135, 90);
 
 /// The platform that Icarus can jump on
-class Platform extends SpriteComponent with HasGameRef<Icarus> {
+class Platform extends SpriteComponent
+    with HasGameRef<Icarus>, CollisionCallbacks {
   Platform({
     super.position,
   }) : super(anchor: Anchor.center, size: platformSize, priority: 1);
@@ -64,13 +65,23 @@ class Platform extends SpriteComponent with HasGameRef<Icarus> {
   void _move(double dt) {
     if (!isMoving) return;
 
-    if (position.x <= -(gameRef.size.x/4)+100) {
+    if (position.x <= -(gameRef.size.x / 4) + 100) {
       direction = 1;
-    } else if (position.x >= gameRef.size.x*1.5-100) {
+    } else if (position.x >= gameRef.size.x * 1.5 - 100) {
       direction = -1;
     }
     _velocity.x = direction * speed;
     position += _velocity * dt;
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is Platform) {
+      other.direction = -other.direction;
+      direction = -direction;
+    }
   }
 }
 

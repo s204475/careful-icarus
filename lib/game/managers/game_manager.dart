@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:io';
 import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:careful_icarus/game/managers/upgrade_manager.dart';
@@ -10,7 +11,6 @@ import '../icarus.dart';
 
 /// This class is used to manage the game. It is used to store the game's state and saves these values between sessions.
 class GameManager extends Component with HasGameRef<Icarus> {
-  static const bool debugging = true;
   static bool gameover = false;
   static num height = 0;
   static num heightRecord = 0;
@@ -20,6 +20,9 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static int fishGatheredRun = 0;
   static int fishGatheredTotal = 0;
   static bool manualControl = false;
+
+  /// Bool for debugging (showing hitboxes and positions on screen)
+  static const bool debugging = false;
 
   //Stats (powers)
   static int sealprotection = (UpgradeManager.upgrades["Sealion Protection"][
@@ -46,18 +49,15 @@ class GameManager extends Component with HasGameRef<Icarus> {
 
   static void startLevel() {
     waxCurrent = waxMax;
-    debugPrint("Start level");
-    SoundManager.playMusic();
+    if (Platform.isAndroid) SoundManager.playMusic();
     gameover = false;
     levelStartTime = DateTime.now();
-    debugPrint(
-        'Level start: ${levelStartTime.hour}:${levelStartTime.minute}:${levelStartTime.second}.${levelStartTime.millisecond}');
 
     //Reset stats
     fishGatheredRun = 0;
     height = 0;
 
-    //testUpgrades();
+    //testUpgrades(); //Used only for testing
   }
 
   static void testUpgrades() {
@@ -72,13 +72,11 @@ class GameManager extends Component with HasGameRef<Icarus> {
   }
 
   static Future<void> win() async {
-    debugPrint('Victory!');
     SoundManager.stopMusic();
 
     if (timeToSunRecord > DateTime.now().difference(levelStartTime).inSeconds) {
       timeToSunRecord =
           DateTime.now().difference(levelStartTime).inSeconds.toDouble();
-      debugPrint('New record: $timeToSunRecord!');
     }
 
     updateFish();
@@ -91,7 +89,6 @@ class GameManager extends Component with HasGameRef<Icarus> {
     SoundManager.stopMusic();
     if (!runOnce) {
       DampenedCamera.lockHeight = true;
-      debugPrint('Defeat!');
 
       updateFish();
 
@@ -106,10 +103,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
     int fishGatheredTotal = await readInt('fishGatheredTotal');
     int fishIdled = getFishIdled();
     int total = totalfish;
-    debugPrint(
-        'Fish idled: $fishIdled \nFish gathered: $fishGatheredRun \nTotal fish gathered (multiplier = $fishMultiplier): $total');
     fishGatheredTotal += total;
-    debugPrint('Total fish gathered: $fishGatheredTotal');
     UpgradeManager.fish = fishGatheredTotal;
     writeInt('fishGatheredTotal', fishGatheredTotal);
   }
