@@ -1,10 +1,9 @@
-// ignore_for_file: invalid_use_of_internal_member
+// ignore_for_file: invalid_use_of_internal_member, prefer_final_fields
 
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
-
 import 'managers/level_manager.dart';
 
 /// The camera component that follows the player. It gradually follows the player mimicking a dampened effect
