@@ -88,6 +88,22 @@ class Player extends SpriteComponent
   }
 
   @override
+  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (disableControls) return false;
+
+    _hAxisInput = 0;
+
+    // Keyboard movement
+    if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+      move(-200); //int to speed up the movement
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+      move(200); //int to speed up the movement
+    }
+
+    return true;
+  }
+
+  @override
   Future<void> update(double dt) async {
     if (disableControls) return;
 
