@@ -32,7 +32,7 @@ class HealthBar extends PositionComponent with HasGameRef<Icarus> {
 
   @override
   void update(double dt) {
-    position.y = Icarus.cameraComponent.visibleWorldRect.top + 100;
+    //position.y = Icarus.cameraComponent.visibleWorldRect.top + 100;
     GameManager.waxCurrent -=
         dt * 3; // wax is a countdown timer. 100 wax = 33 seconds to live
   }
