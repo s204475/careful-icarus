@@ -187,11 +187,9 @@ class Player extends SpriteComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
       if (sealionProtectionsUsed < GameManager.sealprotection) {
         //Can use SealionProtection
-        //debugPrint("SealionProtection used");
         sealionProtectionsUsed++;
         other.destroy();
         jump();

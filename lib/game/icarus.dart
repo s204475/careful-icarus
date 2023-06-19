@@ -1,5 +1,5 @@
+// ignore_for_file: prefer_initializing_formals
 import 'dart:io';
-
 import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -21,7 +21,6 @@ class Icarus extends FlameGame
   final Function() notifyParent;
 
   Icarus({required Vector2 viewportResolution, required this.notifyParent}) {
-    // ignore: prefer_initializing_formals
     Icarus.viewportResolution = viewportResolution;
   }
   static late Vector2 viewportResolution;
@@ -48,15 +47,11 @@ class Icarus extends FlameGame
     }
 
     addAll([world, cameraComponent]);
-    //debugPrint("loading level");
     levelManager = LevelManager(this, cameraComponent);
     await levelManager.startLevel();
     lastPlatformYpos = levelManager.lastYpos;
 
-    //debugPrint("viewport res: $viewportResolution");
     add(TapTarget(LevelManager.player));
-
-    //debugPrint("loading complete");
   }
 
   @override
@@ -131,10 +126,8 @@ class TapTarget extends PositionComponent with TapCallbacks {
     if (_fingerOnScreen) {
       if (_xLocation < Icarus.viewportResolution.x / 2) {
         player.move(-200.toDouble());
-        //debugPrint("left");
       } else {
         player.move(200.toDouble());
-        //debugPrint("right");
       }
     }
   }

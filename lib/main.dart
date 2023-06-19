@@ -19,7 +19,6 @@ import 'package:dcdg/dcdg.dart';
 
 void main() async {
   runApp(const MainApp());
-  //UpgradeManager.resetUpgrades(); // TODO: remove
   UpgradeManager.readFish(); //Reads the amount of fish from the save file
   UpgradeManager.readUpgrades(); //Reads the upgrades from the save file
 }

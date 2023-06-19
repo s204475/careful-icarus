@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_initializing_formals
+// ignore_for_file: invalid_use_of_internal_member
+
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
@@ -26,10 +29,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
-    // ignore: prefer_initializing_formals
+
     this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
-    //icarus.camera.gameSize;
 
     player.position = Vector2(
         cameraComponent.viewfinder.visibleWorldRect.size.width / 4,
@@ -43,7 +45,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
     // UI
     scoreCounter = HeightCounter(
-        /*margin: EdgeInsets.all(20),*/ anchor: Anchor.topCenter,
+        anchor: Anchor.topCenter,
         position: Vector2(
             cameraComponent.viewfinder.visibleWorldRect.size.width / 4, 40));
     Icarus.cameraComponent.viewport.add(scoreCounter);
@@ -66,7 +68,6 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     //Add wax (health) bag
     HealthBar healthbar = HealthBar();
     Icarus.world.add(healthbar);
-    //scoreCounter.add(healthbar);
 
     lastYpos = addPlatforms(0); // add the initial first 10 platforms
 
@@ -96,7 +97,7 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         platform.speed = 35;
       }
       lastYpos += km;
-      //add enemy as well?
+      //Possibly adds an enemy
       bool enemyAdded = false;
       int enemyChance = Random().nextInt(100);
       double enemyThreshold = -LevelManager.player.position.y / 1000;

@@ -47,17 +47,15 @@ class GameManager extends Component with HasGameRef<Icarus> {
 
   static void startLevel() {
     waxCurrent = waxMax;
-    //debugPrint("Start level");
     if (Platform.isAndroid) SoundManager.playMusic();
     gameover = false;
     levelStartTime = DateTime.now();
-    //debugPrint('Level start: ${levelStartTime.hour}:${levelStartTime.minute}:${levelStartTime.second}.${levelStartTime.millisecond}');
 
     //Reset stats
     fishGatheredRun = 0;
     height = 0;
 
-    //testUpgrades();
+    //testUpgrades(); //Used only for testing
   }
 
   static void testUpgrades() {
@@ -72,13 +70,11 @@ class GameManager extends Component with HasGameRef<Icarus> {
   }
 
   static Future<void> win() async {
-    //debugPrint('Victory!');
     SoundManager.stopMusic();
 
     if (timeToSunRecord > DateTime.now().difference(levelStartTime).inSeconds) {
       timeToSunRecord =
           DateTime.now().difference(levelStartTime).inSeconds.toDouble();
-      //debugPrint('New record: $timeToSunRecord!');
     }
 
     updateFish();
@@ -91,7 +87,6 @@ class GameManager extends Component with HasGameRef<Icarus> {
     SoundManager.stopMusic();
     if (!runOnce) {
       DampenedCamera.lockHeight = true;
-      //debugPrint('Defeat!');
 
       updateFish();
 
@@ -106,9 +101,7 @@ class GameManager extends Component with HasGameRef<Icarus> {
     int fishGatheredTotal = await readInt('fishGatheredTotal');
     int fishIdled = getFishIdled();
     int total = totalfish;
-    //debugPrint('Fish idled: $fishIdled \nFish gathered: $fishGatheredRun \nTotal fish gathered (multiplier = $fishMultiplier): $total');
     fishGatheredTotal += total;
-    //debugPrint('Total fish gathered: $fishGatheredTotal');
     UpgradeManager.fish = fishGatheredTotal;
     writeInt('fishGatheredTotal', fishGatheredTotal);
   }

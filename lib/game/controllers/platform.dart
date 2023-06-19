@@ -78,7 +78,6 @@ class Platform extends SpriteComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    //print("collision with " + other.toString());
     if (other is Platform) {
       other.direction = -other.direction;
       direction = -direction;

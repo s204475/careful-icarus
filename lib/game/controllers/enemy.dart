@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:careful_icarus/game/controllers/warning.dart';
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:careful_icarus/game/managers/level_manager.dart';
@@ -11,7 +13,6 @@ import 'platform.dart';
 /// The Enemy can kill the player on collision but otherwise functions as a platform
 class Enemy extends Platform {
   Warning warn = Warning();
-  // ignore: prefer_final_fields
   var _velocity = Vector2.zero();
 
   @override

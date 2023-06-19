@@ -67,13 +67,11 @@ class UpgradeManager {
     if (fish >= upgrades[name]["cost"]) {
       fish -= upgrades[name]["cost"];
       upgrades[name]["level"]++;
-      //debugPrint("bought $name for ${upgrades[name]["cost"]} fish, level is now ${upgrades[name]["level"]}");
       upgrades[name]["cost"] *= 2;
       upgrades[name]["multiplier"] *= 1.5;
       writeInt("fishGatheredTotal", fish.toInt());
       writeUpgrades();
     }
-    //print(UpgradeManager.upgrades);
   }
 
   static void resetUpgrades() {
