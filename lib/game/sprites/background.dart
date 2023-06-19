@@ -8,7 +8,7 @@ class BackgroundSprite extends SpriteComponent with HasGameRef<Icarus> {
     super.position,
   }) : super(
             anchor: Anchor.bottomLeft,
-            size: Vector2(Icarus.viewportResolution.x*2 + 20,
+            size: Vector2(Icarus.viewportResolution.x * 2 + 20,
                 GameManager.distanceToSun.toDouble()),
             priority: 0);
 
@@ -21,13 +21,26 @@ class BackgroundSprite extends SpriteComponent with HasGameRef<Icarus> {
   }
 }
 
+class FishingPenguin extends SpriteComponent with HasGameRef<Icarus> {
+  FishingPenguin({
+    super.position,
+  }) : super(anchor: Anchor.bottomLeft, priority: 1);
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    sprite = await gameRef.loadSprite('FishingPenguin.png');
+  }
+}
+
 class IcebergSprite extends SpriteComponent with HasGameRef<Icarus> {
   IcebergSprite({
     super.position,
   }) : super(
             anchor: Anchor.bottomLeft,
-            size: Vector2(
-                Icarus.viewportResolution.x*2, Icarus.viewportResolution.y*2),
+            size: Vector2(Icarus.viewportResolution.x * 2,
+                Icarus.viewportResolution.y * 2),
             priority: 0);
 
   @override

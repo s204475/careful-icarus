@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_final_fields
 
 import 'package:careful_icarus/game/DampenedCamera.dart';
 import 'package:careful_icarus/game/managers/game_manager.dart';
@@ -30,7 +31,7 @@ class HeightCounter extends HudMarginComponent with HasGameRef<Icarus> {
       textRenderer: defaultRenderer,
     );
     add(_scoreComponent);
-    
+
     _timerComponent = TextComponent(
       position: Vector2(0, 70),
       anchor: Anchor.center,
@@ -79,7 +80,6 @@ class HeightCounter extends HudMarginComponent with HasGameRef<Icarus> {
     //var curPos = LevelManager.player.position.y + _startingOffset + 15;
     var curPos = (DampenedCamera.trail?.position.y ?? 0) + _startingOffset;
     curPos = curPos > 0 ? curPos : -curPos;
-
 
     return (curPos).toInt().toString();
   }

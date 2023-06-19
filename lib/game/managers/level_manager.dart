@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_initializing_formals
+// ignore_for_file: invalid_use_of_internal_member
+
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
@@ -16,7 +19,7 @@ import 'dart:math';
 import '../sprites/background.dart';
 import '../util/util.dart';
 
-/// Handles creation of the actual level, including the player, platforms, and background
+/// Handles creation of the actual level, including the player, platforms, and background.
 /// Also handles game over and winning logic
 class LevelManager extends Component with HasGameRef<Icarus> {
   static late Player player;
@@ -26,10 +29,9 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
   LevelManager(Icarus icarus, DampenedCamera cameraComponent) {
     player = Player();
-    // ignore: prefer_initializing_formals
+
     this.cameraComponent = cameraComponent;
     Icarus.world.add(player);
-    //icarus.camera.gameSize;
 
     player.position = Vector2(
         cameraComponent.viewfinder.visibleWorldRect.size.width / 4,
@@ -41,9 +43,12 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         maxDistance: icarus.size.y / 2,
         minDistance: 100);
 
-      // UI
-      scoreCounter = HeightCounter(/*margin: EdgeInsets.all(20),*/ anchor: Anchor.topCenter, position: Vector2(cameraComponent.viewfinder.visibleWorldRect.size.width / 4, 40));
-      Icarus.cameraComponent.viewport.add(scoreCounter);
+    // UI
+    scoreCounter = HeightCounter(
+        anchor: Anchor.topCenter,
+        position: Vector2(
+            cameraComponent.viewfinder.visibleWorldRect.size.width / 4, 40));
+    Icarus.cameraComponent.viewport.add(scoreCounter);
   }
 
   Future<void> startLevel() async {
@@ -53,24 +58,30 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     bg.position += Vector2(-(bg.size.x / 4), Icarus.viewportResolution.y * 1.5);
     prop.position += Vector2(
         -Icarus.viewportResolution.x / 2, Icarus.viewportResolution.y * 1.5);
-    Icarus.world.addAll([bg,prop]);
+    Icarus.world.addAll([bg, prop]);
+
+    //Add fishing penguin if unlocked
+    var fisher = FishingPenguin();
+    fisher.position = Vector2(
+        Icarus.viewportResolution.x / 4, Icarus.viewportResolution.y / 2);
 
     //Add wax (health) bag
     HealthBar healthbar = HealthBar();
     //Icarus.world.add(healthbar);
     Icarus.cameraComponent.viewport.add(healthbar);
 
-    lastYpos = addPlatforms(0); // add the initial first 7 platforms
+    lastYpos = addPlatforms(0); // add the initial first 10 platforms
 
     GameManager.startLevel();
   }
 
+  /// Adds a number of platforms to the level depending on the last (now destroyed) platform's position
   int addPlatforms(int lastYpos) {
-    int numberofPlatforms = 10;
+    int numberofPlatforms = 10; // number of platforms to add
     for (var i = 0; i < numberofPlatforms; i++) {
       var platform = Platform();
       Icarus.world.add(platform);
-      int km = (Random().nextInt(275) + 75);
+      int km = (Random().nextInt(275) + 75); // distance between platforms
       platform.position = Vector2(
           Random()
                   .nextInt(Icarus.viewportResolution.x.toInt() + 200)
@@ -82,14 +93,17 @@ class LevelManager extends Component with HasGameRef<Icarus> {
         platform.isMoving = true;
         platform.speed = 15;
       } else if (moveChance <= 5) {
+        // chance of platform moving
         platform.isMoving = true;
         platform.speed = 35;
       }
       lastYpos += km;
+      //Possibly adds an enemy
       bool enemyAdded = false;
       int enemyChance = Random().nextInt(100);
       double enemyThreshold = -LevelManager.player.position.y / 1000;
-      clampDouble(enemyThreshold, 0, 25);
+      enemyThreshold = clampDouble(enemyThreshold, 0,
+          25); //The higher you are, the more likely you are to encounter an enemy. Max 25%
       if (enemyChance <= enemyThreshold && !enemyAdded) {
         var enemy = Enemy();
         Icarus.world.add(enemy);
@@ -101,59 +115,6 @@ class LevelManager extends Component with HasGameRef<Icarus> {
       }
     }
 
-    // GAMLE VERSION AF CLOUD SPAWNING, BEHOLDER DEN HER HVIS VI NU VIL HAVE NOGET FRA DEN.
-
-    /*for (var i = 0; i < numberofPlatforms; i++) {
-      var platform = Platform();
-      Icarus.world.add(platform);
-      //print("viewport res: ${Icarus.viewportResolution.x.toInt()}");
-      
-      platform.position = Vector2(
-          Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
-          -lastYpos.toDouble());
-      int moveChance = Random().nextInt(10);
-      if (moveChance <= 2) {
-        platform.isMoving = true;
-        platform.speed = 15;
-      } else if (moveChance <= 5) {
-        platform.isMoving = true;
-        platform.speed = 35;
-      }
-      lastYpos += distanceBetween;
-      bool enemyAdded = false;
-      int enemyChance = Random().nextInt(100);
-      double enemyThreshold = -LevelManager.player.position.y / 1000;
-      clampDouble(enemyThreshold, 0, 30);
-      if (enemyChance <= enemyThreshold && !enemyAdded) {
-        var enemy = Enemy();
-        Icarus.world.add(enemy);
-        enemy.position = Vector2(
-            Random().nextInt(Icarus.viewportResolution.x.toInt()).toDouble(),
-            -lastYpos.toDouble() - 400);
-        enemy.isMoving = true;
-        enemyAdded = true;
-      }
-    }*/
-
     return lastYpos;
-  }
-
-  static Color getBackgroundColor() {
-    // Define the RGB values for the starting (light blue) and ending (orange) colors
-    Color startColor = const Color(0xFFADD8E6); // Light blue
-    Color endColor = const Color(0xFFFFA500); // Orange
-
-    // Calculate the color gradient
-    double gradientRatio = GameManager.height / GameManager.distanceToSun;
-    int r = (startColor.red + (endColor.red - startColor.red) * gradientRatio)
-        .round();
-    int g =
-        (startColor.green + (endColor.green - startColor.green) * gradientRatio)
-            .round();
-    int b =
-        (startColor.blue + (endColor.blue - startColor.blue) * gradientRatio)
-            .round();
-
-    return Color.fromARGB(255, r, g, b);
   }
 }

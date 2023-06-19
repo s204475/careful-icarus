@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_internal_member
+
 import 'package:careful_icarus/game/icarus.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -9,26 +11,38 @@ import 'managers/level_manager.dart';
 class DampenedCamera extends CameraComponent with HasGameRef {
   DampenedCamera({required super.world});
 
-  static PositionComponent? trail; // the object used to follow the target, the camera is always fixed on this object
-  static PositionComponent? target; // a refernce to the target for the trail to follow
+  /// The object used to follow the target, the camera is always fixed on this object
+  static PositionComponent? trail;
 
-  static double maxDistance = double.infinity; // used to set the max distance the camera can travel, unused TODO
-  static double minDistance = 0; // the minimum distance the target can move before the trail has to follow
+  /// A refernce to the target for the trail to follow
+  static PositionComponent? target;
 
-  static bool horizontalOnly = false; // sets if the camera should only move on the x axis
-  static bool verticalOnly = false; // sets if the camera should only move on the y axis
-  static bool lockHeight = false; // sets if the camera should be able to move down on the y axis
+  /// Used to set the max distance the camera can travel
+  static double maxDistance = double.infinity;
 
-  static Vector2 _offset = Vector2.zero(); // offset used to move the camera a fixed relative distance from the target
+  /// The minimum distance the target can move before the trail has to follow
+  static double minDistance = 0;
+
+  /// Sets if the camera should only move on the x axis
+  static bool horizontalOnly = false;
+
+  /// Sets if the camera should only move on the y axis
+  static bool verticalOnly = false;
+
+  /// Sets if the camera should be able to move down on the y axis
+  static bool lockHeight = false;
+
+  /// offset used to move the camera a fixed relative distance from the target
+  static late Vector2 _offset;
 
   @override
   Future<void> onLoad() async {
-  super.onLoad();
-  
-  priority = 99;
+    super.onLoad();
 
-  viewfinder.zoom = 0.5; // the size of a pixel 1:1, 1:4
-}
+    priority = 99;
+
+    viewfinder.zoom = 0.5; // the size of a pixel 1:1, 1:4
+  }
 
   Future<void> followDampened(
     PositionComponent target, {
@@ -49,15 +63,14 @@ class DampenedCamera extends CameraComponent with HasGameRef {
     DampenedCamera.minDistance = minDistance;
     DampenedCamera.target = target;
 
-    if (trail != null) { // make sure the camera only follows a single target, while removing now unused objects
+    if (trail != null) {
+      // make sure the camera only follows a single target, while removing now unused objects
       remove(trail!);
     }
 
-    DampenedCamera._offset.y = -viewfinder.visibleWorldRect.size.height / 4; // 
+    DampenedCamera._offset.y = -viewfinder.visibleWorldRect.size.height / 4; //
 
     trail = PositionComponent(position: target.position + _offset);
-    trail?.add(
-        SpriteComponent(sprite: await gameRef.loadSprite('PixelPenguin1.png')));
 
     follow(trail!,
         maxSpeed: maxSpeed,
@@ -68,12 +81,11 @@ class DampenedCamera extends CameraComponent with HasGameRef {
 
   @override
   void update(double dt) {
-    
     Vector2 followPos = trail!.position - _offset;
     Vector2 playerPos = target!.position;
 
     Vector2 deltaPos = playerPos - followPos;
-    
+
     if (horizontalOnly || lockHeight && deltaPos.y > 0) {
       deltaPos.y = 0;
     } else {

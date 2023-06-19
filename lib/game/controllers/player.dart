@@ -9,12 +9,10 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/audio_pool.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../icarus.dart';
 import '../managers/sound_manager.dart';
 import 'enemy.dart';
-import '../sprites/glider.dart';
 import 'platform.dart' as kplatform;
 import '../managers/game_manager.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -65,23 +63,6 @@ class Player extends SpriteComponent
   void start() async {
     disableControls = false;
     launch();
-  }
-
-  @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (disableControls) return false;
-
-    _hAxisInput = 0;
-
-    if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      move(-200); //int to speed up the movement
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      move(200); //int to speed up the movement
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      jump(); //TODO: remove this debug "cheat"
-    }
-
-    return true;
   }
 
   /// Handles horizontal movement
@@ -206,11 +187,9 @@ class Player extends SpriteComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    //print("collision with " + other.toString());
     if (other is Enemy && other.isAlive) {
       if (sealionProtectionsUsed < GameManager.sealprotection) {
         //Can use SealionProtection
-        debugPrint("SealionProtection used");
         sealionProtectionsUsed++;
         other.destroy();
         jump();

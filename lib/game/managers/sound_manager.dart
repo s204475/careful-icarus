@@ -1,5 +1,6 @@
 import 'package:flame_audio/flame_audio.dart';
 
+/// SoundManager handles the playing of sounds. Currently, sound is only supported on Android
 class SoundManager {
   static bool muted = false;
   static bool _themePlaying = false;
@@ -10,6 +11,7 @@ class SoundManager {
   }
 
   static void playMusic() {
+    if (muted) return;
     if (_themePlaying == false) {
       FlameAudio.bgm.play("FlyingPenguins_Theme.mp3");
       _themePlaying = true;
