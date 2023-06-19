@@ -30,7 +30,7 @@ class _MainMenuState extends State<MainMenu> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         onPressed: () => SoundManager.mute(),
-        child: Icon(Icons.volume_off),
+        child: const Icon(Icons.volume_off),
       ),
       appBar: AppBar(
         leading: SizedBox(
@@ -43,9 +43,9 @@ class _MainMenuState extends State<MainMenu> {
             },
           ),
         ),
-        title: Text('Manual Control'),
+        title: const Text('Manual Control'),
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'ICARUS',
           style: TextStyle(
@@ -55,11 +55,10 @@ class _MainMenuState extends State<MainMenu> {
           ),
         ),
       ),
-      bottomSheet: Container(
-          child: Padding(
+      bottomSheet: Padding(
         padding: const EdgeInsets.all(60.0),
         child: Image.asset('assets/images/VictoryDance.gif'),
-      )),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -81,13 +80,12 @@ class _MainMenuState extends State<MainMenu> {
                                     notifyParent: gameover))),
                       );
                     },
-                    child: Text('PLAY'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      onPrimary: Colors.white,
+                      foregroundColor: Colors.white, backgroundColor: Colors.blue,
                       shadowColor: Colors.red,
                       elevation: 5,
                     ),
+                    child: const Text('PLAY'),
                   ),
                 ),
                 SizedBox(
@@ -98,11 +96,10 @@ class _MainMenuState extends State<MainMenu> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ShopPage(widget.game)));
                     },
-                    label: Text('Shop'),
-                    icon: Icon(Icons.shopping_cart),
+                    label: const Text('Shop'),
+                    icon: const Icon(Icons.shopping_cart),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      onPrimary: Colors.white,
+                      foregroundColor: Colors.white, backgroundColor: Colors.green,
                       shadowColor: Colors.red,
                       elevation: 5,
                     ),
