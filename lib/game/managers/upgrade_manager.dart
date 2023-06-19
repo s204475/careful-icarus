@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../util/local_storage.dart';
 
 class UpgradeManager {
@@ -65,14 +67,13 @@ class UpgradeManager {
     if (fish >= upgrades[name]["cost"]) {
       fish -= upgrades[name]["cost"];
       upgrades[name]["level"]++;
-      print(
-          "bought $name for ${upgrades[name]["cost"]} fish, level is now ${upgrades[name]["level"]}");
+      //debugPrint("bought $name for ${upgrades[name]["cost"]} fish, level is now ${upgrades[name]["level"]}");
       upgrades[name]["cost"] *= 2;
       upgrades[name]["multiplier"] *= 1.5;
       writeInt("fishGatheredTotal", fish.toInt());
       writeUpgrades();
     }
-    print(UpgradeManager.upgrades);
+    //print(UpgradeManager.upgrades);
   }
 
   static void resetUpgrades() {

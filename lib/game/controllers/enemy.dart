@@ -8,6 +8,7 @@ import '../managers/game_manager.dart';
 import '../util/util.dart';
 import 'platform.dart';
 
+/// The Enemy can kill the player on collision but otherwise functions as a platform
 class Enemy extends Platform {
   Warning warn = Warning();
   // ignore: prefer_final_fields

@@ -28,7 +28,7 @@ class ShoppingButton extends Container {
         ),
         ElevatedButton(
           onPressed: () {
-            print('minus one of $upgradeName'); //TODO implement this
+            //debugPrint('minus one of $upgradeName'); //TODO implement this
           },
           child: Icon(Icons.remove),
         ),

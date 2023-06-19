@@ -44,21 +44,22 @@ class Icarus extends FlameGame
         .loadAll(['sfx_wing.mp3', 'FlyingPenguins_Theme.mp3']);
 
     addAll([world, cameraComponent]);
-    debugPrint("loading level");
+    //debugPrint("loading level");
     levelManager = LevelManager(this, cameraComponent);
     await levelManager.startLevel();
     lastPlatformYpos = levelManager.lastYpos;
 
-    debugPrint("viewport res: $viewportResolution");
+    //debugPrint("viewport res: $viewportResolution");
     add(TapTarget(LevelManager.player));
 
-    debugPrint("loading complete");
+    //debugPrint("loading complete");
   }
 
   @override
   Future<void> update(double dt) async {
-    // add platforms if needed, 20 at a time
-    if (LevelManager.player.position.y < (-lastPlatformYpos + 500 * 2)) {
+    // add platforms if needed, 10 at a time
+    if (LevelManager.player.position.y < (-lastPlatformYpos + 1000)) {
+      //When 1000 pixels close to the last platform, add more platforms
       lastPlatformYpos = levelManager.addPlatforms(lastPlatformYpos);
     }
     togglePause();
