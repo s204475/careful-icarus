@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:careful_icarus/game/managers/sound_manager.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -40,8 +42,10 @@ class Icarus extends FlameGame
     );
 
     //Load audio into cache to smoothe playback
-    await FlameAudio.audioCache
-        .loadAll(['sfx_wing.mp3', 'FlyingPenguins_Theme.mp3']);
+    if (Platform.isAndroid || Platform.isIOS) {
+      await FlameAudio.audioCache
+          .loadAll(['sfx_wing.mp3', 'FlyingPenguins_Theme.mp3']);
+    }
 
     addAll([world, cameraComponent]);
     //debugPrint("loading level");
