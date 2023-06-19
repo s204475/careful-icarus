@@ -64,7 +64,8 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     if (GameManager.idleFisher > 0) {
       var fisher = FishingPenguin();
       fisher.position = Vector2(
-          Icarus.viewportResolution.x / 4, Icarus.viewportResolution.y / 2);
+          -Icarus.viewportResolution.x / 5 , Icarus.viewportResolution.y / 2 +50);
+      fisher.flipHorizontally();
       Icarus.world.add(fisher);
     }
 
