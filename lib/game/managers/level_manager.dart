@@ -61,13 +61,16 @@ class LevelManager extends Component with HasGameRef<Icarus> {
     Icarus.world.addAll([bg, prop]);
 
     //Add fishing penguin if unlocked
-    var fisher = FishingPenguin();
-    fisher.position = Vector2(
-        Icarus.viewportResolution.x / 4, Icarus.viewportResolution.y / 2);
+    if (GameManager.idleFisher > 0) {
+      var fisher = FishingPenguin();
+      fisher.position = Vector2(
+          Icarus.viewportResolution.x / 4, Icarus.viewportResolution.y / 2);
+      Icarus.world.add(fisher);
+    }
 
     //Add wax (health) bag
     HealthBar healthbar = HealthBar();
-    //Icarus.world.add(healthbar);
+
     Icarus.cameraComponent.viewport.add(healthbar);
 
     lastYpos = addPlatforms(0); // add the initial first 10 platforms

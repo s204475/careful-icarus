@@ -11,7 +11,6 @@ import '../icarus.dart';
 
 /// This class is used to manage the game. It is used to store the game's state and saves these values between sessions.
 class GameManager extends Component with HasGameRef<Icarus> {
-  static const bool debugging = true;
   static bool gameover = false;
   static num height = 0;
   static num heightRecord = 0;
@@ -21,6 +20,9 @@ class GameManager extends Component with HasGameRef<Icarus> {
   static int fishGatheredRun = 0;
   static int fishGatheredTotal = 0;
   static bool manualControl = false;
+
+  /// Bool for debugging (showing hitboxes and positions on screen)
+  static const bool debugging = false;
 
   //Stats (powers)
   static int sealprotection = (UpgradeManager.upgrades["Sealion Protection"][
