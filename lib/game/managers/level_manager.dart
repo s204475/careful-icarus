@@ -57,8 +57,8 @@ class LevelManager extends Component with HasGameRef<Icarus> {
 
     //Add wax (health) bag
     HealthBar healthbar = HealthBar();
-    Icarus.world.add(healthbar);
-    //scoreCounter.add(healthbar);
+    //Icarus.world.add(healthbar);
+    Icarus.cameraComponent.viewport.add(healthbar);
 
     lastYpos = addPlatforms(0); // add the initial first 7 platforms
 
