@@ -69,20 +69,20 @@ class _ShopPageState extends State<ShopPage> {
           ),
           const Text('Shop Page'),
           Text('[ You have $fish fish.]'),
-          ListView.builder(
+          ListView.builder( //constructs a list of buttons for each upgrade
             itemCount: upgrades.length,
             padding: const EdgeInsets.all(8),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               return ShoppingButton(upgrades.keys.toList()[index],
-                  notifyParent: refresh);
+                  notifyParent: refresh); //calls the refresh method
             },
           ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: PopupMenuButton<int>(
+      floatingActionButton: PopupMenuButton<int>( //places a settings button in the top right
         icon: const Icon(Icons.settings),
         onSelected: (item) {
           onSelected(item);
@@ -98,7 +98,7 @@ class _ShopPageState extends State<ShopPage> {
           ),
         ],
       ),
-      bottomSheet: SizedBox(
+      bottomSheet: SizedBox(  //places the start button at the bottom of the screen
         width: MediaQuery.of(context).size.width,
         height: 80,
         child: ElevatedButton(
@@ -107,7 +107,7 @@ class _ShopPageState extends State<ShopPage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => GameWidget(
-                        game: Icarus(
+                        game: Icarus( //gets the screen size, then passes it to the game via gameover()
                             viewportResolution: Vector2(
                                 MediaQuery.of(context).size.width,
                                 MediaQuery.of(context).size.height),
