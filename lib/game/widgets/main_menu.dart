@@ -26,7 +26,7 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( //we use a bunch of the integrated functionality from Scaffold to make a nice looking menu
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         onPressed: () => SoundManager.mute(),
@@ -61,7 +61,7 @@ class _MainMenuState extends State<MainMenu> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly, //evenly spaced to make it look nice
           children: [
             Row(
               children: [
