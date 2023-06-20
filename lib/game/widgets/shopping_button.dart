@@ -17,7 +17,7 @@ class ShoppingButton extends Container {
     return Row(
       children: [
         Expanded(
-            child: Text(
+            child: Text( //string interpolation is used here to display the level and cost of the upgrade
                 '[${upgrades[upgradeName]["level"]}] $upgradeName cost: ${upgrades[upgradeName]["cost"]}')),
         ElevatedButton(
           onPressed: () {
@@ -27,7 +27,7 @@ class ShoppingButton extends Container {
           child: const Icon(Icons.add),
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {}, //further development should allow player to "undo" purchases
           child: const Icon(Icons.remove),
         ),
       ],
