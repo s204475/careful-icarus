@@ -63,6 +63,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static Level lvl = Level.shop;
 
+  /// This function is called when the game is over, needs to be passed along to Icarus
   gameover() {
     setState(() {
       Navigator.of(context).push(MaterialPageRoute(
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// build the initial widget, this is the main menu
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
