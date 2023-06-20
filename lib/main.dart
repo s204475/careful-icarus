@@ -1,5 +1,6 @@
 import 'package:careful_icarus/game/managers/upgrade_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flame/game.dart';
 import 'game/icarus.dart';
@@ -19,6 +20,9 @@ import 'package:flame_audio/flame_audio.dart';
 /// The main function, starts the app and reads the locally saved data
 void main() async {
   runApp(const MainApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   UpgradeManager.readFish(); //Reads the amount of fish from the save file
   UpgradeManager.readUpgrades(); //Reads the upgrades from the save file
 }
