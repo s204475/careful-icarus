@@ -43,7 +43,7 @@ class Icarus extends FlameGame
     //Load audio into cache to smoothe playback
     if (Platform.isAndroid || Platform.isIOS) {
       await FlameAudio.audioCache
-          .loadAll(['sfx_wing.mp3', 'FlyingPenguins_Theme.mp3']);
+          .loadAll(['Jump.wav', 'FlyingPenguins_Theme.mp3']);
     }
 
     addAll([world, cameraComponent]);

@@ -22,29 +22,30 @@ void main() {
     expect(
         Icarus.world.children
             .any((element) => element is PlatformDissappearing),
-        false); //Platform exists
+        false); //Is there a PlatformDissappearing component?
 
-    platform.checkIfBelow();
+    platform.checkIfBelow(); //Destroys platform if below player
 
     expect(
         Icarus.world.children
             .any((element) => element is PlatformDissappearing),
-        true); //Platform has been removed
+        true); //Platform has been removed and there should be a PlatformDissappearing component
   });
 
   test('Platforms much below the player should be destroyed', () {
-    // Create a new Enemy instance
+    // Initialize the game
     Icarus icarus =
         Icarus(viewportResolution: Vector2(100, 100), notifyParent: () {});
-    Platform platform = Platform(position: Vector2.zero());
     Player player = Player(position: Vector2(0, -2001));
     LevelManager.player = player;
+    // Create a new Platform instance
+    Platform platform = Platform(position: Vector2.zero());
     Icarus.world.add(platform);
     Icarus.world.add(player);
 
     expect(Icarus.world.children.contains(platform), true); //Platform exists
 
-    platform.checkIfBelow();
+    platform.checkIfBelow(); //Destroys platform if below player
 
     expect(Icarus.world.children.contains(platform),
         false); //Platform has been removed

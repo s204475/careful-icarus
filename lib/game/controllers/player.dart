@@ -76,14 +76,14 @@ class Player extends SpriteComponent
     if (startFall) return;
     var jumpStrength = GameManager.jumpStrength;
     if (disableControls) return;
-    SoundManager.playSound('sfx_wing.mp3', 0.6);
+    SoundManager.playSound('Jump.wav', 0.6);
     velocity.y -= jumpStrength;
     velocity.y = clampDouble(velocity.y, -(jumpStrength * 1.5), -jumpStrength);
   }
 
   /// The first jump of the game
   void launch() {
-    SoundManager.playSound('sfx_wing.mp3', 0.6);
+    SoundManager.playSound('Jump.wav', 0.6);
     velocity.y -= GameManager.launchStrength;
   }
 
